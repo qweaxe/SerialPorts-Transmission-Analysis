@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>Lock.png</file>
+        <file>off.png</file>
+        <file>offline.png</file>
+        <file>on.png</file>
+        <file>online.png</file>
+        <file>ufologo.ico</file>
+        <file>Unlock.png</file>
+        <file>warning.png</file>
+    </qresource>
+</RCC>

@@ -45,11 +45,12 @@ void ProcessThread::begin(QByteArray data)
 QByteArray ProcessThread::Read(QByteArray data)
 {
 	int length = data.size();
+	buffer.append(data);
 	if (data[0] != 0xAA && data[1] != 0x55)
 	{
 		
 		buffer = data;//这里处理有问题，需要修改，没有处理要舍弃的情况，或者是多余的情况，检测是否有 AA 55，分两种情况
-
+		//不如在此直接read就完事了，处理放到后面去，切片，缓存等手续直接和处理分析一起
 
 	}
 
@@ -72,6 +73,7 @@ QByteArray ProcessThread::Read(QByteArray data)
 
 void ProcessThread::Process(QByteArray data)
 {
+
 	switch (data[2])
 	{
 	case 0x00://com0

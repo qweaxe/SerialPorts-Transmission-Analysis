@@ -106,6 +106,7 @@
     <QtRcc Include="Resources\Resource.qrc" />
     <QtUic Include="QtWidgetsApplication1.ui" />
     <QtMoc Include="QtWidgetsApplication1.h" />
+    <QtMoc Include="CircularBuffer.cpp" />
     <ClCompile Include="LDDriver.cpp" />
     <ClCompile Include="MyThread.cpp" />
     <ClCompile Include="QtWidgetsApplication1.cpp" />
@@ -113,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MyThread.h" />
+    <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="Include.h" />
     <ClInclude Include="LDDriver.h" />
     <ClInclude Include="resource.h" />

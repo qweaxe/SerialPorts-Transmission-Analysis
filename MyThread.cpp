@@ -26,7 +26,7 @@ ProcessThread::ProcessThread(QObject* parent) :QObject(parent)
 
 void ProcessThread::begin(QByteArray data)
 {
-	//qDebug() << "处理线程：" << num << " || " << QThread::currentThread();
+	qDebug() << "处理线程：" << " || " << QThread::currentThread();
 	QElapsedTimer time;
 	time.start();
 	//for (int i = 0; i < num; i++)
@@ -46,7 +46,13 @@ QByteArray ProcessThread::Read(QByteArray data)
 {
 	int length = data.size();
 	if (data[0] != 0xAA && data[1] != 0x55)
-		buffer = data;//这里处理有问题，需要修改，没有处理要舍弃的情况
+	{
+		
+		buffer = data;//这里处理有问题，需要修改，没有处理要舍弃的情况，或者是多余的情况，检测是否有 AA 55，分两种情况
+
+
+	}
+
 	else if (data[3]!=length-7)
 	{
 		if (data[3] > length - 7)
@@ -54,6 +60,11 @@ QByteArray ProcessThread::Read(QByteArray data)
 			buffer = data.sliced(((uint)data[3]) + 7);
 			//data.chop(length-(((uint)data[3]) + 7));
 			data.truncate(((uint)data[3]) + 7);
+		}
+
+		else if (data[3] < length - 7)
+		{
+			buffer = data;
 		}
 	}
 	return data;

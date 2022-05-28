@@ -16,6 +16,7 @@
 #include"CircularBuffer.h"
 
 
+
 class QtWidgetsApplication1 : public QMainWindow
 {
     Q_OBJECT
@@ -43,19 +44,12 @@ signals:
     void sigAmpStatusChange();
     void starting1(int num);
     void starting2(QByteArray data);
-
 public slots:
+
     void on_pushButton_toggled(bool checked);
     void change_ampstatus();
 
     //void COM0Changed();
-    //void COM1Changed();
-    //void COM2Changed();
-    //void COM3Changed();
-    //void COM4Changed();
-    //void COM5Changed();
-    //void COM6Changed();
-    //void COM7Changed();
 
 private slots:
     void on_ComComboBox_currentIndexChanged(int index);

@@ -49,8 +49,7 @@ QByteArray ProcessThread::Read(QByteArray data)
 	if (data[0] != 0xAA && data[1] != 0x55)
 	{
 		
-		buffer = data;//这里处理有问题，需要修改，没有处理要舍弃的情况，或者是多余的情况，检测是否有 AA 55，分两种情况
-		//不如在此直接read就完事了，处理放到后面去，切片，缓存等手续直接和处理分析一起
+		buffer = data;
 
 	}
 
@@ -73,34 +72,67 @@ QByteArray ProcessThread::Read(QByteArray data)
 
 void ProcessThread::Process(QByteArray data)
 {
-
-	switch (data[2])
+	uint length = data.size();
+	if (data[0]!=0xAA&&data[1]!=0x55)//判断字头
 	{
-	case 0x00://com0
-		//Amp0.ReInfoData(data);
-		break;
-	case 0x01://com1
+		//分情况讨论，三种情况
+		//1°半句+一句：前面的残留以及后面的完整一句（或者不完整） 
+		// 
+		//2° 只有半句：后面的剩余不一定完整，要分情况讨论
+		// 
+		//3°其他情况
 
-		break;
-	case 0x02://com2
+		//这里处理有问题，需要修改，没有处理要舍弃的情况，或者是多余的情况，检测是否有 AA 55，分两种情况
+		//不如在此直接read就完事了，处理放到后面去，切片，缓存等手续直接和处理分析一起
 
-		break;
-	case 0x03://com3
 
-		break;
-	case 0x04://com4
 
-		break;
-	case 0x05://com5
-
-		break;
-	case 0x06://com6
-
-		break;
-	case 0x07://com7
-
-		break;
-	default:
-		break;
 	}
+	else if (data[3]!=length-7)
+	{
+		if (data[3]>length-7)
+		{
+
+		}
+		else if (data[3]<length-7)
+		{
+
+		}
+
+	}
+
+	else
+	{
+		switch (data[2])
+		{
+		case 0x00://com0
+			//Amp0.ReInfoData(data);
+
+			break;
+		case 0x01://com1
+
+			break;
+		case 0x02://com2
+
+			break;
+		case 0x03://com3
+
+			break;
+		case 0x04://com4
+
+			break;
+		case 0x05://com5
+
+			break;
+		case 0x06://com6
+
+			break;
+		case 0x07://com7
+
+			break;
+		default:
+			break;
+		}
+	}
+	
 }

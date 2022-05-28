@@ -36,6 +36,12 @@ private:
 	QByteArray buffer;
 	QByteArray processdata;
 	QtLambdapump Amp0;
+	QtLambdapump Amp1;
+	QtLambdapump Amp2;
+	QtLambdapump Amp3;
+	QtGolightpump Amp4;
+	QtGolightpump Amp5;
+
 };
 #endif // !MYTHREAD_H
 

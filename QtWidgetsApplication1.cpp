@@ -58,6 +58,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     //connect(Mainwork, &MainThread::working, this, [=]int l);
     //connect(Processwork, &ProcessThread::working, this, [=]int l);
 }
+     
 
 
 

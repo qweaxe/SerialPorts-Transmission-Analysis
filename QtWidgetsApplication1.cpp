@@ -1,7 +1,7 @@
 ﻿#include "QtWidgetsApplication1.h"
 //QApplication::addLibraryPath("");
 
-//测试版本（之前sb删掉了lambda版本）
+//lambda版本
  
 /**
   * @Function Name  : QtWidgetsApplication1

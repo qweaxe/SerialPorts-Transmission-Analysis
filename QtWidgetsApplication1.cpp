@@ -566,7 +566,7 @@ void QtWidgetsApplication1::DisplayData(const QByteArray buf)
 void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
 {
     //转换
-    int length = buf.size();
+    uint length = buf.size();
     double curvalue = 0;
     double tempvalue = 0;
     int powervalue = 0;
@@ -581,7 +581,7 @@ void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
     //    size = buf[3] + 5;
     //    buf.resize(size);
     //}
-    else if (buf[3] != length - 7)
+    else if ((unsigned char)buf[3] != length - 7)
         QMessageBox::warning(this, "错误❌", "收到数据长度不对");
     else
     {

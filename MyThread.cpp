@@ -112,7 +112,7 @@ void ProcessThread::Process(QByteArray data)
 
 			break;
 		case 0x01://com1
-			Amp1.ReInfoData(data);
+			Amp1->ReInfoData(data);
 			emit processed(1, Amp1);
 			break;
 		case 0x02://com2

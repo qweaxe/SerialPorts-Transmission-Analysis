@@ -265,6 +265,19 @@ void QtLambdapump::MMstatusQuery()
 
 }
 /**
+  * @Function Name  : SetStatus
+  * @
+  * @brief 接收别的线程处理后的值
+  * @param Amp 另外的线程处理后的pump驱动类的指针
+  * @retval void
+  */
+void QtLambdapump::SetStatus(QtLambdapump* Amp)
+{
+    this->repumpcurrent = Amp->Pumpcurrent();
+    this->repumppower = Amp->Pumppower();
+    this->repumptemp = Amp->Pumptemp();
+}
+/**
   * @Function Name  : QtDhkjpump
   * @
   * @brief 东辉科技的构造函数

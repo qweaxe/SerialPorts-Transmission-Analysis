@@ -32,11 +32,13 @@ public slots:
 signals:
 	void working(int num);
 	void finish(QString elapsedTime);//可以传递多个参数，槽会匹配并忽略多余的参数
+	void processed(int n, QtLambdapump* Amp);
+
 private:
 	QByteArray buffer;
 	QByteArray processdata;
-	QtLambdapump Amp0;
-	QtLambdapump Amp1;
+	QtLambdapump *Amp0=new QtLambdapump;
+	QtLambdapump *Amp1=new QtLambdapump;
 	QtLambdapump Amp2;
 	QtLambdapump Amp3;
 	QtGolightpump Amp4;

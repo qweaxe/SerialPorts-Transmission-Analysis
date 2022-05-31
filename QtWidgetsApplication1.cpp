@@ -16,7 +16,8 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     ui.setupUi(this);
     //分配线程
    // Mainwork->moveToThread(t1);
-   // Processwork->moveToThread(t2);
+    Processwork->moveToThread(t2);
+    
     //理论上这些应该全放到构造函数里去
     QStringList comlist;
     QIntValidator* SMvalidator = new QIntValidator(curmin, seedcurmax, this);
@@ -52,11 +53,15 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
 
     //给子线程传值
     //connect(this, &QtWidgetsApplication1::starting1, Mainwork, &MainThread::begin);
-    //connect(this, &QtWidgetsApplication1::starting2, Processwork, &ProcessThread::begin);
+    connect(this, &QtWidgetsApplication1::starting2, Processwork, &ProcessThread::begin);
+
 
     //接收子线程发送的数据，并更新进度条
     //connect(Mainwork, &MainThread::working, this, [=]int l);
     //connect(Processwork, &ProcessThread::working, this, [=]int l);
+    connect(Processwork, &ProcessThread::processed, this, &QtWidgetsApplication1::COM0Changed);
+
+    t2->start();
 }
      
 
@@ -497,7 +502,8 @@ void QtWidgetsApplication1::ReadData()
         //emit starting2(buf);
         redatatxt.write(buf.toHex(' ').toUpper());
         redatatxt.write(enter);
-        AnalysisData(buf);
+        emit starting2(buf);
+        //AnalysisData(buf);
         DisplayData(buf);
     }
     redatatxt.close();
@@ -1613,6 +1619,44 @@ bool QtWidgetsApplication1::SendDatabyte(const int com,  QByteArray senddata)
   */
 void QtWidgetsApplication1::change_ampstatus()
 {
+}
+
+void QtWidgetsApplication1::COM0Changed(int n, QtLambdapump* Amp0)
+{
+    switch (n)
+    {
+    case 0:
+        Seed.SetStatus(Amp0);
+        ui.COM0CurLcd->display(Seed.Pumpcurrent());
+        ui.COM0PowerLcd->display(Seed.Pumppower());
+        ui.COM0TempLcd->display(Seed.Pumptemp());
+        break;
+    case 1:
+        Amp1.SetStatus(Amp0);
+        ui.COM0CurLcd->display(Amp1.Pumpcurrent());
+        break;
+    case 2:
+
+        break;
+    case 3:
+
+        break;
+    case 4:
+
+        break;
+    case 5:
+
+        break;
+    case 6:
+
+        break;
+    case 7:
+
+        break;
+    default:
+        break;
+    }
+
 }
 
 

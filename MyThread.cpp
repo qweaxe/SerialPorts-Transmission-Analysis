@@ -88,7 +88,7 @@ void ProcessThread::Process(QByteArray data)
 
 
 	}
-	else if (data[3]!=length-7)
+	else if (data[3]!=length-7)//长度校验
 	{
 		if (data[3]>length-7)
 		{
@@ -100,17 +100,20 @@ void ProcessThread::Process(QByteArray data)
 		}
 
 	}
+	//校验和校验，先省略
 
-	else
+	else//正常情况
 	{
 		switch (data[2])
 		{
 		case 0x00://com0
-			//Amp0.ReInfoData(data);
+			Amp0->ReInfoData(data);
+			emit processed(0, Amp0);
 
 			break;
 		case 0x01://com1
-
+			Amp1.ReInfoData(data);
+			emit processed(1, Amp1);
 			break;
 		case 0x02://com2
 
@@ -133,6 +136,7 @@ void ProcessThread::Process(QByteArray data)
 		default:
 			break;
 		}
+
 	}
 	
 }

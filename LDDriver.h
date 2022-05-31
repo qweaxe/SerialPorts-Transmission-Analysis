@@ -25,6 +25,7 @@ public:
     void OnstatusQuery();
     void MMOnstatusQuery();
     void MMstatusQuery();
+    void SetStatus(QtLambdapump* Amp);
     Status& Ampstatus() { return ampstatus; }
     int Pumpcurrent() { return repumpcurrent; }
     double Pumptemp() { return repumptemp; }
@@ -38,7 +39,7 @@ public:
     double LD27wcur() { return ld27wcur; }
     double LD9wcur() { return ld9wcur; }
     QByteArray& Datasend() { return datasend; }
-    QtLambdapump* th;
+    
     //~QtLambdapump();//
 private:
     Status ampstatus = off;

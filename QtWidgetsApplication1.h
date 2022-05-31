@@ -39,6 +39,7 @@ public:
     void Changeui();
     bool SendDatabyte(const int com,  QByteArray senddata);
     CircularBuffer circularBuffer;
+    
 signals:
     void sigLabelChange();
     void sigAmpStatusChange();
@@ -49,7 +50,7 @@ public slots:
     void on_pushButton_toggled(bool checked);
     void change_ampstatus();
 
-    //void COM0Changed();
+    void COM0Changed(int n, QtLambdapump* Amp0);
 
 private slots:
     void on_ComComboBox_currentIndexChanged(int index);

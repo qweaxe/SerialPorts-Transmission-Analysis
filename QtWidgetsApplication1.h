@@ -150,9 +150,9 @@ private:
     double mainmax = 10.0;//存在问题，稍后再修改
     int sleeptime = 30;
     QString txtfilename = "D:/zzz/Datareceive.txt";
-    QString txterrorfile = "D:/zzz/ErrorData.txt";
+    QString errortxtfilename = "D:/zzz/ReErrorData.txt";
     QFile redatatxt;
-    QFile reerrordatatxt;
+    QFile reerrortxt;
     QTextStream stream;
    
     //先试试不new的版本,行不通

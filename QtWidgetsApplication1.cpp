@@ -1,7 +1,7 @@
 ﻿#include "QtWidgetsApplication1.h"
 //QApplication::addLibraryPath("");
 
-//测试版本（专门测试用的，为的是Lambda的装机）
+//lambda版本（测试分支）
  
 /**
   * @Function Name  : QtWidgetsApplication1
@@ -24,7 +24,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     QDoubleValidator* MMvalidator = new QDoubleValidator(amp4curmin, amp4curmax, 1, this);
     QDoubleValidator* Mainvalidator = new QDoubleValidator(mainmin, mainmax, 1, this);
     redatatxt.setFileName(txtfilename);
-    reerrordatatxt.setFileName(txterrorfile);
+    reerrortxt.setFileName(errortxtfilename);
 
     ui.COM0PowerEdit->setValidator(SMvalidator);
     ui.COM1PowerEdit->setValidator(SMvalidator);
@@ -61,7 +61,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     //connect(Processwork, &ProcessThread::working, this, [=]int l);
     connect(Processwork, &ProcessThread::processed, this, &QtWidgetsApplication1::COM0Changed);
 
-   // t2->start();
+    //t2->start();
 }
      
 
@@ -496,7 +496,7 @@ void QtWidgetsApplication1::ReadData()
     //enter[0] = '\n';
    
     redatatxt.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append);
-    reerrordatatxt.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
+    reerrortxt.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
     if (!buf.isEmpty())
     {
         //circularBuffer.append(buf);
@@ -574,36 +574,36 @@ void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
     int backcurvalue = 0;//应该要改成double类型才对
     int size = 0;
     QByteArray enter("\n");
-    QByteArray byteframe("error type: 帧头不对  数据：");
+    QByteArray byteframe("error type：帧头不对  数据：");
     QByteArray bytelength("error type: 长度不对  数据：");
-    QByteArray bytechecksum("error type: 校验和不正确  数据：");
+    QByteArray bytechecksum("error type:校验和不对  数据：");
     //帧头验证
     if (buf[0] != 0xAA && buf[1] != 0x55)
-    { 
+    {
         //QMessageBox::warning(this, tr("警告⚠"), tr("舍弃"));
-        reerrordatatxt.write(byteframe);
-        reerrordatatxt.write(enter);
-        reerrordatatxt.write(buf.toHex().toUpper());
-        reerrordatatxt.write(enter);
-        reerrordatatxt.close();
+        reerrortxt.write(byteframe);
+        reerrortxt.write(enter);
+        reerrortxt.write(buf);
+        reerrortxt.write(enter);
+        reerrortxt.close();
+
     }
-        
+      
     //长度验证
     //else
     //{
     //    size = buf[3] + 5;
     //    buf.resize(size);
     //}
-    else if ((unsigned int)buf[3] != length - 7)
+    else if ((unsigned char)buf[3] != length - 7)
     {
         //QMessageBox::warning(this, "错误❌", "收到数据长度不对");
-        reerrordatatxt.write(bytelength);
-        reerrordatatxt.write(enter);
-        reerrordatatxt.write(buf);
-        reerrordatatxt.write(enter);
-        reerrordatatxt.close();
+        reerrortxt.write(bytelength);
+        reerrortxt.write(enter);
+        reerrortxt.write(buf);
+        reerrortxt.write(enter);
+        reerrortxt.close();
     }
-        
     else
     {
         //(选)获取命令字、数据长度
@@ -615,12 +615,13 @@ void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
         if (checksum[0] != buf[length - 3])
         {
             //QMessageBox::warning(this, tr("警告⚠"), tr("校验和不正确"));
-            reerrordatatxt.write(bytechecksum);
-            reerrordatatxt.write(enter);
-            reerrordatatxt.write(buf);
-            reerrordatatxt.write(enter);
-            reerrordatatxt.close();
-        }//目前这样，感觉不太对
+            reerrortxt.write(bytechecksum);
+            reerrortxt.write(enter);
+            reerrortxt.write(buf);
+            reerrortxt.write(enter);
+            reerrortxt.close();
+        }
+            //目前这样，感觉不太对
         else
         {
             switch (buf[2])

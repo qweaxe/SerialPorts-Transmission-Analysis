@@ -22,21 +22,21 @@ QtLambdapump::QtLambdapump()
     repumpcurrent = 0;
     repumppower = 0;
     repumptemp = 25.0;
-    backtemp = 25.0;
+    rebacktemp = 25.0;
     remodeltemp = 25.0;
     resettectemp = 0.0;
     reteccurrent = 0;
-    cavtemp = 0.0;
-    ld27wcur = 0.0;
-    ld27wsetcur = 0.001;
-    ld27wtemp = 25.0;
-    ld9wcur = 0.0;
-    ld9wsetcur = 0.001;
+    recavtemp = 0.0;
+    reld27wcur = 0.0;
+    reld27wsetcur = 0.001;
+    reld27wtemp = 25.0;
+    reld9wcur = 0.0;
+    reld9wsetcur = 0.001;
     pd1power = 0;
     pd2power = 0;
     pd3power = 0;
     pd4power = 0;
-    tectemp = 25.0;
+    retectemp = 25.0;
     resetcurrent = 1;
     setcurvalue = 0;
 }
@@ -171,17 +171,25 @@ void QtLambdapump::ReInfoData(const QByteArray data)
             this->repumppower = ((unsigned char)data[15]) * 256 + (unsigned char)data[16];
             this->repumptemp = (((unsigned char)data[17]) * 256 + (unsigned char)data[18]) / 100.0;//不知道要不要this
             break;
+        case 0x0E://双温控返回全部数据
+            this->reteccurrent = ((unsigned char)data[7] * 256 + (unsigned char)data[8]);
+            this->recavtemp = ((unsigned char)data[9] * 256 + (unsigned char)data[10]) / 100.0;
+            this->repumpcurrent = ((unsigned char)data[11] * 256 + (unsigned char)data[12]);
+            this->repumppower = ((unsigned char)data[13] * 256 + (unsigned char)data[14]);
+            this->repumptemp = ((unsigned char)data[15] * 256 + (unsigned char)data[16]) / 100.0;
+            this->rebacktemp = ((unsigned char)data[19] * 256 + (unsigned char)data[20]) / 100.0;
+            break;
         case 0x16://大电流板返回数据，一次+连续
             this->pd1power = (((unsigned char)data[7]) * 256 + (unsigned char)data[8]);
-            this->backtemp = (((unsigned char)data[9]) * 256 + (unsigned char)data[10]) / 100.0;
+            this->rebacktemp = (((unsigned char)data[9]) * 256 + (unsigned char)data[10]) / 100.0;
             this->pd2power = (((unsigned char)data[11]) * 256 + (unsigned char)data[12]);
             this->pd3power = (((unsigned char)data[13]) * 256 + (unsigned char)data[14]);
             this->pd4power = (((unsigned char)data[15]) * 256 + (unsigned char)data[16]);
-            this->ld27wtemp = (((unsigned char)data[17]) * 256 + (unsigned char)data[18]) / 100.0;
-            this->ld27wcur = (((unsigned char)data[19]) * 256 + (unsigned char)data[20]) / 1000.0;
-            this->ld9wcur = (((unsigned char)data[21]) * 256 + (unsigned char)data[22]) / 1000.0;
-            this->ld27wsetcur = (((unsigned char)data[25]) * 256 + (unsigned char)data[26]) / 1000.0;
-            this->ld9wsetcur = (((unsigned char)data[27]) * 256 + (unsigned char)data[28]) / 1000.0;
+            this->reld27wtemp = (((unsigned char)data[17]) * 256 + (unsigned char)data[18]) / 100.0;
+            this->reld27wcur = (((unsigned char)data[19]) * 256 + (unsigned char)data[20]) / 1000.0;
+            this->reld9wcur = (((unsigned char)data[21]) * 256 + (unsigned char)data[22]) / 1000.0;
+            this->reld27wsetcur = (((unsigned char)data[25]) * 256 + (unsigned char)data[26]) / 1000.0;
+            this->reld9wsetcur = (((unsigned char)data[27]) * 256 + (unsigned char)data[28]) / 1000.0;
             break;
         default:
             break;
@@ -191,11 +199,11 @@ void QtLambdapump::ReInfoData(const QByteArray data)
         if (data[7] == 0x7E)
         {
             this->resetcurrent = ((unsigned char)data[8]) * 256 + (unsigned char)data[9];
-            this->ld27wsetcur = (((unsigned char)data[8]) * 256 + (unsigned char)data[9]) / 1000.0;
+            this->reld27wsetcur = (((unsigned char)data[8]) * 256 + (unsigned char)data[9]) / 1000.0;
         }
         else if (data[7] == 0x7F)
-            this->ld9wsetcur = (((unsigned char)data[8]) * 256 + (unsigned char)data[9]) / 1000.0;
-        if (this->resetcurrent == 1 || (this->ld9wsetcur == 0.001 && this->ld27wsetcur == 0.0))//新方法，判断是否开启
+            this->reld9wsetcur = (((unsigned char)data[8]) * 256 + (unsigned char)data[9]) / 1000.0;
+        if (this->resetcurrent == 1 || (this->reld9wsetcur == 0.001 && this->reld27wsetcur == 0.0))//新方法，判断是否开启
         {
             if (this->ampstatus == on)
                 this->ampstatus = off;//要this

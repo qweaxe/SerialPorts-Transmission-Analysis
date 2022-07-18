@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'QtWidgetsApplication1EUttgW.ui'
+** Form generated from reading UI file 'QtWidgetsApplication1ZgquNS.ui'
 **
 ** Created by: Qt User Interface Compiler version 6.2.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef QTWIDGETSAPPLICATION1EUTTGW_H
-#define QTWIDGETSAPPLICATION1EUTTGW_H
+#ifndef QTWIDGETSAPPLICATION1ZGQUNS_H
+#define QTWIDGETSAPPLICATION1ZGQUNS_H
 
 #include <QtCore/QVariant>
 #include <QtGui/QIcon>
@@ -1118,7 +1118,7 @@ public:
 
     void retranslateUi(QMainWindow *QtWidgetsApplication1Class)
     {
-        QtWidgetsApplication1Class->setWindowTitle(QCoreApplication::translate("QtWidgetsApplication1Class", "QtWidgetsApplication1", nullptr));
+        QtWidgetsApplication1Class->setWindowTitle(QCoreApplication::translate("QtWidgetsApplication1Class", "UFO_Laser Control", nullptr));
         groupBox2->setTitle(QCoreApplication::translate("QtWidgetsApplication1Class", "COM1", nullptr));
         COM1Status->setText(QString());
         SetCOM1Button->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\350\256\276\347\275\256\347\224\265\346\265\201", nullptr));
@@ -1133,8 +1133,8 @@ public:
         label_16->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "LD\346\270\251\345\272\246\357\274\232", nullptr));
         label_15->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "LD\347\224\265\346\265\201\357\274\232", nullptr));
         label_14->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\350\203\214\345\205\211\347\224\265\346\265\201\357\274\232", nullptr));
-        label_26->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "mA", nullptr));
-        label_33->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "mA", nullptr));
+        label_26->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "A", nullptr));
+        label_33->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "A", nullptr));
         groupBox4->setTitle(QCoreApplication::translate("QtWidgetsApplication1Class", "COM3", nullptr));
         COM3Status->setText(QString());
         SetCOM3Button->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\350\256\276\347\275\256\347\224\265\346\265\201", nullptr));
@@ -1233,4 +1233,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // QTWIDGETSAPPLICATION1EUTTGW_H
+#endif // QTWIDGETSAPPLICATION1ZGQUNS_H

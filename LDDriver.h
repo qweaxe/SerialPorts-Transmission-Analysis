@@ -34,10 +34,10 @@ public:
     int PD2power() { return pd2power; }
     int PD3power() { return pd3power; }
     int PD4power() { return pd4power; }
-    double Modeltemp() { return backtemp; }
-    double LD27wtemp() { return ld27wtemp; }
-    double LD27wcur() { return ld27wcur; }
-    double LD9wcur() { return ld9wcur; }
+    double Modeltemp() { return rebacktemp; }
+    double LD27wtemp() { return reld27wtemp; }
+    double LD27wcur() { return reld27wcur; }
+    double LD9wcur() { return reld9wcur; }
     QByteArray& Datasend() { return datasend; }
     
     //~QtLambdapump();//
@@ -55,17 +55,17 @@ private:
     double remodeltemp;//返回指令中背板温度
     double repumptemp;//返回指令中多模LD（27W）温度
     int pd1power;//返回指令中pd1功率
-    double backtemp;//背板温度
-    double tectemp;//tec温度
-    double cavtemp;//腔温度
+    double rebacktemp;//背板温度
+    double retectemp;//tec温度
+    double recavtemp;//腔温度
     int pd2power;//pd2功率
     int pd3power;//pd3功率
     int pd4power;//pd4功率
-    double ld27wtemp;//多模ld（27w）温度
-    double ld27wcur;//多模ld（27w）电流
-    double ld9wcur;//多模ld（9w）电流
-    double ld27wsetcur;//多模ld（27w）设置电流
-    double ld9wsetcur;//多模ld（9w）设置电流
+    double reld27wtemp;//多模ld（27w）温度
+    double reld27wcur;//多模ld（27w）电流
+    double reld9wcur;//多模ld（9w）电流
+    double reld27wsetcur;//多模ld（27w）设置电流
+    double reld9wsetcur;//多模ld（9w）设置电流
 
 };
 

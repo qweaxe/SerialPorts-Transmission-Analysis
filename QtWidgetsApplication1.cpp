@@ -1,4 +1,6 @@
 ﻿#include "QtWidgetsApplication1.h"
+#include <qvalidator.h>
+#include<QtWidgets/QMessageBox>
 //QApplication::addLibraryPath("");
 
 //lambda版本（测试分支）
@@ -28,7 +30,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
 
     ui.COM0PowerEdit->setValidator(SMvalidator);
     ui.COM1PowerEdit->setValidator(SMvalidator);
-    ui.COM2PowerEdit->setValidator(SMvalidator);
+    ui.COM2PowerEdit->setValidator(MMvalidator);
     ui.COM3PowerEdit->setValidator(MMvalidator);
     ui.COM4PowerEdit->setValidator(MMvalidator);
     ui.COM5PowerEdit->setValidator(MMvalidator);
@@ -246,14 +248,14 @@ void QtWidgetsApplication1::on_SetCOM2Button_clicked()
     else
     {
         timer->stop();
-        uint value = ui.COM2PowerEdit->text().toUInt();
+        double value = ui.COM2PowerEdit->text().toDouble();
         if (value > amp2curmax)
             QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
         else
         {
             //SetAmp2Data.resize(8);
             
-            Amp2.Setcurrent(value);
+            Amp2.Set9Wcurrent(value);
             SendDatabyte(2, Amp2.Datasend());
         }
         if (LaserQuery == on)
@@ -275,7 +277,7 @@ void QtWidgetsApplication1::on_SetCOM3Button_clicked()
     {
         timer->stop();
         double value = ui.COM3PowerEdit->text().toDouble();
-        if (value > amp4curmax)
+        if (value > amp3curmax)
             QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
         else
         {
@@ -508,6 +510,7 @@ void QtWidgetsApplication1::ReadData()
         DisplayData(buf);
     }
     redatatxt.close();
+    reerrortxt.close();
     buf.clear();
     //buffer.close();
 }
@@ -534,7 +537,6 @@ void QtWidgetsApplication1::on_SeedPowerEdit_returnPressed()
         ui.SendtextEdit->clear();
         ui.SendtextEdit->setText(Senddata.toHex().toUpper());
     }
-
 
 }
 
@@ -687,9 +689,10 @@ void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
                 default:
                     break;
                 }
-                ui.COM2TempLcd->display(Amp2.Pumptemp());
+                //com2仅连了一个9W泵
+                ui.COM2TempLcd->display(Amp2.Modeltemp());
                 ui.COM2PowerLcd->display(Amp2.Pumppower());
-                ui.COM2CurLcd->display(Amp2.Pumpcurrent());
+                ui.COM2CurLcd->display(Amp2.LD9wcur());
                 break;
 
             case 0x03://case[amp3]
@@ -838,10 +841,7 @@ void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
 
     }
     //检验数据
-
     //读取数据，分发
-
-
 }
 /**
   * @Function Name  : on_EnlaserButton_toggled
@@ -1083,6 +1083,7 @@ char* QtWidgetsApplication1::ConverttoHex(int value)//备用
     int low = value % 256;
     /*buffer[0] = hi;
     buffer[1] = low;*/
+    *text = hi + low;
     return text;
 }
 /**
@@ -1188,51 +1189,37 @@ Status QtWidgetsApplication1::Enlaser()
 
 
     //逐级发送数据
+    //Seed
     Seed.OnstatusQuery();
     SendDatabyte(0, Seed.Datasend());
-    //CRC16Checksum(Seed.Datasend());
-    //Comandlen[1] = Seed.Datasend().size();//长度
-    //Senddata.resize(1);
-    //Senddata[0] = 0x00;
-    //Senddata = Header+Comandlen+Seed.Datasend() + Senddata;
-    //Checksum(Senddata);
-    // Senddata=Senddata+Ender;
-    //serial->write(Senddata);
-    //serial->waitForBytesWritten(10);
-    //ui.SendtextEdit->clear();
-    //ui.SendtextEdit->append(AddBlank(Senddata));
-    //Sleep(sleeptime);
-    //Senddata.clear();
-    //Senddata.resize(1);
-
 
     //Amp1，这种就可以放到类里作为一个方法
     Amp1.OnstatusQuery();
     SendDatabyte(1, Amp1.Datasend());
 
    //Amp2
-    Amp2.OnstatusQuery();
+    Amp2.MMOnstatusQuery();
     SendDatabyte(2, Amp2.Datasend());
 
     //Amp3，读模块号
     Amp3.MMOnstatusQuery();
     SendDatabyte(3, Amp3.Datasend());
 
-    //Amp4
-    Amp4.Onofflaser(temp);
-    SendDatabyte(4, Amp4.Datasend());
+    ////Amp4
+    //Amp4.Onofflaser(temp);
+    //SendDatabyte(4, Amp4.Datasend());
 
-    //Amp5
-    Amp5.Onofflaser(temp);
-    SendDatabyte(5, Amp5.Datasend());
+    ////Amp5
+    //Amp5.Onofflaser(temp);
+    //SendDatabyte(5, Amp5.Datasend());
    
-    //Amp6
-    Amp6.Onofflaser(temp);
-    SendDatabyte(6, Amp6.Datasend());
-    
-    //Amp7
-    Amp7.Onofflaser(temp);
-    SendDatabyte(7, Amp7.Datasend());
+    ////Amp6
+    //Amp6.Onofflaser(temp);
+    //SendDatabyte(6, Amp6.Datasend());
+    //
+    ////Amp7
+    //Amp7.Onofflaser(temp);
+    //SendDatabyte(7, Amp7.Datasend());
 
     ////Main
     //Mainamp.OnOffstatusQuery();
@@ -1349,6 +1336,8 @@ Status QtWidgetsApplication1::Dislaser()
   //Senddata.clear();
   //Senddata.resize(2);
     Comandlen[0] = 0x00;
+   
+    //Seed
     Seed.Setcurrent(1);
     SendDatabyte(0, Seed.Datasend());
 
@@ -1357,32 +1346,31 @@ Status QtWidgetsApplication1::Dislaser()
     SendDatabyte(1, Amp1.Datasend());
 
    //Amp2
-
-    Amp2.Setcurrent(1);
+    Amp2.Set9Wcurrent(0.001);
     SendDatabyte(2, Amp2.Datasend());
 
     //Amp3，还不知道问啥，直接电流设置为0，9W
     Amp3.Set9Wcurrent(0.001);
     SendDatabyte(3, Amp3.Datasend());
 
-    //Amp4
-    Comandlen[0] = 0x04;
-    Amp4.Onofflaser(temp);
-    SendDatabyte(4, Amp4.Datasend());
+    ////Amp4
+    //Comandlen[0] = 0x04;
+    //Amp4.Onofflaser(temp);
+    //SendDatabyte(4, Amp4.Datasend());
 
-    //Amp5
-    Comandlen[0] = 0x05;
-    Amp5.Onofflaser(temp);
-    SendDatabyte(5, Amp5.Datasend());
+    ////Amp5
+    //Comandlen[0] = 0x05;
+    //Amp5.Onofflaser(temp);
+    //SendDatabyte(5, Amp5.Datasend());
 
-    //Amp6
-    Comandlen[0] = 0x06;
-    Amp6.Onofflaser(temp);
-    SendDatabyte(6, Amp6.Datasend());
-
-    Comandlen[0] = 0x07;
-    Amp7.Onofflaser(temp);
-    SendDatabyte(7, Amp7.Datasend());
+    ////Amp6
+    //Comandlen[0] = 0x06;
+    //Amp6.Onofflaser(temp);
+    //SendDatabyte(6, Amp6.Datasend());
+    ////Amp7
+    //Comandlen[0] = 0x07;
+    //Amp7.Onofflaser(temp);
+    //SendDatabyte(7, Amp7.Datasend());
     ////Main
     //Mainamp.OnOffDevice();
     //Comandlen[0] = 0x05;
@@ -1427,54 +1415,54 @@ void QtWidgetsApplication1::LaserStatusQuery()
         Amp1.StatusQuery();
         SendDatabyte(1, Amp1.Datasend());
 
-        Amp2.StatusQuery();
+        Amp2.MMstatusQuery();
         SendDatabyte(2, Amp2.Datasend());
        
         //com3想连大电流驱动，预计要改
         Amp3.MMstatusQuery();
         SendDatabyte(3, Amp3.Datasend());
 
-        //com4 
-        Amp4.CurrentQuery();
-        SendDatabyte(4, Amp4.Datasend());
+        ////com4 
+        //Amp4.CurrentQuery();
+        //SendDatabyte(4, Amp4.Datasend());
 
-        Amp4.BacklightQuery();
-        SendDatabyte(4, Amp4.Datasend());
+        //Amp4.BacklightQuery();
+        //SendDatabyte(4, Amp4.Datasend());
 
-        Amp4.TempQuery();
-        SendDatabyte(4, Amp4.Datasend());
+        //Amp4.TempQuery();
+        //SendDatabyte(4, Amp4.Datasend());
 
-        // com5
-        Amp5.CurrentQuery();
-        SendDatabyte(5, Amp5.Datasend());
+        //// com5
+        //Amp5.CurrentQuery();
+        //SendDatabyte(5, Amp5.Datasend());
 
-        Amp5.BacklightQuery();
-        SendDatabyte(5, Amp5.Datasend());
+        //Amp5.BacklightQuery();
+        //SendDatabyte(5, Amp5.Datasend());
 
-        Amp5.TempQuery();
-        SendDatabyte(5, Amp5.Datasend());
+        //Amp5.TempQuery();
+        //SendDatabyte(5, Amp5.Datasend());
 
-        // com6
-        Comandlen[0] = 0x06;
-        Amp6.CurrentQuery();
-        SendDatabyte(6, Amp6.Datasend());
+        //// com6
+        //Comandlen[0] = 0x06;
+        //Amp6.CurrentQuery();
+        //SendDatabyte(6, Amp6.Datasend());
 
-        Amp6.BacklightQuery();
-        SendDatabyte(6, Amp6.Datasend());
+        //Amp6.BacklightQuery();
+        //SendDatabyte(6, Amp6.Datasend());
 
-        Amp6.TempQuery();
-        SendDatabyte(6, Amp6.Datasend());
+        //Amp6.TempQuery();
+        //SendDatabyte(6, Amp6.Datasend());
 
 
-        // com7
-        Amp7.CurrentQuery();
-        SendDatabyte(7, Amp7.Datasend());
+        //// com7
+        //Amp7.CurrentQuery();
+        //SendDatabyte(7, Amp7.Datasend());
 
-        Amp7.BacklightQuery();
-        SendDatabyte(7, Amp7.Datasend());
+        //Amp7.BacklightQuery();
+        //SendDatabyte(7, Amp7.Datasend());
 
-        Amp7.TempQuery();
-        SendDatabyte(7, Amp7.Datasend());
+        //Amp7.TempQuery();
+        //SendDatabyte(7, Amp7.Datasend());
 
         //////功放的
         ////Comandlen[0] = 0x05;

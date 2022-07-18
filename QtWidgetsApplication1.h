@@ -2,16 +2,14 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_QtWidgetsApplication1.h"
-#include <qvalidator.h>
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
+//#include <QtSerialPort/QSerialPort>
+//#include <QtSerialPort/QSerialPortInfo>
 #include<QBuffer>
-#include<QtWidgets/QMessageBox>
 #include<qtimer.h>
 #include<Windows.h>
 #include<QFile>
 #include"MyThread.h"
-#include<QThread>
+//#include<QThread>
 #include"LDDriver.h"
 #include"CircularBuffer.h"
 
@@ -142,8 +140,8 @@ private:
     int curmin = 0;
     int seedcurmax = 1000;
     int amp1curmax = 1000;
-    int amp2curmax = 1000;
-    int amp3curmax = 1000;
+    double amp2curmax = 10.0;
+    double amp3curmax = 10.0;
     double amp4curmin = 0.0;
     double amp4curmax = 10.0;
     double mainmin = 0.0;

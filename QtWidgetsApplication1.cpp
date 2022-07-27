@@ -576,16 +576,18 @@ void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
     int backcurvalue = 0;//应该要改成double类型才对
     int size = 0;
     QByteArray enter("\n");
-    QByteArray byteframe("error type：帧头不对  数据：");
-    QByteArray bytelength("error type: 长度不对  数据：");
-    QByteArray bytechecksum("error type:校验和不对  数据：");
+    //如果要写中文应该用QString
+    QByteArray byteframe("error type：frame  Data：");
+    QByteArray bytelength("error type: length  Data：");
+    QByteArray bytechecksum("error type: checksum  Data：");
+    
     //帧头验证
     if (buf[0] != 0xAA && buf[1] != 0x55)
     {
         //QMessageBox::warning(this, tr("警告⚠"), tr("舍弃"));
         reerrortxt.write(byteframe);
         reerrortxt.write(enter);
-        reerrortxt.write(buf);
+        reerrortxt.write(buf.toHex(' ').toUpper());
         reerrortxt.write(enter);
         reerrortxt.close();
 
@@ -602,7 +604,7 @@ void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
         //QMessageBox::warning(this, "错误❌", "收到数据长度不对");
         reerrortxt.write(bytelength);
         reerrortxt.write(enter);
-        reerrortxt.write(buf);
+        reerrortxt.write(buf.toHex(' ').toUpper());
         reerrortxt.write(enter);
         reerrortxt.close();
     }
@@ -619,7 +621,7 @@ void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
             //QMessageBox::warning(this, tr("警告⚠"), tr("校验和不正确"));
             reerrortxt.write(bytechecksum);
             reerrortxt.write(enter);
-            reerrortxt.write(buf);
+            reerrortxt.write(buf.toHex(' ').toUpper());
             reerrortxt.write(enter);
             reerrortxt.close();
         }

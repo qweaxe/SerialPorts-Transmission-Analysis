@@ -32,12 +32,6 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     ui.COM1PowerEdit->setValidator(SMvalidator);
     ui.COM2PowerEdit->setValidator(MMvalidator);
     ui.COM3PowerEdit->setValidator(MMvalidator);
-    ui.COM4PowerEdit->setValidator(MMvalidator);
-    ui.COM5PowerEdit->setValidator(MMvalidator);
-    ui.COM6PowerEdit->setValidator(MMvalidator);
-    ui.COM7PowerEdit->setValidator(MMvalidator);
-    ui.MainpowerEdit->setValidator(Mainvalidator);
-
     comlist.clear();
 
     //这句语法不太熟悉
@@ -316,171 +310,6 @@ void QtWidgetsApplication1::on_setCOM39WBtn_clicked()
     }
 }
 
-/**
-  * @Function Name  : on_SetCOM4Button_clicked
-  * @
-  * @brief 发送com4的数据
-  * @param None
-  * @retval void
-  */
-void QtWidgetsApplication1::on_SetCOM4Button_clicked()
-{
-    if (Comstatus == off)
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
-    else
-    {
-        timer->stop();
-        uint value = (ui.COM4PowerEdit->text().toDouble()) * 1000;
-        if (value > 10000)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
-        else
-        {
-            Amp4.Setcurrent(value);
-            SendDatabyte(4, Amp4.Datasend());
-        }
-        if (LaserQuery == on)
-            timer->start();
-    }
-}
-/**
-  * @Function Name  : on_SetCOM5Button_clicked
-  * @
-  * @brief 发送com5的数据
-  * @param None
-  * @retval void
-  */
-void QtWidgetsApplication1::on_SetCOM5Button_clicked()
-{
-    if (Comstatus == off)
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
-    else
-    {
-        timer->stop();
-        uint value = (ui.COM5PowerEdit->text().toDouble()) * 1000;
-        if (value > 10000)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
-        else
-        {
-            Amp5.Setcurrent(value);
-            SendDatabyte(5, Amp5.Datasend());
-        }
-        if (LaserQuery == on)
-            timer->start();
-    }
-}
-
-/**
-  * @Function Name  : on_SetCOM6Button_clicked
-  * @
-  * @brief 发送com6的数据
-  * @param None
-  * @retval void
-  */
-void QtWidgetsApplication1::on_SetCOM6Button_clicked()
-{
-    if (Comstatus == off)
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
-    else
-    {
-        timer->stop();
-        uint value = (ui.COM6PowerEdit->text().toDouble()) * 1000;
-        if (value > 10000)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
-        else
-        {
-            Amp6.Setcurrent(value);
-            SendDatabyte(6, Amp6.Datasend());
-        }
-        if (LaserQuery == on)
-            timer->start();
-    }
-}
-
-/**
-  * @Function Name  : on_SetCOM7Button_clicked
-  * @
-  * @brief 发送com7的数据
-  * @param None
-  * @retval void
-  */
-void QtWidgetsApplication1::on_SetCOM7Button_clicked()
-{
-    if (Comstatus == off)
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
-    else
-    {
-        timer->stop();
-        uint value = (ui.COM7PowerEdit->text().toDouble()) * 1000;
-        if (value > 10000)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
-        else
-        {
-            Amp7.Setcurrent(value);
-            SendDatabyte(7, Amp7.Datasend());
-        }
-        if (LaserQuery == on)
-            timer->start();
-    }
-}
-
-/**
-  * @Function Name  : on_SetMainButton_clicked
-  * @
-  * @brief 发送主放大（com5）的数据
-  * @param None
-  * @retval void
-  */
-void QtWidgetsApplication1::on_SetMainButton_clicked()
-{
-    if (Comstatus == off)
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
-    else
-    {
-        timer->stop();
-        //想想怎么处理数据，发送的其实是HEX代码
-        QByteArray value = ui.MainpowerEdit->text().toLatin1();
-        double douvalue = ui.MainpowerEdit->text().toDouble();
-        if (douvalue > mainmax)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
-        else
-        {
-            Mainamp.Setcurrent(value);
-            SetMainData.resize(9);//试试01.5A那边能否接受
-            Comandlen[0] = 0x05;
-            Comandlen[1] = Mainamp.Datasend().size();
-
-            //SetMainData[0] = 0x53;//S
-            //SetMainData[1] = 0x49;//I
-            //SetMainData[2] = 0x20;//space
-            //SetMainData[3] = value[0];
-            //SetMainData[4] = 0x2E;//0x2E.//中文点怎么办？试试，好像不行
-            //SetMainData[5] = value[2];
-            //SetMainData[6] = 0x30;//不打0了，自己赋值为0
-            //SetMainData[7] = 0x0D;//CR
-            //SetMainData[8] = 0x0A;//LF
-
-            Senddata[0] = 0x00;
-            //Senddata =Header+Comandlen+ SetMainData + Senddata;
-            Senddata = Header + Comandlen + Mainamp.Datasend() + Senddata;
-            Checksum(Senddata);
-            Senddata = Senddata + Ender;
-            serial->write(Senddata);
-            serial->waitForBytesWritten(10);
-            ui.SendtextEdit->clear();
-            ui.SendtextEdit->append(AddBlank(Senddata));
-            Senddata.clear();
-
-            Senddata.resize(1);
-            Senddata[0] = 0x00;
-
-
-        }
-        if (LaserQuery == on)
-            timer->start();
-    }
-}
-
-
 
 /**
   * @Function Name  : Readdata
@@ -693,8 +522,8 @@ void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
                 }
                 //com2仅连了一个9W泵
                 ui.COM2TempLcd->display(Amp2.Modeltemp());
-                ui.COM2PowerLcd->display(Amp2.Pumppower());
-                ui.COM2CurLcd->display(Amp2.LD9wcur());
+                ui.COM227WLDTempLcd->display(Amp2.LD27wtemp());
+                ui.COM29WCurLcd->display(Amp2.LD9wcur());
                 break;
 
             case 0x03://case[amp3]
@@ -713,130 +542,12 @@ void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
                     break;
                 }
                 ui.COM3TempLcd->display(Amp3.Modeltemp());
-                ui.COM3PowerLcd->display(Amp3.Pumppower());
-                ui.COM3CurLcd->display(Amp3.LD27wcur());
-               
+                ui.COM327WTempLcd->display(Amp3.LD27wtemp());
+                ui.COM327WCurLcd->display(Amp3.LD27wcur());
+                ui.COM39WCurLcd->display(Amp3.LD9wcur());
                 break;
-                //case[amp4]
-            case 0x04:
-                //QMessageBox::information(this, "收到消息", "这个是Amp4端返回的信号！");
-                Amp4.ReInfoData(buf);
-                switch (Amp4.Ampstatus())//感觉这样不太好
-                {
-                case on:
-                    ui.COM4Status->setPixmap(QPixmap(":/images/online.png"));
-                    break;
-
-                case off:
-                    ui.COM4Status->setPixmap(QPixmap(":/images/offline.png"));
-                    break;
-                default:
-                    break;
-                }
-                ui.COM4PowerLcd->display(Amp4.Amppower());
-                ui.COM4TempLcd->display(Amp4.Amptemp());
-                ui.COM4CurLcd->display(Amp4.Ampcurrent());
-                break;
-                //case[main]
-                //纯发字符串 
-            case 0x05:// AA 55 05 0B 31 2E 32 30 41 0D 0A 3D 3E 0D 0A BA (0D 0A)（这里已经去掉了）：1.20A CR LF => CR LF
-                //QMessageBox::information(this, "收到消息", "这个是Main端返回的信号！");
-                //length = buf[3] + 4;
-                //Mainamp.ReInfoData(buf);
-                //switch (buf[length - 4])
-                //{
-                //case 0x21://!
-                //    QMessageBox::warning(this, tr("警告⚠"), tr(" Command correct but execution error (e.g. parameters out of range)"));
-                //    break;
-                //case 0x3D://=
-
-                //    switch (buf[length - 7])
-                //    {
-                //    case 0x30://0，电源关闭，远程关闭
-                //        ui.MainStatus->setPixmap(QPixmap(":/images/online.png"));
-                //        break;
-                //    case 0x31://1，电源开启，远程关闭
-
-                //        break;
-                //    case 0x32://2，电源关闭，远程开启
-                //        ui.MainStatus->setPixmap(QPixmap(":/images/offline.png"));//这种情况应该是关后询问
-                //        break;
-                //    case 0x33://3，电源开启，远程开启
-                //        ui.MainStatus->setPixmap(QPixmap(":/images/online.png"));
-                //        break;
-                //    case 0x41://A
-                //        ui.MainCurLcd->display(Mainamp.ampcurrent());
-                //        break;
-                //    case 0x56://V
-
-                //        break;
-                //    default:
-                //        break;
-                //    }
-                //    break;
-                //case 0x3F://?
-                //    QMessageBox::warning(this, tr("警告⚠"), tr("Command error, not accepted."));
-                //    break;
-                //default:
-                //    break;
-                //}
-                Amp5.ReInfoData(buf);
-                switch (Amp5.Ampstatus())//感觉这样不太好
-                {
-                case on:
-                    ui.COM5Status->setPixmap(QPixmap(":/images/online.png"));
-                    break;
-
-                case off:
-                    ui.COM5Status->setPixmap(QPixmap(":/images/offline.png"));
-                    break;
-                default:
-                    break;
-                }
-                ui.COM5PowerLcd->display(Amp5.Amppower());
-                ui.COM5TempLcd->display(Amp5.Amptemp());
-                ui.COM5CurLcd->display(Amp5.Ampcurrent());
-                break;
-               
-            case 0x06:
-                Amp6.ReInfoData(buf);
-                switch (Amp6.Ampstatus())//感觉这样不太好
-                {
-                case on:
-                    ui.COM6Status->setPixmap(QPixmap(":/images/online.png"));
-                    break;
-
-                case off:
-                    ui.COM6Status->setPixmap(QPixmap(":/images/offline.png"));
-                    break;
-                default:
-                    break;
-                }
-                ui.COM6PowerLcd->display(Amp6.Amppower());
-                ui.COM6TempLcd->display(Amp6.Amptemp());
-                ui.COM6CurLcd->display(Amp6.Ampcurrent());
-                break;
-
-            case 0x07:
-                Amp7.ReInfoData(buf);
-                switch (Amp7.Ampstatus())//感觉这样不太好
-                {
-                case on:
-                    ui.COM7Status->setPixmap(QPixmap(":/images/online.png"));
-                    break;
-
-                case off:
-                    ui.COM7Status->setPixmap(QPixmap(":/images/offline.png"));
-                    break;
-                default:
-                    break;
-                }
-                ui.COM7PowerLcd->display(Amp7.Amppower());
-                ui.COM7TempLcd->display(Amp7.Amptemp());
-                ui.COM7CurLcd->display(Amp7.Ampcurrent());
-                break;
+          
             default:
-
                 break;
             }
         }
@@ -963,28 +674,6 @@ void QtWidgetsApplication1::SetData()//
     //SetAmp3Data[6] = 0x00;//crc16low
     //SetAmp3Data[7] = 0x00;//crc16hi
     
-    //QtGolightpump amp4;
-    SetAmp4Data.resize(8);
-    SetAmp4Data[0] = 0xEF;
-    SetAmp4Data[1] = 0xEF;
-    SetAmp4Data[2] = 0x05;
-    SetAmp4Data[3] = 0xFF;
-    SetAmp4Data[4] = 0x00;
-    SetAmp4Data[7] = 0x00;
-    Amp4.Setcurrent(0);
-
-    Amp5.Setcurrent(0);
-    Amp6.Setcurrent(0);
-    Amp7.Setcurrent(0);
-    //功放端不知是否是设置GSI还是先找目标再SI，先按SI设置
-    //QtCotek mainamp;
-    SetMainData.resize(9);
-    SetMainData[0] = 0x53;//S
-    SetMainData[1] = 0x49;//I
-    SetMainData[2] = 0x20;//space
-    SetMainData[4] = 0x2E;//.
-    SetMainData[7] = 0x0D;//CR
-    SetMainData[8] = 0x0A;//LF
      
     //紧急时刻直接设置的值
     SetSeedzero.resize(5);
@@ -1679,15 +1368,15 @@ void QtWidgetsApplication1::COM0Changed(int n, QtLambdapump* Amp0)
 }
 
 
-/**
-  * @Function Name  : on_COMDelayEdit_returnPressed
-  * @
-  * @brief 通信延时设置，回车触发
-  * @param None
-  * @retval void
-  */
-void QtWidgetsApplication1::on_COMDelayEdit_returnPressed()
-{
-    sleeptime = ui.COMDelayEdit->text().toInt();
-}
+///**
+//  * @Function Name  : on_COMDelayEdit_returnPressed
+//  * @
+//  * @brief 通信延时设置，回车触发
+//  * @param None
+//  * @retval void
+//  */
+//void QtWidgetsApplication1::on_COMDelayEdit_returnPressed()
+//{
+//    sleeptime = ui.COMDelayEdit->text().toInt();
+//}
 

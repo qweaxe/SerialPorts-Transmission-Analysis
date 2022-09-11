@@ -62,8 +62,6 @@ private slots:
 
     void on_EnlaserButton_toggled(bool checked);
 
-    void on_SetMainButton_clicked();
-
     void on_SetCOM1Button_clicked();
 
     void on_SetCOM2Button_clicked();
@@ -78,15 +76,6 @@ private slots:
 
     void on_GetLDStatusBtn_toggled(bool checked);
 
-    void on_SetCOM4Button_clicked();
-
-    void on_SetCOM5Button_clicked();
-
-    void on_SetCOM6Button_clicked();
-
-    void on_SetCOM7Button_clicked();
-
-    void on_COMDelayEdit_returnPressed();
 
     void on_setCOM39WBtn_clicked();
 
@@ -106,11 +95,6 @@ private:
     QtLambdapump Amp1;
     QtLambdapump Amp2;
     QtLambdapump Amp3;
-    QtGolightpump Amp4;
-    QtGolightpump Amp5;
-    QtGolightpump Amp6;
-    QtGolightpump Amp7;
-    QtCotek Mainamp;
 
     QSerialPort* serial;//全局的串口对象
     QBuffer buffer;//
@@ -128,8 +112,6 @@ private:
     QByteArray SetAmp1zero;
     QByteArray SetAmp2zero;
     QByteArray SetAmp3zero;
-    QByteArray SetAmp4zero;
-    QByteArray SetMainzero;
     QByteArray temp;
     QByteArray temp1;
     QByteArray checksum;

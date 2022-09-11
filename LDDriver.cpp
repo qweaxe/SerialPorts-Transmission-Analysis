@@ -37,7 +37,7 @@ QtLambdapump::QtLambdapump()
     pd3power = 0;
     pd4power = 0;
     retectemp = 25.0;
-    resetcurrent = 1;
+    resetcurrent = 0;
     setcurvalue = 0;
 }
 /**
@@ -203,7 +203,7 @@ void QtLambdapump::ReInfoData(const QByteArray data)
         }
         else if (data[7] == 0x7F)
             this->reld9wsetcur = (((unsigned char)data[8]) * 256 + (unsigned char)data[9]) / 1000.0;
-        if (this->resetcurrent == 1 || (this->reld9wsetcur == 0.001 && this->reld27wsetcur == 0.0))//新方法，判断是否开启
+        if (this->resetcurrent == 1 || ((abs(this->reld9wsetcur -0.001)<0.001) && abs(this->reld27wsetcur -0.001)<0.001))//新方法，判断是否开启
         {
             if (this->ampstatus == on)
                 this->ampstatus = off;//要this

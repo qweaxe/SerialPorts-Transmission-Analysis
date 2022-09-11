@@ -1268,65 +1268,65 @@ Status QtWidgetsApplication1::Dislaser()
     timer->stop();
     Senddata.resize(1);
     
-    SetSeedData.resize(5);//停止获取数据
-    //SetSeedData.fromHex("0x55,0x0A,0x03,0x70,0x70");
-    SetSeedData[0] = 0x55;
-    SetSeedData[1] = 0xAA;
-    SetSeedData[2] = 0x03;
-    SetSeedData[3] = 0x70;
-    SetSeedData[4] = 0x70;
+    //SetSeedData.resize(5);//停止获取数据
+    ////SetSeedData.fromHex("0x55,0x0A,0x03,0x70,0x70");
+    //SetSeedData[0] = 0x55;
+    //SetSeedData[1] = 0xAA;
+    //SetSeedData[2] = 0x03;
+    //SetSeedData[3] = 0x70;
+    //SetSeedData[4] = 0x70;
 
-    //关闭命令，看返回值是否正常
-    QByteArray temp;
-    temp.resize(1);
-    temp[0] = 0x05;
+    ////关闭命令，看返回值是否正常
+    //QByteArray temp;
+    //temp.resize(1);
+    //temp[0] = 0x05;
    
-    SetAmp1Data.resize(6);
-    SetAmp1Data[0] = 0xEF;
-    SetAmp1Data[1] = 0xEF;
-    SetAmp1Data[2] = 0x03;
-    SetAmp1Data[3] = 0xFF;
-    SetAmp1Data[4] = 0x05;
+    //SetAmp1Data.resize(6);
+    //SetAmp1Data[0] = 0xEF;
+    //SetAmp1Data[1] = 0xEF;
+    //SetAmp1Data[2] = 0x03;
+    //SetAmp1Data[3] = 0xFF;
+    //SetAmp1Data[4] = 0x05;
 
-    //关闭命令，看返回值是否正常
-    
-    SetAmp2Data.resize(6);
-    SetAmp2Data[0] = 0xEF;
-    SetAmp2Data[1] = 0xEF;
-    SetAmp2Data[2] = 0x03;
-    SetAmp2Data[3] = 0xFF;
-    SetAmp2Data[4] = 0x05;
+    ////关闭命令，看返回值是否正常
+    //
+    //SetAmp2Data.resize(6);
+    //SetAmp2Data[0] = 0xEF;
+    //SetAmp2Data[1] = 0xEF;
+    //SetAmp2Data[2] = 0x03;
+    //SetAmp2Data[3] = 0xFF;
+    //SetAmp2Data[4] = 0x05;
 
-    //设置pump电流为0算了，也不好弄，3月24日
-    SetAmp3Data.resize(8);
-    SetAmp3Data[0] = 0x00;
-    SetAmp3Data[1] = 0x06;
-    SetAmp3Data[2] = 0x55;
-    SetAmp3Data[3] = 0x7E;
-    SetAmp3Data[4] = 0x00;//hi
-    SetAmp3Data[5] = 0x00;//low
-    SetAmp3Data[6] = 0xF8;
-    SetAmp3Data[7] = 0x1E;
+    ////设置pump电流为0算了，也不好弄，3月24日
+    //SetAmp3Data.resize(8);
+    //SetAmp3Data[0] = 0x00;
+    //SetAmp3Data[1] = 0x06;
+    //SetAmp3Data[2] = 0x55;
+    //SetAmp3Data[3] = 0x7E;
+    //SetAmp3Data[4] = 0x00;//hi
+    //SetAmp3Data[5] = 0x00;//low
+    //SetAmp3Data[6] = 0xF8;
+    //SetAmp3Data[7] = 0x1E;
 
-    //关闭命令，看返回值是否正常
-    Amp4.Onofflaser(temp);
-    SetAmp4Data.resize(6);
-    SetAmp4Data[0] = 0xEF;
-    SetAmp4Data[1] = 0xEF;
-    SetAmp4Data[2] = 0x05;
-    SetAmp4Data[3] = 0xFF;
-    SetAmp4Data[4] = 0x00;
+    ////关闭命令，看返回值是否正常
+    //Amp4.Onofflaser(temp);
+    //SetAmp4Data.resize(6);
+    //SetAmp4Data[0] = 0xEF;
+    //SetAmp4Data[1] = 0xEF;
+    //SetAmp4Data[2] = 0x05;
+    //SetAmp4Data[3] = 0xFF;
+    //SetAmp4Data[4] = 0x00;
 
-    SetMainData.resize(9);//不知道是power还是global power,先用前者
-    SetMainData[0] = 0x50;//P
-    SetMainData[1] = 0x4F;//O
-    SetMainData[2] = 0x57;//W
-    SetMainData[3] = 0x45;//E
-    SetMainData[4] = 0x52;//R
-    SetMainData[5] = 0x20;//space
-    SetMainData[6] = 0x30;//0
-    SetMainData[7] = 0x0D;//CR
-    SetMainData[8] = 0x0A;//LF
+    //SetMainData.resize(9);//不知道是power还是global power,先用前者
+    //SetMainData[0] = 0x50;//P
+    //SetMainData[1] = 0x4F;//O
+    //SetMainData[2] = 0x57;//W
+    //SetMainData[3] = 0x45;//E
+    //SetMainData[4] = 0x52;//R
+    //SetMainData[5] = 0x20;//space
+    //SetMainData[6] = 0x30;//0
+    //SetMainData[7] = 0x0D;//CR
+    //SetMainData[8] = 0x0A;//LF
 
     //逐级发送数据
 
@@ -1337,7 +1337,7 @@ Status QtWidgetsApplication1::Dislaser()
   //serial->write(Senddata);
   //Senddata.clear();
   //Senddata.resize(2);
-    Comandlen[0] = 0x00;
+    //Comandlen[0] = 0x00;
    
     //Seed
     Seed.Setcurrent(1);

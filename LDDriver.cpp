@@ -185,7 +185,7 @@ void QtLambdapump::ReInfoData(const QByteArray data)
             this->pd2power = (((unsigned char)data[11]) * 256 + (unsigned char)data[12]);
             this->pd3power = (((unsigned char)data[13]) * 256 + (unsigned char)data[14]);
             this->pd4power = (((unsigned char)data[15]) * 256 + (unsigned char)data[16]);
-            this->reld27wtemp = (((unsigned char)data[17]) * 256 + (unsigned char)data[18]) / 100.0;
+            this->reld27wtemp = (data[17]* 256 + (unsigned char) data[18]) / 100.0;
             this->reld27wcur = (((unsigned char)data[19]) * 256 + (unsigned char)data[20]) / 1000.0;
             this->reld9wcur = (((unsigned char)data[21]) * 256 + (unsigned char)data[22]) / 1000.0;
             this->reld27wsetcur = (((unsigned char)data[25]) * 256 + (unsigned char)data[26]) / 1000.0;

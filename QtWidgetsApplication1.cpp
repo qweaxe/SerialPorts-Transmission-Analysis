@@ -181,7 +181,7 @@ void QtWidgetsApplication1::on_SetCOM0Button_clicked()
 {
     //串口是否开启
     if (Comstatus == off)
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
+        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
 
     else
     {
@@ -210,7 +210,7 @@ void QtWidgetsApplication1::on_SetCOM0Button_clicked()
 void QtWidgetsApplication1::on_SetCOM1Button_clicked()
 {
     if (Comstatus == off)
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
+        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
     else
     {
         timer->stop();
@@ -238,7 +238,7 @@ void QtWidgetsApplication1::on_SetCOM1Button_clicked()
 void QtWidgetsApplication1::on_SetCOM2Button_clicked()
 {
     if (Comstatus == off)
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
+        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
     else
     {
         timer->stop();
@@ -266,7 +266,11 @@ void QtWidgetsApplication1::on_SetCOM2Button_clicked()
 void QtWidgetsApplication1::on_SetCOM3Button_clicked()
 {
     if (Comstatus == off)
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
+        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
+    else if (Amp3.LD9wsetcur()<0.9)
+    {
+        QMessageBox::warning(this, tr("警告"), tr("前一级尚未正确开启！"));
+    }
     else
     {
         timer->stop();
@@ -293,7 +297,11 @@ void QtWidgetsApplication1::on_SetCOM3Button_clicked()
 void QtWidgetsApplication1::on_setCOM39WBtn_clicked()
 {
     if (Comstatus == off)
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
+        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
+    else if (Amp2.LD9wsetcur() < 0.9)
+    {
+        QMessageBox::warning(this, tr("警告"), tr("前一级尚未正确开启！"));
+    }
     else
     {
         timer->stop();

@@ -38,6 +38,8 @@ public:
     double LD27wtemp() { return reld27wtemp; }
     double LD27wcur() { return reld27wcur; }
     double LD9wcur() { return reld9wcur; }
+    double LD27wsetcur() { return reld27wsetcur; }
+    double LD9wsetcur() { return reld9wsetcur; }
     QByteArray& Datasend() { return datasend; }
     
     //~QtLambdapump();//

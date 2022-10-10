@@ -36,6 +36,7 @@ public slots:
 	void send();//数值还是直接发整理好的内容？
 	void SetSerialPort(bool checked);
 	void SetSerialPortList();
+
 signals:
 	void working(int num);
 	void finish(QString elapsedTime);//可以传递多个参数，槽会匹配并忽略多余的参数

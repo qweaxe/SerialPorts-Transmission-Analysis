@@ -61,8 +61,9 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     emit QtWidgetsApplication1::starting2();
     connect(Processwork, &ProcessThread::SerialPortChanged, this, &QtWidgetsApplication1::SerialPortChanged);
     connect(this, &QtWidgetsApplication1::GetSerialPort, Processwork, &ProcessThread::SetSerialPortList);
-    //设置串口信息先不用多线程处理？不行！不然无法收发
-    //connect(this,&QtWidgetsApplication1::on_pushButton_toggled,Processwork, )
+    //connect设置串口的信息函数
+    connect(this, &QtWidgetsApplication1::SetSerialPort, Processwork, &ProcessThread::SetSerialPort);
+    
 }
      
 
@@ -87,6 +88,7 @@ void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
 {
     if (checked)
     {
+
         serial = new QSerialPort;
         //设置串口名
         serial->setPortName(ui.ComComboBox->currentText());

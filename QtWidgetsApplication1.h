@@ -44,6 +44,7 @@ signals:
     void starting1(int num);
     void starting2();
     void GetSerialPort();
+    void SetSerialPort(bool checked);
 public slots:
 
     void on_pushButton_toggled(bool checked);

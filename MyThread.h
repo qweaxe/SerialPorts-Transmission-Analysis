@@ -34,6 +34,7 @@ public slots:
 	QByteArray Read(QByteArray data);
 	void begin();//需要在子线程分配的资源，全部在此函数进行，该槽函数绑定到线程的started()信号上
 	void send();//数值还是直接发整理好的内容？
+	void SetSerialPort(bool checked);
 signals:
 	void working(int num);
 	void finish(QString elapsedTime);//可以传递多个参数，槽会匹配并忽略多余的参数

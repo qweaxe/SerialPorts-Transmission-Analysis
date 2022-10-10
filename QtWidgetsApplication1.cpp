@@ -35,16 +35,16 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     comlist.clear();
 
     //这句语法不太熟悉
-    foreach(const QSerialPortInfo & info, QSerialPortInfo::availablePorts())
-    {
-        QSerialPort serial;
-        serial.setPort(info);
-        if (serial.open(QIODevice::ReadWrite))
-        {
-            ui.ComComboBox->addItem(serial.portName());
-            serial.close();
-        }
-    }
+    //foreach(const QSerialPortInfo & info, QSerialPortInfo::availablePorts())
+    //{
+    //    QSerialPort serial;
+    //    serial.setPort(info);
+    //    if (serial.open(QIODevice::ReadWrite))
+    //    {
+    //        ui.ComComboBox->addItem(serial.portName());
+    //        serial.close();
+    //    }
+    //}
     //SetData();//换个位置？使能和控制电流的命令长度不一样
 
     //给子线程建立连接
@@ -58,8 +58,10 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     //connect(Processwork, &ProcessThread::processed, this, &QtWidgetsApplication1::COM0Changed);
 
     t2->start();
-
+    emit QtWidgetsApplication1::starting2();
     connect(Processwork, &ProcessThread::SerialPortChanged, this, &QtWidgetsApplication1::SerialPortChanged);
+    //设置串口信息先不用多线程处理？不行！不然无法收发
+    //connect(this,&QtWidgetsApplication1::on_pushButton_toggled,Processwork, )
 }
      
 

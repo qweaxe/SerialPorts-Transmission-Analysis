@@ -26,8 +26,7 @@ ProcessThread::ProcessThread(QObject* parent) :QObject(parent)
 
 void ProcessThread::begin(QByteArray data)
 {
-	qDebug() << "处理线程：" << " || " << QThread::currentThread();
-	QElapsedTimer time;
+	qDebug() << "处理线程开始工作：" << " || " << QThread::currentThread();
 	time.start();
 	//for (int i = 0; i < num; i++)
 	//{
@@ -35,11 +34,16 @@ void ProcessThread::begin(QByteArray data)
 	//	
 	//	emit working(i);
 	//}
-	processdata=Read(data);
+	processdata=Read(data);//读和处理不要放到初始函数上
 	Process(processdata);
 
 	qDebug() << "处理线程，共耗时： " << time.elapsed() << "ms。";
 	emit finish(QString::number(time.elapsed()));//改变一下，不在这里销毁，仅仅作为结果输出
+}
+
+void ProcessThread::send()//发送函数
+{
+
 }
 
 QByteArray ProcessThread::Read(QByteArray data)

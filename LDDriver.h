@@ -2,6 +2,7 @@
 #ifndef LDDRIVER_H_
 #define LDDRIVER_H_
 
+#include<QObject>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
@@ -12,7 +13,7 @@ enum Status
     broken
 };
 
-class QtLambdapump :public QSerialPort//:public QtWidgetsApplication1
+class QtLambdapump :public QObject//:public QtWidgetsApplication1
 {
 public:
     QtLambdapump();

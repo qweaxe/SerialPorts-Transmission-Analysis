@@ -45,9 +45,9 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
             serial.close();
         }
     }
-    SetData();//换个位置？使能和控制电流的命令长度不一样
+    //SetData();//换个位置？使能和控制电流的命令长度不一样
 
-    //给子线程传值
+    //给子线程建立连接
     //connect(this, &QtWidgetsApplication1::starting1, Mainwork, &MainThread::begin);
     connect(this, &QtWidgetsApplication1::starting2, Processwork, &ProcessThread::begin);
 
@@ -57,7 +57,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     //connect(Processwork, &ProcessThread::working, this, [=]int l);
     connect(Processwork, &ProcessThread::processed, this, &QtWidgetsApplication1::COM0Changed);
 
-    //t2->start();
+    t2->start();
 }
      
 
@@ -102,6 +102,8 @@ void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
         //关闭设置菜单使能（好像不要这个功能）
         //连接信号槽，点开始通信后就开始，下位机一有数据发送过来就会相应此槽函数：connect（ob1，sig1，ob2，slot1）
         QObject::connect(serial, &QSerialPort::readyRead, this, &QtWidgetsApplication1::ReadData);
+        //多线程版本，2022年10月8日，需要修改
+        //QObject::connect(serial, &QSerialPort::readyRead, Processwork, &ProcessThread::Read);
         Comstatus = on;
         //图标提示
         ui.statuslabel->setPixmap(QPixmap(":/images/on.png"));

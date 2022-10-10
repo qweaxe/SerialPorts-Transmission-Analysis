@@ -31,7 +31,7 @@ public:
     QString AddBlank(QByteArray& arr);//不止，还有自动大写等
     void Checksum(QByteArray& data);
     void CRC16Checksum(QByteArray& data);
-    char* ConverttoHex(int value);//没用
+    //char* ConverttoHex(int value);//没用
     Status Enlaser();
     Status Dislaser();
     void Changeui();
@@ -42,7 +42,7 @@ signals:
     void sigLabelChange();
     void sigAmpStatusChange();
     void starting1(int num);
-    void starting2(QByteArray data);
+    void starting2();
 public slots:
 
     void on_pushButton_toggled(bool checked);
@@ -136,11 +136,11 @@ private:
     QTextStream stream;
    
     //先试试不new的版本,行不通
-    QThread* t1=new QThread;
+    //QThread* t1=new QThread;
     QThread* t2=new QThread;
 
     //创建任务类的对象
-    MainThread* Mainwork=new MainThread;
+    //MainThread* Mainwork=new MainThread;
     ProcessThread* Processwork=new ProcessThread;
 };
 

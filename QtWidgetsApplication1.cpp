@@ -111,7 +111,7 @@ void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
         //connect，循环访问信息
         QObject::connect(timer, &QTimer::timeout, this, &QtWidgetsApplication1::LaserStatusQuery);
 
-        QByteArray Test = Seed.Datasend();
+        //QByteArray Test = Seed.Datasend();
     }
     else
     {
@@ -770,23 +770,24 @@ char QtWidgetsApplication1::ConvertHexChar(char ch)//备用
         return ch - 'a' + 10;
     else return ch - ch;//不在此范围内，这样是否合理？
 }
-/**
-  * @Function Name  : ConverttoHex
-  * @
-  * @brief 转换为16进制，备用
-  * @param value  要转的10进制数
-  * @retval char 转换的字符串
-  */
-char* QtWidgetsApplication1::ConverttoHex(int value)//备用
-{
-    char* text;
-    int hi = value / 256;
-    int low = value % 256;
-    /*buffer[0] = hi;
-    buffer[1] = low;*/
-    *text = hi + low;
-    return text;
-}
+///**
+//  * @Function Name  : ConverttoHex
+//  * @
+//  * @brief 转换为16进制，备用
+//  * @param value  要转的10进制数
+//  * @retval char 转换的字符串
+//  */
+//char* QtWidgetsApplication1::ConverttoHex(int value)//备用
+//{
+//    char* text;
+//    int hi = value / 256;
+//    int low = value % 256;
+//    /*buffer[0] = hi;
+//    buffer[1] = low;*/
+//    *text = hi + low;
+//    return text;
+//}
+
 /**
   * @Function Name  : AddBlank
   * @

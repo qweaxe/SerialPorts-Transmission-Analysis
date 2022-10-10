@@ -60,6 +60,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     t2->start();
     emit QtWidgetsApplication1::starting2();
     connect(Processwork, &ProcessThread::SerialPortChanged, this, &QtWidgetsApplication1::SerialPortChanged);
+    connect(this, &QtWidgetsApplication1::GetSerialPort, Processwork, &ProcessThread::SetSerialPortList);
     //设置串口信息先不用多线程处理？不行！不然无法收发
     //connect(this,&QtWidgetsApplication1::on_pushButton_toggled,Processwork, )
 }
@@ -154,18 +155,21 @@ void QtWidgetsApplication1::on_ComComboBox_currentIndexChanged(int index)
   */
 void QtWidgetsApplication1::on_GetcomButton_clicked()
 {
-    //只能通过按钮这种蠢方法去刷新com口了
+
+    emit GetSerialPort();
     ui.ComComboBox->clear();
-    foreach(const QSerialPortInfo & info, QSerialPortInfo::availablePorts())
-    {
-        QSerialPort serial;
-        serial.setPort(info);
-        if (serial.open(QIODevice::ReadWrite))
-        {
-            ui.ComComboBox->addItem(serial.portName());
-            serial.close();
-        }
-    }
+    //只能通过按钮这种蠢方法去刷新com口了
+    //ui.ComComboBox->clear();
+    //foreach(const QSerialPortInfo & info, QSerialPortInfo::availablePorts())
+    //{
+    //    QSerialPort serial;
+    //    serial.setPort(info);
+    //    if (serial.open(QIODevice::ReadWrite))
+    //    {
+    //        ui.ComComboBox->addItem(serial.portName());
+    //        serial.close();
+    //    }
+    //}
     //ui.GetcomButton->setText(tr("发送数据"));
     //serial->write("00ff ffff");
 
@@ -360,7 +364,7 @@ void QtWidgetsApplication1::ReadData()
 
 
 /**
-  * @Function Name  : on_GetcomButton_clicked
+  * @Function Name  : on_SeedPowerEdit_returnPressed
   * @
   * @brief 回车也能发出信号
   * @param None
@@ -1384,6 +1388,7 @@ void QtWidgetsApplication1::COM0Changed(int n, QtLambdapump* Amp0)
 
 void QtWidgetsApplication1::SerialPortChanged(QString info)
 {
+    //ui.ComComboBox->clear();
     ui.ComComboBox->addItem(info);
 }
 

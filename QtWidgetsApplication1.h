@@ -43,6 +43,7 @@ signals:
     void sigAmpStatusChange();
     void starting1(int num);
     void starting2();
+    void GetSerialPort();
 public slots:
 
     void on_pushButton_toggled(bool checked);

@@ -36,18 +36,7 @@ void ProcessThread::begin()
 	//}
 	//processdata=Read(data);//读和处理不要放到初始函数上
 	//Process(processdata);
-	foreach(const QSerialPortInfo & info, QSerialPortInfo::availablePorts())
-	{
-		//QSerialPort serial;
-		serial.setPort(info);
-		if (serial.open(QIODevice::ReadWrite))
-		{
-			//ui.ComComboBox->addItem(serial.portName());
-			emit ProcessThread::SerialPortChanged(serial.portName());
-			serial.close();
-		}
-	}
-
+	SetSerialPortList();
 	qDebug() << "处理线程，共耗时： " << time.elapsed() << "ms。";
 	//emit finish(QString::number(time.elapsed()));//改变一下，不在这里销毁，仅仅作为结果输出
 }
@@ -60,6 +49,21 @@ void ProcessThread::send()//发送函数
 void ProcessThread::SetSerialPort(bool checked)
 {
 
+}
+
+void ProcessThread::SetSerialPortList()
+{
+	foreach(const QSerialPortInfo & info, QSerialPortInfo::availablePorts())
+	{
+		//QSerialPort serial;
+		serial.setPort(info);
+		if (serial.open(QIODevice::ReadWrite))
+		{
+			//ui.ComComboBox->addItem(serial.portName());
+			emit ProcessThread::SerialPortChanged(serial.portName());
+			serial.close();
+		}
+	}
 }
 
 QByteArray ProcessThread::Read(QByteArray data)

@@ -50,14 +50,16 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     //给子线程建立连接
     //connect(this, &QtWidgetsApplication1::starting1, Mainwork, &MainThread::begin);
     connect(this, &QtWidgetsApplication1::starting2, Processwork, &ProcessThread::begin);
-
+    
 
     //接收子线程发送的数据，并更新进度条
     //connect(Mainwork, &MainThread::working, this, [=]int l);
     //connect(Processwork, &ProcessThread::working, this, [=]int l);
-    connect(Processwork, &ProcessThread::processed, this, &QtWidgetsApplication1::COM0Changed);
+    //connect(Processwork, &ProcessThread::processed, this, &QtWidgetsApplication1::COM0Changed);
 
     t2->start();
+
+    connect(Processwork, &ProcessThread::SerialPortChanged, this, &QtWidgetsApplication1::SerialPortChanged);
 }
      
 
@@ -1378,6 +1380,10 @@ void QtWidgetsApplication1::COM0Changed(int n, QtLambdapump* Amp0)
 
 }
 
+void QtWidgetsApplication1::SerialPortChanged(QString info)
+{
+    ui.ComComboBox->addItem(info);
+}
 
 ///**
 //  * @Function Name  : on_COMDelayEdit_returnPressed

@@ -38,6 +38,7 @@ signals:
 	void working(int num);
 	void finish(QString elapsedTime);//可以传递多个参数，槽会匹配并忽略多余的参数
 	void processed(int n, QtLambdapump* Amp);
+	void SerialPortChanged(QString info);
 
 private:
 	QByteArray buffer;
@@ -50,6 +51,7 @@ private:
 	QtGolightpump Amp5;
 	QElapsedTimer time;
 	QTimer* timer;
+	QSerialPort serial;
 };
 
 

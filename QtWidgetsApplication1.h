@@ -49,6 +49,8 @@ public slots:
     void change_ampstatus();
 
     void COM0Changed(int n, QtLambdapump* Amp0);
+    
+    void SerialPortChanged(QString info);
 
 private slots:
     void on_ComComboBox_currentIndexChanged(int index);

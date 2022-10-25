@@ -45,7 +45,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     //        serial.close();
     //    }
     //}
-    //SetData();//换个位置？使能和控制电流的命令长度不一样
+    SetData();//换个位置？使能和控制电流的命令长度不一样
 
     //给子线程建立连接
     //connect(this, &QtWidgetsApplication1::starting1, Mainwork, &MainThread::begin);
@@ -86,6 +86,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
   */
 void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
 {
+    emit SetSerialPort(checked);
     if (checked)
     {
 
@@ -887,17 +888,17 @@ Status QtWidgetsApplication1::Enlaser()
 {
     bool status = 0;
     //timer->stop();
-    //初始化数据
-    SetSeedData[2] = 0x03;//开始获取数据
-    SetSeedData[3] = 0x73;
-    SetSeedData[4] = 0x73;
-    
-    //开启命令，看返回值是否正常来判断通信
-   
-   // 设置Golight开启关闭状态的控制位;
-    QByteArray temp;
-    temp.resize(1);
-    temp[0] = 0x04;
+   // //初始化数据
+   // SetSeedData[2] = 0x03;//开始获取数据
+   // SetSeedData[3] = 0x73;
+   // SetSeedData[4] = 0x73;
+   // 
+   // //开启命令，看返回值是否正常来判断通信
+   //
+   //// 设置Golight开启关闭状态的控制位;
+   // QByteArray temp;
+   // temp.resize(1);
+   // temp[0] = 0x04;
 
 
     //逐级发送数据

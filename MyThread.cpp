@@ -16,7 +16,7 @@ void MainThread::begin(int num)
 		emit working(i);
 	}
 	qDebug() << "主线程，共耗时： " << time.elapsed() << "ms。";
-	emit finish(QString::number(time.elapsed()));
+	//emit finish(QString::number(time.elapsed()));
 }
 
 ProcessThread::ProcessThread(QObject* parent) :QObject(parent)

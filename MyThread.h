@@ -31,11 +31,12 @@ public:
 	QSerialPort* port;
 
 public slots:
-	QByteArray Read(QByteArray data);
+	QByteArray Read();
 	void begin();//需要在子线程分配的资源，全部在此函数进行，该槽函数绑定到线程的started()信号上
 	void send();//数值还是直接发整理好的内容？
 	void SetSerialPort(bool checked);
 	void SetSerialPortList();
+	void SerialPortName(QString text);
 
 signals:
 	void working(int num);
@@ -46,6 +47,7 @@ signals:
 private:
 	QByteArray buffer;
 	QByteArray processdata;
+	QByteArray data;
 	QtLambdapump *Amp0=new QtLambdapump;
 	QtLambdapump *Amp1=new QtLambdapump;
 	QtLambdapump Amp2;
@@ -55,6 +57,7 @@ private:
 	QElapsedTimer time;
 	QTimer* timer;
 	QSerialPort serial;
+	QSerialPort* serialport;
 };
 
 

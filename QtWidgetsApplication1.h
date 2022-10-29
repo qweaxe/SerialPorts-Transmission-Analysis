@@ -45,6 +45,7 @@ signals:
     void starting2();
     void GetSerialPort();
     void SetSerialPort(bool checked);
+    void SetSerialPortName(QString text);
 public slots:
 
     void on_pushButton_toggled(bool checked);

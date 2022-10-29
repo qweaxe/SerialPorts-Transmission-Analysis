@@ -41,7 +41,7 @@ void ProcessThread::begin()
 	//emit finish(QString::number(time.elapsed()));//改变一下，不在这里销毁，仅仅作为结果输出
 }
 
-void ProcessThread::send()//发送函数
+void ProcessThread::send()//发送函数，改成bool？
 {
 
 }
@@ -51,26 +51,35 @@ void ProcessThread::SetSerialPort(bool checked)
 	if (checked)
 	{
 
-		//serial = new QSerialPort;
-		////设置串口名
+		serialport = new QSerialPort;
+		//设置串口名，不在这设置了
 		//serial->setPortName(ui.ComComboBox->currentText());
-		////打开串口，读写F
+		
+		//打开串口，读写F
 		//serial->open(QIODevice::ReadWrite);
-		////设置波特率，后面改成可变的
+		serialport->open(QIODevice::ReadWrite);
+		//设置波特率，后面改成可变的
 		//serial->setBaudRate(QSerialPort::Baud115200);
-		////设置数据位数，后面改成可变的
+		serialport->setBaudRate(QSerialPort::Baud115200);
+		//设置数据位数，后面改成可变的
 		//serial->setDataBits(QSerialPort::Data8);
-		////设置校验位，后面改成可变的
+		serialport->setDataBits(QSerialPort::Data8);
+		//设置校验位，后面改成可变的
 		//serial->setParity(QSerialPort::NoParity);
-		////设置停止位，后面改成可变的
+		serialport->setParity(QSerialPort::NoParity);
+		//设置停止位，后面改成可变的
 		//serial->setStopBits(QSerialPort::OneStop);
-		////设置流控制
+		serialport->setStopBits(QSerialPort::OneStop);
+		//设置流控制
 		//serial->setFlowControl(QSerialPort::NoFlowControl);
-		////设置读取数据的缓存大小
+		serialport->setFlowControl(QSerialPort::NoFlowControl);
+		//设置读取数据的缓存大小，后面改成可变的
 		//serial->setReadBufferSize(1024);
+		serialport->setReadBufferSize(1024);
 		////关闭设置菜单使能（好像不要这个功能）
-		////连接信号槽，点开始通信后就开始，下位机一有数据发送过来就会相应此槽函数：connect（ob1，sig1，ob2，slot1）
+		//连接信号槽，点开始通信后就开始，下位机一有数据发送过来就会相应此槽函数：connect（ob1，sig1，ob2，slot1）
 		//QObject::connect(serial, &QSerialPort::readyRead, this, &QtWidgetsApplication1::ReadData);
+		QObject::connect(serialport, &QSerialPort::readyRead, this, &ProcessThread::Read);
 		////多线程版本，2022年10月8日，需要修改
 		////QObject::connect(serial, &QSerialPort::readyRead, Processwork, &ProcessThread::Read);
 		//Comstatus = on;
@@ -86,6 +95,9 @@ void ProcessThread::SetSerialPort(bool checked)
 	{
 		//timer->stop();
 		//serial->clear();
+		serialport->clear();
+		serialport->close();
+		serialport->deleteLater();
 		//serial->close();
 		//serial->deleteLater();
 		//Comstatus = off;
@@ -114,31 +126,33 @@ void ProcessThread::SetSerialPortList()
 	}
 }
 
-QByteArray ProcessThread::Read(QByteArray data)
+QByteArray ProcessThread::Read()
 {
-	int length = data.size();
-	buffer.append(data);
-	if (data[0] != 0xAA && data[1] != 0x55)
-	{
-		
-		buffer = data;
+	buffer.append(serialport->readAll());
+	int length = buffer.size();
+	//想想怎么分情况讨论
+	
+	//if (data[0] != 0xAA && data[1] != 0x55)
+	//{
+	//	
+	//	buffer = data;
 
-	}
+	//}
 
-	else if (data[3]!=length-7)
-	{
-		if (data[3] > length - 7)
-		{
-			buffer = data.sliced(((uint)data[3]) + 7);
-			//data.chop(length-(((uint)data[3]) + 7));
-			data.truncate(((uint)data[3]) + 7);
-		}
+	//else if (data[3]!=length-7)
+	//{
+	//	if (data[3] > length - 7)
+	//	{
+	//		buffer = data.sliced(((uint)data[3]) + 7);
+	//		//data.chop(length-(((uint)data[3]) + 7));
+	//		data.truncate(((uint)data[3]) + 7);
+	//	}
 
-		else if (data[3] < length - 7)
-		{
-			buffer = data;
-		}
-	}
+	//	else if (data[3] < length - 7)
+	//	{
+	//		buffer = data;
+	//	}
+	//}
 	return data;
 }
 
@@ -212,3 +226,10 @@ void ProcessThread::Process(QByteArray data)
 	}
 	
 }
+
+void ProcessThread::SerialPortName(QString text)
+{
+	serialport->setPortName(text);
+}
+
+

@@ -63,6 +63,8 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     connect(this, &QtWidgetsApplication1::GetSerialPort, Processwork, &ProcessThread::SetSerialPortList);
     //connect设置串口的信息函数
     connect(this, &QtWidgetsApplication1::SetSerialPort, Processwork, &ProcessThread::SetSerialPort);
+    //connect设置串口的信息函数
+    connect(this, &QtWidgetsApplication1::SetSerialPortName, Processwork, &ProcessThread::SerialPortName);
     
 }
      
@@ -86,32 +88,34 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
   */
 void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
 {
+    //这里的顺序可能会影响到后面的性能
     emit SetSerialPort(checked);
+
     if (checked)
     {
-
-        serial = new QSerialPort;
-        //设置串口名
-        serial->setPortName(ui.ComComboBox->currentText());
-        //打开串口，读写F
-        serial->open(QIODevice::ReadWrite);
-        //设置波特率，后面改成可变的
-        serial->setBaudRate(QSerialPort::Baud115200);
-        //设置数据位数，后面改成可变的
-        serial->setDataBits(QSerialPort::Data8);
-        //设置校验位，后面改成可变的
-        serial->setParity(QSerialPort::NoParity);
-        //设置停止位，后面改成可变的
-        serial->setStopBits(QSerialPort::OneStop);
-        //设置流控制
-        serial->setFlowControl(QSerialPort::NoFlowControl);
-        //设置读取数据的缓存大小
-        serial->setReadBufferSize(1024);
-        //关闭设置菜单使能（好像不要这个功能）
-        //连接信号槽，点开始通信后就开始，下位机一有数据发送过来就会相应此槽函数：connect（ob1，sig1，ob2，slot1）
-        QObject::connect(serial, &QSerialPort::readyRead, this, &QtWidgetsApplication1::ReadData);
-        //多线程版本，2022年10月8日，需要修改
-        //QObject::connect(serial, &QSerialPort::readyRead, Processwork, &ProcessThread::Read);
+        emit SetSerialPortName(ui.ComComboBox->currentText());
+        //serial = new QSerialPort;
+        ////设置串口名
+        //serial->setPortName(ui.ComComboBox->currentText());
+        ////打开串口，读写F
+        //serial->open(QIODevice::ReadWrite);
+        ////设置波特率，后面改成可变的
+        //serial->setBaudRate(QSerialPort::Baud115200);
+        ////设置数据位数，后面改成可变的
+        //serial->setDataBits(QSerialPort::Data8);
+        ////设置校验位，后面改成可变的
+        //serial->setParity(QSerialPort::NoParity);
+        ////设置停止位，后面改成可变的
+        //serial->setStopBits(QSerialPort::OneStop);
+        ////设置流控制
+        //serial->setFlowControl(QSerialPort::NoFlowControl);
+        ////设置读取数据的缓存大小
+        //serial->setReadBufferSize(1024);
+        ////关闭设置菜单使能（好像不要这个功能）
+        ////连接信号槽，点开始通信后就开始，下位机一有数据发送过来就会相应此槽函数：connect（ob1，sig1，ob2，slot1）
+        //QObject::connect(serial, &QSerialPort::readyRead, this, &QtWidgetsApplication1::ReadData);
+        ////多线程版本，2022年10月8日，需要修改
+        ////QObject::connect(serial, &QSerialPort::readyRead, Processwork, &ProcessThread::Read);
         Comstatus = on;
         //图标提示
         ui.statuslabel->setPixmap(QPixmap(":/images/on.png"));
@@ -124,9 +128,9 @@ void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
     else
     {
         timer->stop();
-        serial->clear();
-        serial->close();
-        serial->deleteLater();
+        //serial->clear();
+        //serial->close();
+        //serial->deleteLater();
         Comstatus = off;
         //图标提示
         ui.statuslabel->setPixmap(QPixmap(":/images/off.png"));

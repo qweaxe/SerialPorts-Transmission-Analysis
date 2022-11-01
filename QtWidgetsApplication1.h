@@ -12,6 +12,8 @@
 //#include<QThread>
 #include"LDDriver.h"
 #include"CircularBuffer.h"
+//#include<qstringlist.h>
+
 
 
 
@@ -29,15 +31,16 @@ public:
     void QStringtoHex(QString str, QByteArray& SendData);//貌似没有
     char ConvertHexChar(char ch);
     QString AddBlank(QByteArray& arr);//不止，还有自动大写等
-    void Checksum(QByteArray& data);
-    void CRC16Checksum(QByteArray& data);
+    //void Checksum(QByteArray& data);
+    //void CRC16Checksum(QByteArray& data);
     //char* ConverttoHex(int value);//没用
     Status Enlaser();
     Status Dislaser();
     void Changeui();
     bool SendDatabyte(const int com,  QByteArray senddata);
     CircularBuffer circularBuffer;
-    
+
+
 signals:
     void sigLabelChange();
     void sigAmpStatusChange();
@@ -46,6 +49,7 @@ signals:
     void GetSerialPort();
     void SetSerialPort(bool checked);
     void SetSerialPortName(QString text);
+    void senddata(const int com, QByteArray data);
 public slots:
 
     void on_pushButton_toggled(bool checked);
@@ -95,7 +99,7 @@ private:
     Status Amp4status = off;
     Status Mainstatus = off;
     Status LaserQuery = off;
-    bool isSend = 0;
+    //bool isSend = 0;
     QtLambdapump Seed;
     QtLambdapump Amp1;
     QtLambdapump Amp2;
@@ -103,10 +107,10 @@ private:
 
     QSerialPort* serial;//全局的串口对象
     QBuffer buffer;//
-    QByteArray Senddata;
-    QByteArray Header;
-    QByteArray Comandlen;
-    QByteArray Ender;
+    //QByteArray Senddata;
+    //QByteArray Header;
+    //QByteArray Comandlen;
+    //QByteArray Ender;
     QByteArray SetSeedData;
     QByteArray SetAmp1Data;
     QByteArray SetAmp2Data;
@@ -142,10 +146,10 @@ private:
    
     //先试试不new的版本,行不通
     //QThread* t1=new QThread;
-    QThread* t2=new QThread;
+    QThread* t2;
 
     //创建任务类的对象
     //MainThread* Mainwork=new MainThread;
-    ProcessThread* Processwork=new ProcessThread;
+    ProcessThread* Processwork;
 };
 

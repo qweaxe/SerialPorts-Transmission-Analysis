@@ -16,12 +16,18 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+    t2 = new QThread;
+    Processwork = new ProcessThread;
+
+    QStringList mslist = Processwork->GetSerialAvailable();
+    ui.ComComboBox->addItems(mslist);
     //分配线程
    // Mainwork->moveToThread(t1);
-    Processwork->moveToThread(t2);
     
+    Processwork->moveToThread(t2);
+
     //理论上这些应该全放到构造函数里去
-    QStringList comlist;
+   // QStringList comlist;
     QIntValidator* SMvalidator = new QIntValidator(curmin, seedcurmax, this);
     QDoubleValidator* MMvalidator = new QDoubleValidator(amp4curmin, amp4curmax, 1, this);
     QDoubleValidator* Mainvalidator = new QDoubleValidator(mainmin, mainmax, 1, this);
@@ -32,7 +38,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     ui.COM1PowerEdit->setValidator(SMvalidator);
     ui.COM2PowerEdit->setValidator(MMvalidator);
     ui.COM3PowerEdit->setValidator(MMvalidator);
-    comlist.clear();
+    //comlist.clear();
 
     //这句语法不太熟悉
     //foreach(const QSerialPortInfo & info, QSerialPortInfo::availablePorts())
@@ -45,7 +51,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     //        serial.close();
     //    }
     //}
-    SetData();//换个位置？使能和控制电流的命令长度不一样
+    //SetData();//换个位置？使能和控制电流的命令长度不一样
 
     //给子线程建立连接
     //connect(this, &QtWidgetsApplication1::starting1, Mainwork, &MainThread::begin);
@@ -65,6 +71,8 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     connect(this, &QtWidgetsApplication1::SetSerialPort, Processwork, &ProcessThread::SetSerialPort);
     //connect设置串口的信息函数
     connect(this, &QtWidgetsApplication1::SetSerialPortName, Processwork, &ProcessThread::SerialPortName);
+    //connect发送函数
+    connect(this, &QtWidgetsApplication1::senddata, Processwork, &ProcessThread::send);
     
 }
      
@@ -89,7 +97,9 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
 void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
 {
     //这里的顺序可能会影响到后面的性能
-    emit SetSerialPort(checked);
+
+    //emit SetSerialPort(checked);
+    bool stat = Processwork->SetSerialPort(checked);
 
     if (checked)
     {
@@ -116,13 +126,15 @@ void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
         //QObject::connect(serial, &QSerialPort::readyRead, this, &QtWidgetsApplication1::ReadData);
         ////多线程版本，2022年10月8日，需要修改
         ////QObject::connect(serial, &QSerialPort::readyRead, Processwork, &ProcessThread::Read);
-        Comstatus = on;
+        //Comstatus = on;
         //图标提示
         ui.statuslabel->setPixmap(QPixmap(":/images/on.png"));
         ui.pushButton->setText(tr("关闭串口"));
-        //connect，循环访问信息
-        QObject::connect(timer, &QTimer::timeout, this, &QtWidgetsApplication1::LaserStatusQuery);
-
+        ////connect，循环访问信息
+        //QObject::connect(timer, &QTimer::timeout, this, &QtWidgetsApplication1::LaserStatusQuery);
+        //qDebug() << "portName() = " << serial->portName();
+        //qDebug() << "isOpen = " << serial->isOpen();
+        //qDebug() << "Error is " << serial->error();
         //QByteArray Test = Seed.Datasend();
     }
     else
@@ -211,7 +223,8 @@ void QtWidgetsApplication1::on_SetCOM0Button_clicked()
         {
             //value = value * 109.2267;
             Seed.Setcurrent(value);
-            SendDatabyte(0, Seed.Datasend());
+            //SendDatabyte(0, Seed.Datasend());
+            emit senddata(0, Seed.Datasend());
         }
         if (LaserQuery == on)
             timer->start();
@@ -239,7 +252,7 @@ void QtWidgetsApplication1::on_SetCOM1Button_clicked()
         {
 
             Amp1.Setcurrent(value);
-            SendDatabyte(1, Amp1.Datasend());
+            //SendDatabyte(1, Amp1.Datasend());
         }
         if (LaserQuery == on)
             timer->start();
@@ -267,7 +280,7 @@ void QtWidgetsApplication1::on_SetCOM2Button_clicked()
             //SetAmp2Data.resize(8);
             
             Amp2.Set9Wcurrent(value);
-            SendDatabyte(2, Amp2.Datasend());
+            //SendDatabyte(2, Amp2.Datasend());
         }
         if (LaserQuery == on)
             timer->start();
@@ -298,7 +311,7 @@ void QtWidgetsApplication1::on_SetCOM3Button_clicked()
         {
         
             Amp3.SetMMcurrent(value);
-            SendDatabyte(3, Amp3.Datasend());
+            //SendDatabyte(3, Amp3.Datasend());
         }
         if (LaserQuery == on)
             timer->start();
@@ -328,7 +341,7 @@ void QtWidgetsApplication1::on_setCOM39WBtn_clicked()
         else
         {       
             Amp3.Set9Wcurrent(value);
-            SendDatabyte(3, Amp3.Datasend());
+            //SendDatabyte(3, Amp3.Datasend());
         }
         if (LaserQuery == on)
             timer->start();
@@ -379,18 +392,18 @@ void QtWidgetsApplication1::ReadData()
   */
 void QtWidgetsApplication1::on_SeedPowerEdit_returnPressed()
 {
-    if (Comstatus == off)
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
-    else
-    {
-        //int value = ui.SeedPowerEdit->text().toInt();
-       // SetSeedData[3] = value / 125;
-       // SetSeedData[4] = value % 125;
-        Senddata += SetSeedData;
-        serial->write(Senddata);
-        ui.SendtextEdit->clear();
-        ui.SendtextEdit->setText(Senddata.toHex().toUpper());
-    }
+    //if (Comstatus == off)
+    //    QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
+    //else
+    //{
+    //    //int value = ui.SeedPowerEdit->text().toInt();
+    //   // SetSeedData[3] = value / 125;
+    //   // SetSeedData[4] = value % 125;
+    //    Senddata += SetSeedData;
+    //    serial->write(Senddata);
+    //    ui.SendtextEdit->clear();
+    //    ui.SendtextEdit->setText(Senddata.toHex().toUpper());
+    //}
 
 }
 
@@ -469,7 +482,7 @@ void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
         temp.resize(length - 2);
         //检验校验和
         temp = buf;
-        Checksum(temp);
+        //Checksum(temp);
         if (checksum[0] != buf[length - 3])
         {
             //QMessageBox::warning(this, tr("警告⚠"), tr("校验和不正确"));
@@ -634,101 +647,66 @@ void QtWidgetsApplication1::on_EnlaserButton_toggled(bool checked)
         }
     }
 }
-/**
-  * @Function Name  : SetData
-  * @
-  * @brief 初始化各级的初始数据
-  * @param None
-  * @retval void
-  */
-void QtWidgetsApplication1::SetData()//
-{
-    //这些应当放到主类的构造函数中去
-    Header.resize(2);
-    Header[0] = 0x55;
-    Header[1] = 0xAA;
-    Ender.resize(2);
-    Ender[0] = 0x0D;
-    Ender[1] = 0x0A;
-    Comandlen.resize(2);
-    Comandlen[0] = 0x08;
-    Comandlen[1] = 0x00;
-    checksum.resize(1);
-    checksum[0] = 0x00;
-    Senddata.resize(1);
-    Senddata[0] = 0x00;
-
-    //QtDhkjpump seed;
-    SetSeedData.resize(5);
-    SetSeedData[0] = 0x55;
-    SetSeedData[1] = 0xAA;
-    SetSeedData[2] = 0x02;
-    SetSeedData[3] = 0x00;
-    SetSeedData[4] = 0x00;
-    Seed.Setcurrent(0);
-    //EF EF 05 FF 00 VAL(Hi) VAL(Low) Checksum
-
-    //QtGolightpump amp1;
-
-    SetAmp1Data.resize(8);
-    SetAmp1Data[0] = 0xEF;
-    SetAmp1Data[1] = 0xEF;
-    SetAmp1Data[2] = 0x05;
-    SetAmp1Data[3] = 0xFF;
-    SetAmp1Data[4] = 0x00;
-    SetAmp1Data[7] = 0x00;
-    Amp1.Setcurrent(0);
-    //QtGolightpump amp2;
-    SetAmp2Data.resize(8);
-    SetAmp2Data[0] = 0xEF;
-    SetAmp2Data[1] = 0xEF;
-    SetAmp2Data[2] = 0x05;
-    SetAmp2Data[3] = 0xFF;
-    SetAmp2Data[4] = 0x00;
-    SetAmp2Data[7] = 0x00;
-    Amp2.Setcurrent(0);
-    //QtGolightpump amp3;
-    SetAmp3Data.resize(6);
-    SetAmp3Data[0] = 0x01;
-    SetAmp3Data[1] = 0x06;
-    SetAmp3Data[2] = 0x55;
-    SetAmp3Data[3] = 0x7E;
-    SetAmp3Data[4] = 0x00;//high
-    SetAmp3Data[5] = 0x00;//low
-    Amp3.Setcurrent(0);
-    //SetAmp3Data[6] = 0x00;//crc16low
-    //SetAmp3Data[7] = 0x00;//crc16hi
-    
-     
-    //紧急时刻直接设置的值
-    SetSeedzero.resize(5);
-    SetSeedzero[0] = 0x55;
-    SetSeedzero[1] = 0xAA;
-    SetSeedzero[2] = 0x02;
-    SetSeedzero[3] = 0x00;
-    SetSeedzero[4] = 0x00;
-
-    SetAmp1zero.resize(8);
-    SetAmp1zero[0] = 0xEF;
-    SetAmp1zero[1] = 0xEF;
-    SetAmp1zero[2] = 0x05;
-    SetAmp1zero[3] = 0xFF;
-    SetAmp1zero[4] = 0x00;
-    SetAmp1zero[5] = 0x00;
-    SetAmp1zero[6] = 0x00;
-    SetAmp1zero[7] = 0xE2;
-
-    SetAmp3zero.resize(8);
-    SetAmp3zero[0] = 0x01;
-    SetAmp3zero[1] = 0x06;
-    SetAmp3zero[2] = 0x55;
-    SetAmp3zero[3] = 0x7E;
-    SetAmp3zero[4] = 0x00;
-    SetAmp3zero[5] = 0x00;
-    SetAmp3zero[6] = 0xF8;
-    SetAmp3zero[7] = 0x1E;
-
-}
+///**
+//  * @Function Name  : SetData
+//  * @
+//  * @brief 初始化各级的初始数据
+//  * @param None
+//  * @retval void
+//  */
+//void QtWidgetsApplication1::SetData()//
+//{
+//    //这些应当放到主类的构造函数中去
+//    Header.resize(2);
+//    Header[0] = 0x55;
+//    Header[1] = 0xAA;
+//    Ender.resize(2);
+//    Ender[0] = 0x0D;
+//    Ender[1] = 0x0A;
+//    Comandlen.resize(2);
+//    Comandlen[0] = 0x08;
+//    Comandlen[1] = 0x00;
+//    checksum.resize(1);
+//    checksum[0] = 0x00;
+//    Senddata.resize(1);
+//    Senddata[0] = 0x00;
+//
+//
+//    //EF EF 05 FF 00 VAL(Hi) VAL(Low) Checksum
+//
+//    //QtGolightpump amp1;
+//
+//    SetAmp1Data.resize(8);
+//    SetAmp1Data[0] = 0xEF;
+//    SetAmp1Data[1] = 0xEF;
+//    SetAmp1Data[2] = 0x05;
+//    SetAmp1Data[3] = 0xFF;
+//    SetAmp1Data[4] = 0x00;
+//    SetAmp1Data[7] = 0x00;
+//    Amp1.Setcurrent(0);
+//    //QtGolightpump amp2;
+//    SetAmp2Data.resize(8);
+//    SetAmp2Data[0] = 0xEF;
+//    SetAmp2Data[1] = 0xEF;
+//    SetAmp2Data[2] = 0x05;
+//    SetAmp2Data[3] = 0xFF;
+//    SetAmp2Data[4] = 0x00;
+//    SetAmp2Data[7] = 0x00;
+//    Amp2.Setcurrent(0);
+//    //QtGolightpump amp3;
+//    SetAmp3Data.resize(6);
+//    SetAmp3Data[0] = 0x01;
+//    SetAmp3Data[1] = 0x06;
+//    SetAmp3Data[2] = 0x55;
+//    SetAmp3Data[3] = 0x7E;
+//    SetAmp3Data[4] = 0x00;//high
+//    SetAmp3Data[5] = 0x00;//low
+//    Amp3.Setcurrent(0);
+//    //SetAmp3Data[6] = 0x00;//crc16low
+//    //SetAmp3Data[7] = 0x00;//crc16hi
+//    
+//
+//}
 /**
   * @Function Name  : QStringtoHex
   * @
@@ -828,21 +806,21 @@ QString QtWidgetsApplication1::AddBlank(QByteArray& arr)
   * @param data 待求校验和的数据
   * @retval void
   */
-void QtWidgetsApplication1::Checksum(QByteArray& data)//校验和部分
-{
-    int length = data.size();
-    //QByteArray checksum;
-    //checksum.resize(1);
-   // checksum[0] = 0x00;
-    data[length - 1] = 0x00;
-   unsigned char temp = data[length - 1];//2022年4月12日修改
-    for (int i = 0; i < length; i++)//感觉data+=的重载有问题，所以用此方法
-    {
-        temp += data[i];
-    }
-    data[length - 1] = temp;
-    checksum[0] = data[length - 1];
-}
+//void QtWidgetsApplication1::Checksum(QByteArray& data)//校验和部分
+//{
+//    int length = data.size();
+//    //QByteArray checksum;
+//    //checksum.resize(1);
+//   // checksum[0] = 0x00;
+//    data[length - 1] = 0x00;
+//   unsigned char temp = data[length - 1];//2022年4月12日修改
+//    for (int i = 0; i < length; i++)//感觉data+=的重载有问题，所以用此方法
+//    {
+//        temp += data[i];
+//    }
+//    data[length - 1] = temp;
+//    checksum[0] = data[length - 1];
+//}
 
 /**
   * @Function Name  : CRC16Checksum
@@ -851,35 +829,35 @@ void QtWidgetsApplication1::Checksum(QByteArray& data)//校验和部分
   * @param data 待求校验和的数据
   * @retval void
   */
-void QtWidgetsApplication1::CRC16Checksum(QByteArray& data)
-{
-    int len = data.size();
-    data.resize(len + 2);
-    uint crc = 0xFFFF;
-    uint high = 0;
-    uint low = 0;
-    for (int pos = 0; pos < len; pos++)
-    {
-        crc ^= (unsigned char)data[pos];//xor byte into least sig. byte of crc；不然会转换为有符号数
-        for (int i = 8; i != 0; i--)
-        {
-            if ((crc & 0x0001) != 0)// Last is 1
-            {
-                crc >>= 1;//shift right and xor 0xA001
-                crc ^= 0xA001;
-            }
-            else// last is 0
-                crc >>= 1;//only shift right
-        }
-    }
-    //高低字节转换
-    //crc = ((crc & 0x00FF) << 8 | (crc & 0xFF00) >> 8);
-    low = (crc & 0x00FF);
-    high = ((crc & 0xFF00) >> 8);
-    //data.resize(8);
-    data[len] = low;
-    data[len + 1] = high;
-}
+//void QtWidgetsApplication1::CRC16Checksum(QByteArray& data)
+//{
+//    int len = data.size();
+//    data.resize(len + 2);
+//    uint crc = 0xFFFF;
+//    uint high = 0;
+//    uint low = 0;
+//    for (int pos = 0; pos < len; pos++)
+//    {
+//        crc ^= (unsigned char)data[pos];//xor byte into least sig. byte of crc；不然会转换为有符号数
+//        for (int i = 8; i != 0; i--)
+//        {
+//            if ((crc & 0x0001) != 0)// Last is 1
+//            {
+//                crc >>= 1;//shift right and xor 0xA001
+//                crc ^= 0xA001;
+//            }
+//            else// last is 0
+//                crc >>= 1;//only shift right
+//        }
+//    }
+//    //高低字节转换
+//    //crc = ((crc & 0x00FF) << 8 | (crc & 0xFF00) >> 8);
+//    low = (crc & 0x00FF);
+//    high = ((crc & 0xFF00) >> 8);
+//    //data.resize(8);
+//    data[len] = low;
+//    data[len + 1] = high;
+//}
 
 /**
   * @Function Name  : Enlaser
@@ -907,20 +885,20 @@ Status QtWidgetsApplication1::Enlaser()
 
     //逐级发送数据
     //Seed
-    Seed.OnstatusQuery();
-    SendDatabyte(0, Seed.Datasend());
+   // Seed.OnstatusQuery();
+   // SendDatabyte(0, Seed.Datasend());
 
-    //Amp1，这种就可以放到类里作为一个方法
-    Amp1.OnstatusQuery();
-    SendDatabyte(1, Amp1.Datasend());
+   // //Amp1，这种就可以放到类里作为一个方法
+   // Amp1.OnstatusQuery();
+   // SendDatabyte(1, Amp1.Datasend());
 
-   //Amp2
-    Amp2.MMOnstatusQuery();
-    SendDatabyte(2, Amp2.Datasend());
+   ////Amp2
+   // Amp2.MMOnstatusQuery();
+   // SendDatabyte(2, Amp2.Datasend());
 
-    //Amp3，读模块号
-    Amp3.MMOnstatusQuery();
-    SendDatabyte(3, Amp3.Datasend());
+   // //Amp3，读模块号
+   // Amp3.MMOnstatusQuery();
+   // SendDatabyte(3, Amp3.Datasend());
 
     ////Amp4
     //Amp4.Onofflaser(temp);
@@ -981,7 +959,7 @@ Status QtWidgetsApplication1::Enlaser()
 Status QtWidgetsApplication1::Dislaser()
 {
     timer->stop();
-    Senddata.resize(1);
+    //Senddata.resize(1);
     
     //SetSeedData.resize(5);//停止获取数据
     ////SetSeedData.fromHex("0x55,0x0A,0x03,0x70,0x70");
@@ -1054,21 +1032,21 @@ Status QtWidgetsApplication1::Dislaser()
   //Senddata.resize(2);
     //Comandlen[0] = 0x00;
    
-    //Seed
-    Seed.Setcurrent(1);
-    SendDatabyte(0, Seed.Datasend());
+  //  //Seed
+  //  Seed.Setcurrent(1);
+  //  SendDatabyte(0, Seed.Datasend());
 
-  //Amp1
-    Amp1.Setcurrent(1);
-    SendDatabyte(1, Amp1.Datasend());
+  ////Amp1
+  //  Amp1.Setcurrent(1);
+  //  SendDatabyte(1, Amp1.Datasend());
 
-   //Amp2
-    Amp2.Set9Wcurrent(0.001);
-    SendDatabyte(2, Amp2.Datasend());
+  // //Amp2
+  //  Amp2.Set9Wcurrent(0.001);
+  //  SendDatabyte(2, Amp2.Datasend());
 
-    //Amp3，还不知道问啥，直接电流设置为0，9W
-    Amp3.Set9Wcurrent(0.001);
-    SendDatabyte(3, Amp3.Datasend());
+  //  //Amp3，还不知道问啥，直接电流设置为0，9W
+  //  Amp3.Set9Wcurrent(0.001);
+  //  SendDatabyte(3, Amp3.Datasend());
 
     ////Amp4
     //Comandlen[0] = 0x04;
@@ -1126,18 +1104,18 @@ void QtWidgetsApplication1::LaserStatusQuery()
     }
     else
     {
-        Seed.StatusQuery();
-        SendDatabyte(0, Seed.Datasend());
+        //Seed.StatusQuery();
+        //SendDatabyte(0, Seed.Datasend());
 
-        Amp1.StatusQuery();
-        SendDatabyte(1, Amp1.Datasend());
+        //Amp1.StatusQuery();
+        //SendDatabyte(1, Amp1.Datasend());
 
-        Amp2.MMstatusQuery();
-        SendDatabyte(2, Amp2.Datasend());
+        //Amp2.MMstatusQuery();
+        //SendDatabyte(2, Amp2.Datasend());
        
-        //com3想连大电流驱动，预计要改
-        Amp3.MMstatusQuery();
-        SendDatabyte(3, Amp3.Datasend());
+        ////com3想连大电流驱动，预计要改
+        //Amp3.MMstatusQuery();
+        //SendDatabyte(3, Amp3.Datasend());
 
         ////com4 
         //Amp4.CurrentQuery();
@@ -1262,86 +1240,86 @@ void QtWidgetsApplication1::Changeui()//备用
   * @param senddata 待发的数据
   * @retval bool 发送情况
   */
-bool QtWidgetsApplication1::SendDatabyte(const int com,  QByteArray senddata)
-{
-    Senddata.resize(1);
-    Senddata[0] = 0x00;
-    Comandlen[1] = 0x00;
-    switch (com)
-    {
-    case 0x00:
-        Comandlen[0] = 0x00;
-        CRC16Checksum(senddata);
-        Comandlen[1] = senddata.size();
-        senddata = Header + Comandlen + senddata + Senddata;
-        break;
-    case 0x01:
-        Comandlen[0] = 0x01;
-        CRC16Checksum(senddata);
-        Comandlen[1] = senddata.size();
-        senddata = Header + Comandlen + senddata + Senddata;
-        break;
-    case 0x02:
-        Comandlen[0] = 0x02;
-        CRC16Checksum(senddata);
-        Comandlen[1] = senddata.size();
-        senddata = Header + Comandlen + senddata + Senddata;
-        break;
-
-    case 0x03:
-        Comandlen[0] = 0x03;
-        CRC16Checksum(senddata);
-        Comandlen[1] = senddata.size();
-        senddata = Header + Comandlen + senddata + Senddata;
-        break;
-    case 0x04:
-        Comandlen[0] = 0x04;
-        Checksum(senddata);
-        Comandlen[1] = senddata.size();
-        senddata = Header + Comandlen + senddata + Senddata;
-        break;
-
-    case 0x05:
-        Comandlen[0] = 0x05;
-        Checksum(senddata);
-        Comandlen[1] = senddata.size();
-        senddata = Header + Comandlen + senddata + Senddata;
-        break;
-
-    case 0x06:
-        Comandlen[0] = 0x06;
-        Checksum(senddata);
-        Comandlen[1] = senddata.size();
-        senddata = Header + Comandlen + senddata + Senddata;
-        break;
-
-    case 0x07:
-        Comandlen[0] = 0x07;
-        Checksum(senddata);
-        Comandlen[1] = senddata.size();
-        senddata = Header + Comandlen + senddata + Senddata;
-        break;
-    default:
-        QMessageBox::warning(this, tr("警告⚠"), tr("Error Occured!"));
-        break;
-    }
-    Checksum(senddata);
-    senddata = senddata + Ender;
-    qint64 size = serial->write(senddata);
-    serial->waitForBytesWritten(10);
-    Sleep(sleeptime);
-    ui.SendtextEdit->clear();
-    ui.SendtextEdit->append(AddBlank(senddata));
-    if (size == -1)
-    {
-        QMessageBox::warning(this, tr("警告⚠"), tr("Error Occured!"));
-        isSend = 0;
-    }
-    else
-        isSend = 1;//不一定，可能发过去了那边没收到
-
-    return isSend;
-}
+//bool QtWidgetsApplication1::SendDatabyte(const int com,  QByteArray senddata)
+//{
+//    Senddata.resize(1);
+//    Senddata[0] = 0x00;
+//    Comandlen[1] = 0x00;
+//    switch (com)
+//    {
+//    case 0x00:
+//        Comandlen[0] = 0x00;
+//        CRC16Checksum(senddata);
+//        Comandlen[1] = senddata.size();
+//        senddata = Header + Comandlen + senddata + Senddata;
+//        break;
+//    case 0x01:
+//        Comandlen[0] = 0x01;
+//        CRC16Checksum(senddata);
+//        Comandlen[1] = senddata.size();
+//        senddata = Header + Comandlen + senddata + Senddata;
+//        break;
+//    case 0x02:
+//        Comandlen[0] = 0x02;
+//        CRC16Checksum(senddata);
+//        Comandlen[1] = senddata.size();
+//        senddata = Header + Comandlen + senddata + Senddata;
+//        break;
+//
+//    case 0x03:
+//        Comandlen[0] = 0x03;
+//        CRC16Checksum(senddata);
+//        Comandlen[1] = senddata.size();
+//        senddata = Header + Comandlen + senddata + Senddata;
+//        break;
+//    case 0x04:
+//        Comandlen[0] = 0x04;
+//        Checksum(senddata);
+//        Comandlen[1] = senddata.size();
+//        senddata = Header + Comandlen + senddata + Senddata;
+//        break;
+//
+//    case 0x05:
+//        Comandlen[0] = 0x05;
+//        Checksum(senddata);
+//        Comandlen[1] = senddata.size();
+//        senddata = Header + Comandlen + senddata + Senddata;
+//        break;
+//
+//    case 0x06:
+//        Comandlen[0] = 0x06;
+//        Checksum(senddata);
+//        Comandlen[1] = senddata.size();
+//        senddata = Header + Comandlen + senddata + Senddata;
+//        break;
+//
+//    case 0x07:
+//        Comandlen[0] = 0x07;
+//        Checksum(senddata);
+//        Comandlen[1] = senddata.size();
+//        senddata = Header + Comandlen + senddata + Senddata;
+//        break;
+//    default:
+//        QMessageBox::warning(this, tr("警告⚠"), tr("Error Occured!"));
+//        break;
+//    }
+//    Checksum(senddata);
+//    senddata = senddata + Ender;
+//    qint64 size = serial->write(senddata);
+//    serial->waitForBytesWritten(10);
+//    Sleep(sleeptime);
+//    ui.SendtextEdit->clear();
+//    ui.SendtextEdit->append(AddBlank(senddata));
+//    if (size == -1)
+//    {
+//        QMessageBox::warning(this, tr("警告⚠"), tr("Error Occured!"));
+//        isSend = 0;
+//    }
+//    else
+//        isSend = 1;//不一定，可能发过去了那边没收到
+//
+//    return isSend;
+//}
 
 
 /**

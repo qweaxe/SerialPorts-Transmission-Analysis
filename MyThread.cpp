@@ -21,7 +21,7 @@ void MainThread::begin(int num)
 
 ProcessThread::ProcessThread(QObject* parent) :QObject(parent)
 {
-
+	serialport = new QSerialPort;
 }
 
 void ProcessThread::begin()
@@ -36,28 +36,128 @@ void ProcessThread::begin()
 	//}
 	//processdata=Read(data);//读和处理不要放到初始函数上
 	//Process(processdata);
-	SetSerialPortList();
+	//SetSerialPortList();
+	SetData();
+	//qDebug() << "portName() = " << serialport->portName();
+	//qDebug() << "isOpen = " << serialport->isOpen();
+	//qDebug() << "Error is " << serialport->error();
 	qDebug() << "处理线程，共耗时： " << time.elapsed() << "ms。";
 	//emit finish(QString::number(time.elapsed()));//改变一下，不在这里销毁，仅仅作为结果输出
 }
 
-void ProcessThread::send()//发送函数，改成bool？
+bool ProcessThread::send(const int com, QByteArray data)//发送函数，改成bool？
 {
+	Senddata.resize(1);
+	Senddata[0] = 0x00;
+	Comandlen[1] = 0x00;
+	switch (com)
+	{
+	case 0x00:
+		Comandlen[0] = 0x00;
+		CRC16Checksum(data);
+		Comandlen[1] = data.size();
+		data = Header + Comandlen + data + Senddata;
+		break;
+	case 0x01:
+		Comandlen[0] = 0x01;
+		CRC16Checksum(data);
+		Comandlen[1] = data.size();
+		data = Header + Comandlen + data + Senddata;
+		break;
+	case 0x02:
+		Comandlen[0] = 0x02;
+		CRC16Checksum(data);
+		Comandlen[1] = data.size();
+		data = Header + Comandlen + data + Senddata;
+		break;
+
+	case 0x03:
+		Comandlen[0] = 0x03;
+		CRC16Checksum(data);
+		Comandlen[1] = data.size();
+		data = Header + Comandlen + data + Senddata;
+		break;
+	case 0x04:
+		Comandlen[0] = 0x04;
+		Checksum(data);
+		Comandlen[1] = data.size();
+		data = Header + Comandlen + data + Senddata;
+		break;
+
+	case 0x05:
+		Comandlen[0] = 0x05;
+		Checksum(data);
+		Comandlen[1] = data.size();
+		data = Header + Comandlen + data + Senddata;
+		break;
+
+	case 0x06:
+		Comandlen[0] = 0x06;
+		Checksum(data);
+		Comandlen[1] = data.size();
+		data = Header + Comandlen + data + Senddata;
+		break;
+
+	case 0x07:
+		Comandlen[0] = 0x07;
+		Checksum(data);
+		Comandlen[1] = data.size();
+		data = Header + Comandlen + data + Senddata;
+		break;
+	default:
+		//QMessageBox::warning(this, tr("警告⚠"), tr("Error Occured!"));
+
+		break;
+	}
+	Checksum(data);
+	data = data + Ender;
+	qint64 size = serialport->write(data);
+	serialport->waitForBytesWritten(10);
+	Sleep(30);//考虑下需不需要这句话？
+	//ui.SendtextEdit->clear();
+	//ui.SendtextEdit->append(AddBlank(senddata));
+	if (size == -1)
+	{
+		//QMessageBox::warning(this, tr("警告⚠"), tr("Error Occured!"));
+		isSend = 0;
+	}
+	else
+		isSend = 1;//不一定，可能发过去了那边没收到
+
+	return isSend;
 
 }
-
-void ProcessThread::SetSerialPort(bool checked)
+void ProcessThread::SetSerialPortList()
 {
+	foreach(const QSerialPortInfo & info, QSerialPortInfo::availablePorts())
+	{
+		QSerialPort serialport;
+		serialport.setPort(info);
+		//emit ProcessThread::SerialPortChanged(info.portName());
+		if (serialport.open(QIODevice::ReadWrite))
+		{
+			//ui.ComComboBox->addItem(serial.portName());
+			qDebug() << "Thread is ："  << " || " << QThread::currentThread();
+			qDebug() << "PortName is : " << serialport.portName();
+			emit ProcessThread::SerialPortChanged(serialport.portName());
+			serialport.close();
+		}
+	}
+}
+
+bool ProcessThread::SetSerialPort(bool checked)
+{
+	//SetSerialPortList();
 	if (checked)
 	{
-
-		serialport = new QSerialPort;
+		qDebug() << "Thread is ：" << " || " << QThread::currentThread();
+		//serialport = new QSerialPort();
 		//设置串口名，不在这设置了
 		//serial->setPortName(ui.ComComboBox->currentText());
-		
+		//serialport->setPortName("COM10");
 		//打开串口，读写F
 		//serial->open(QIODevice::ReadWrite);
-		serialport->open(QIODevice::ReadWrite);
+		bool stat=serialport->open(QIODevice::ReadWrite);
 		//设置波特率，后面改成可变的
 		//serial->setBaudRate(QSerialPort::Baud115200);
 		serialport->setBaudRate(QSerialPort::Baud115200);
@@ -80,8 +180,8 @@ void ProcessThread::SetSerialPort(bool checked)
 		//连接信号槽，点开始通信后就开始，下位机一有数据发送过来就会相应此槽函数：connect（ob1，sig1，ob2，slot1）
 		//QObject::connect(serial, &QSerialPort::readyRead, this, &QtWidgetsApplication1::ReadData);
 		QObject::connect(serialport, &QSerialPort::readyRead, this, &ProcessThread::Read);
-		////多线程版本，2022年10月8日，需要修改
-		////QObject::connect(serial, &QSerialPort::readyRead, Processwork, &ProcessThread::Read);
+		//多线程版本，2022年10月8日，需要修改
+		//QObject::connect(serial, &QSerialPort::readyRead, Processwork, &ProcessThread::Read);
 		//Comstatus = on;
 		////图标提示
 		//ui.statuslabel->setPixmap(QPixmap(":/images/on.png"));
@@ -90,6 +190,9 @@ void ProcessThread::SetSerialPort(bool checked)
 		//QObject::connect(timer, &QTimer::timeout, this, &QtWidgetsApplication1::LaserStatusQuery);
 
 		//QByteArray Test = Seed.Datasend();
+		qDebug() << "portName() = " << serialport->portName();
+		qDebug() << "isOpen = " << serialport->isOpen();
+		qDebug() << "Error is " << serialport->error();
 	}
 	else
 	{
@@ -109,22 +212,10 @@ void ProcessThread::SetSerialPort(bool checked)
 		//ui.GetLDStatusBtn->setText(tr("开始获取"));
 		//ui.EnlaserButton->setText(tr("使能激光器"));
 	}
+	return stat;
 }
 
-void ProcessThread::SetSerialPortList()
-{
-	foreach(const QSerialPortInfo & info, QSerialPortInfo::availablePorts())
-	{
-		//QSerialPort serial;
-		serial.setPort(info);
-		if (serial.open(QIODevice::ReadWrite))
-		{
-			//ui.ComComboBox->addItem(serial.portName());
-			emit ProcessThread::SerialPortChanged(serial.portName());
-			serial.close();
-		}
-	}
-}
+
 
 QByteArray ProcessThread::Read()
 {
@@ -154,6 +245,24 @@ QByteArray ProcessThread::Read()
 	//	}
 	//}
 	return data;
+}
+
+void ProcessThread::SetData()
+{
+	Header.resize(2);
+	Header[0] = 0x55;
+	Header[1] = 0xAA;
+	Ender.resize(2);
+	Ender[0] = 0x0D;
+	Ender[1] = 0x0A;
+	Comandlen.resize(2);
+	Comandlen[0] = 0x08;
+	Comandlen[1] = 0x00;
+	checksum.resize(1);
+	checksum[0] = 0x00;
+	Senddata.resize(1);
+	Senddata[0] = 0x00;
+
 }
 
 void ProcessThread::Process(QByteArray data)
@@ -225,6 +334,62 @@ void ProcessThread::Process(QByteArray data)
 
 	}
 	
+}
+
+void ProcessThread::Checksum(QByteArray& data)
+{
+	int length = data.size();
+	//QByteArray checksum;
+	//checksum.resize(1);
+   // checksum[0] = 0x00;
+	data[length - 1] = 0x00;
+	unsigned char temp = data[length - 1];//2022年4月12日修改
+	for (int i = 0; i < length; i++)//感觉data+=的重载有问题，所以用此方法
+	{
+		temp += data[i];
+	}
+	data[length - 1] = temp;
+	checksum[0] = data[length - 1];
+}
+
+void ProcessThread::CRC16Checksum(QByteArray& data)
+{
+	int len = data.size();
+	data.resize(len + 2);
+	uint crc = 0xFFFF;
+	uint high = 0;
+	uint low = 0;
+	for (int pos = 0; pos < len; pos++)
+	{
+		crc ^= (unsigned char)data[pos];//xor byte into least sig. byte of crc；不然会转换为有符号数
+		for (int i = 8; i != 0; i--)
+		{
+			if ((crc & 0x0001) != 0)// Last is 1
+			{
+				crc >>= 1;//shift right and xor 0xA001
+				crc ^= 0xA001;
+			}
+			else// last is 0
+				crc >>= 1;//only shift right
+		}
+	}
+	//高低字节转换
+	//crc = ((crc & 0x00FF) << 8 | (crc & 0xFF00) >> 8);
+	low = (crc & 0x00FF);
+	high = ((crc & 0xFF00) >> 8);
+	//data.resize(8);
+	data[len] = low;
+	data[len + 1] = high;
+}
+
+QStringList ProcessThread::GetSerialAvailable()
+{
+	QStringList mPortsList;
+	foreach(const QSerialPortInfo & Info, QSerialPortInfo::availablePorts())
+	{
+		mPortsList << Info.portName();
+	}
+	return mPortsList;
 }
 
 void ProcessThread::SerialPortName(QString text)

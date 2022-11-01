@@ -7,6 +7,7 @@
 #include<QThread>
 #include<qtimer.h>
 #include"LDDriver.h"
+#include<Windows.h>
 
 class MainThread :public QObject
 {
@@ -25,16 +26,21 @@ class ProcessThread :public QObject
 	Q_OBJECT
 public:
 	explicit ProcessThread(QObject* parent = nullptr);
-	//~ProcessThread();
 	
+	//~ProcessThread();
+	void SetData();
 	void Process(QByteArray data);
 	QSerialPort* port;
+	void Checksum(QByteArray& data);
+	void CRC16Checksum(QByteArray& data);
+	QStringList GetSerialAvailable();
 
 public slots:
 	QByteArray Read();
+
 	void begin();//需要在子线程分配的资源，全部在此函数进行，该槽函数绑定到线程的started()信号上
-	void send();//数值还是直接发整理好的内容？
-	void SetSerialPort(bool checked);
+	bool send(const int com, QByteArray data);//数值还是直接发整理好的内容？
+	bool SetSerialPort(bool checked);
 	void SetSerialPortList();
 	void SerialPortName(QString text);
 
@@ -48,6 +54,12 @@ private:
 	QByteArray buffer;
 	QByteArray processdata;
 	QByteArray data;
+	QByteArray Senddata;
+	QByteArray Comandlen;
+	QByteArray Header;
+	QByteArray Ender;
+	QByteArray checksum;
+	bool isSend = 0;
 	QtLambdapump *Amp0=new QtLambdapump;
 	QtLambdapump *Amp1=new QtLambdapump;
 	QtLambdapump Amp2;
@@ -56,7 +68,7 @@ private:
 	QtGolightpump Amp5;
 	QElapsedTimer time;
 	QTimer* timer;
-	QSerialPort serial;
+	//QSerialPort serial;
 	QSerialPort* serialport;
 };
 

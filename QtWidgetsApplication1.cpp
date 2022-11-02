@@ -68,7 +68,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     connect(Processwork, &ProcessThread::SerialPortChanged, this, &QtWidgetsApplication1::SerialPortChanged);
     connect(this, &QtWidgetsApplication1::GetSerialPort, Processwork, &ProcessThread::SetSerialPortList);
     //connect设置串口的信息函数
-    connect(this, &QtWidgetsApplication1::SetSerialPort, Processwork, &ProcessThread::SetSerialPort);
+    //connect(this, &QtWidgetsApplication1::SetSerialPort, Processwork, &ProcessThread::SetSerialPort);
     //connect设置串口的信息函数
     connect(this, &QtWidgetsApplication1::SetSerialPortName, Processwork, &ProcessThread::SerialPortName);
     //connect发送函数
@@ -97,48 +97,32 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
 void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
 {
     //这里的顺序可能会影响到后面的性能
-
+    qDebug() << "GUI线程ID：" << QThread::currentThreadId();
     //emit SetSerialPort(checked);
-    bool stat = Processwork->SetSerialPort(checked);
-
+    //bool stat = Processwork->SetSerialPort(ui.ComComboBox->currentText());
     if (checked)
     {
-        emit SetSerialPortName(ui.ComComboBox->currentText());
-        //serial = new QSerialPort;
-        ////设置串口名
-        //serial->setPortName(ui.ComComboBox->currentText());
-        ////打开串口，读写F
-        //serial->open(QIODevice::ReadWrite);
-        ////设置波特率，后面改成可变的
-        //serial->setBaudRate(QSerialPort::Baud115200);
-        ////设置数据位数，后面改成可变的
-        //serial->setDataBits(QSerialPort::Data8);
-        ////设置校验位，后面改成可变的
-        //serial->setParity(QSerialPort::NoParity);
-        ////设置停止位，后面改成可变的
-        //serial->setStopBits(QSerialPort::OneStop);
-        ////设置流控制
-        //serial->setFlowControl(QSerialPort::NoFlowControl);
-        ////设置读取数据的缓存大小
-        //serial->setReadBufferSize(1024);
-        ////关闭设置菜单使能（好像不要这个功能）
-        ////连接信号槽，点开始通信后就开始，下位机一有数据发送过来就会相应此槽函数：connect（ob1，sig1，ob2，slot1）
-        //QObject::connect(serial, &QSerialPort::readyRead, this, &QtWidgetsApplication1::ReadData);
-        ////多线程版本，2022年10月8日，需要修改
-        ////QObject::connect(serial, &QSerialPort::readyRead, Processwork, &ProcessThread::Read);
-        //Comstatus = on;
-        //图标提示
-        ui.statuslabel->setPixmap(QPixmap(":/images/on.png"));
-        ui.pushButton->setText(tr("关闭串口"));
-        ////connect，循环访问信息
-        //QObject::connect(timer, &QTimer::timeout, this, &QtWidgetsApplication1::LaserStatusQuery);
-        //qDebug() << "portName() = " << serial->portName();
-        //qDebug() << "isOpen = " << serial->isOpen();
-        //qDebug() << "Error is " << serial->error();
-        //QByteArray Test = Seed.Datasend();
+        if (!Processwork->SetSerialPort(ui.ComComboBox->currentText()))
+        {
+            Comstatus = off;
+            ui.pushButton->setChecked(0);
+            QMessageBox::warning(this, "⚠警告", "串口打开失败");
+            return;
+        }
+            //图标提示
+            Comstatus = on;
+            ui.statuslabel->setPixmap(QPixmap(":/images/on.png"));
+            ui.pushButton->setText(tr("关闭串口"));
+            ////connect，循环访问信息
+            //QObject::connect(timer, &QTimer::timeout, this, &QtWidgetsApplication1::LaserStatusQuery);
+            //qDebug() << "portName() = " << serial->portName();
+            //qDebug() << "isOpen = " << serial->isOpen();
+            //qDebug() << "Error is " << serial->error();
+
     }
     else
     {
+        Processwork->CloseSerialPort();
         timer->stop();
         //serial->clear();
         //serial->close();
@@ -253,6 +237,7 @@ void QtWidgetsApplication1::on_SetCOM1Button_clicked()
 
             Amp1.Setcurrent(value);
             //SendDatabyte(1, Amp1.Datasend());
+            emit senddata(1, Amp1.Datasend());
         }
         if (LaserQuery == on)
             timer->start();
@@ -281,6 +266,7 @@ void QtWidgetsApplication1::on_SetCOM2Button_clicked()
             
             Amp2.Set9Wcurrent(value);
             //SendDatabyte(2, Amp2.Datasend());
+            emit senddata(2, Amp2.Datasend());
         }
         if (LaserQuery == on)
             timer->start();
@@ -312,6 +298,7 @@ void QtWidgetsApplication1::on_SetCOM3Button_clicked()
         
             Amp3.SetMMcurrent(value);
             //SendDatabyte(3, Amp3.Datasend());
+            emit senddata(3, Amp3.Datasend());
         }
         if (LaserQuery == on)
             timer->start();
@@ -342,6 +329,7 @@ void QtWidgetsApplication1::on_setCOM39WBtn_clicked()
         {       
             Amp3.Set9Wcurrent(value);
             //SendDatabyte(3, Amp3.Datasend());
+            emit senddata(3, Amp3.Datasend());
         }
         if (LaserQuery == on)
             timer->start();

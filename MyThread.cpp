@@ -113,6 +113,7 @@ bool ProcessThread::send(const int com, QByteArray data)//发送函数，改成b
 	data = data + Ender;
 	qint64 size = serialport->write(data);
 	serialport->waitForBytesWritten(10);
+	qDebug() << "Current Thread is : " << QThread::currentThread();
 	Sleep(30);//考虑下需不需要这句话？
 	//ui.SendtextEdit->clear();
 	//ui.SendtextEdit->append(AddBlank(senddata));
@@ -127,6 +128,12 @@ bool ProcessThread::send(const int com, QByteArray data)//发送函数，改成b
 	return isSend;
 
 }
+//void ProcessThread::ReceviceSerialData()
+//{
+//	buffer = serialport->readAll();
+//	qDebug() << QString(buffer) << "当前线程ID：" << QThread::currentThreadId();
+//
+//}
 void ProcessThread::SetSerialPortList()
 {
 	foreach(const QSerialPortInfo & info, QSerialPortInfo::availablePorts())
@@ -145,15 +152,16 @@ void ProcessThread::SetSerialPortList()
 	}
 }
 
-bool ProcessThread::SetSerialPort(bool checked)
+bool ProcessThread::SetSerialPort(QString comName)
 {
 	//SetSerialPortList();
-	if (checked)
-	{
+	//if (checked)
+	//{
 		qDebug() << "Thread is ：" << " || " << QThread::currentThread();
 		//serialport = new QSerialPort();
 		//设置串口名，不在这设置了
 		//serial->setPortName(ui.ComComboBox->currentText());
+		serialport->setPortName(comName);
 		//serialport->setPortName("COM10");
 		//打开串口，读写F
 		//serial->open(QIODevice::ReadWrite);
@@ -180,42 +188,24 @@ bool ProcessThread::SetSerialPort(bool checked)
 		//连接信号槽，点开始通信后就开始，下位机一有数据发送过来就会相应此槽函数：connect（ob1，sig1，ob2，slot1）
 		//QObject::connect(serial, &QSerialPort::readyRead, this, &QtWidgetsApplication1::ReadData);
 		QObject::connect(serialport, &QSerialPort::readyRead, this, &ProcessThread::Read);
-		//多线程版本，2022年10月8日，需要修改
-		//QObject::connect(serial, &QSerialPort::readyRead, Processwork, &ProcessThread::Read);
-		//Comstatus = on;
-		////图标提示
-		//ui.statuslabel->setPixmap(QPixmap(":/images/on.png"));
-		//ui.pushButton->setText(tr("关闭串口"));
-		////connect，循环访问信息
-		//QObject::connect(timer, &QTimer::timeout, this, &QtWidgetsApplication1::LaserStatusQuery);
+
 
 		//QByteArray Test = Seed.Datasend();
 		qDebug() << "portName() = " << serialport->portName();
 		qDebug() << "isOpen = " << serialport->isOpen();
 		qDebug() << "Error is " << serialport->error();
-	}
-	else
-	{
-		//timer->stop();
-		//serial->clear();
-		serialport->clear();
-		serialport->close();
-		serialport->deleteLater();
-		//serial->close();
-		//serial->deleteLater();
-		//Comstatus = off;
-		////图标提示
-		//ui.statuslabel->setPixmap(QPixmap(":/images/off.png"));
-		//ui.pushButton->setText(tr("开启通讯"));
-		//ui.GetLDStatusBtn->setChecked(0);//用信号机制去修改ui？
-		//ui.EnlaserButton->setChecked(0);
-		//ui.GetLDStatusBtn->setText(tr("开始获取"));
-		//ui.EnlaserButton->setText(tr("使能激光器"));
-	}
 	return stat;
 }
 
-
+void ProcessThread::CloseSerialPort()
+{
+	if (serialport->isOpen())
+	{
+		serialport->clear();
+		serialport->close();
+	}
+	qDebug() << "串口关闭状态 : "<<serialport->isOpen();
+}
 
 QByteArray ProcessThread::Read()
 {
@@ -244,6 +234,7 @@ QByteArray ProcessThread::Read()
 	//		buffer = data;
 	//	}
 	//}
+	qDebug() << QString(buffer) << "当前线程ID：" << QThread::currentThreadId();
 	return data;
 }
 

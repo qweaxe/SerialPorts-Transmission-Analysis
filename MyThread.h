@@ -40,7 +40,8 @@ public slots:
 
 	void begin();//需要在子线程分配的资源，全部在此函数进行，该槽函数绑定到线程的started()信号上
 	bool send(const int com, QByteArray data);//数值还是直接发整理好的内容？
-	bool SetSerialPort(bool checked);
+	bool SetSerialPort(QString comName);
+	void CloseSerialPort();
 	void SetSerialPortList();
 	void SerialPortName(QString text);
 

@@ -105,7 +105,7 @@ void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
         Comstatus = on;
         //图标提示
         ui.statuslabel->setPixmap(QPixmap(":/images/on.png"));
-        ui.pushButton->setText(tr("关闭串口"));
+        ui.pushButton->setText(tr("Close Com"));
         //connect，循环访问信息
         QObject::connect(timer, &QTimer::timeout, this, &QtWidgetsApplication1::LaserStatusQuery);
 
@@ -120,11 +120,11 @@ void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
         Comstatus = off;
         //图标提示
         ui.statuslabel->setPixmap(QPixmap(":/images/off.png"));
-        ui.pushButton->setText(tr("开启通讯"));
+        ui.pushButton->setText(tr("Start Comm"));
         ui.GetLDStatusBtn->setChecked(0);//用信号机制去修改ui？
         ui.EnlaserButton->setChecked(0);
-        ui.GetLDStatusBtn->setText(tr("开始获取"));
-        ui.EnlaserButton->setText(tr("使能激光器"));
+        ui.GetLDStatusBtn->setText(tr("Get LD Status"));
+        ui.EnlaserButton->setText(tr("Enable Laser"));
     }
 }
 
@@ -181,7 +181,7 @@ void QtWidgetsApplication1::on_SetCOM0Button_clicked()
 {
     //串口是否开启
     if (Comstatus == off)
-        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
+        QMessageBox::warning(this, tr("Warning⚠"), tr("Serial port is closed, communication failed!"));
 
     else
     {
@@ -189,7 +189,7 @@ void QtWidgetsApplication1::on_SetCOM0Button_clicked()
         timer->stop();
         uint value = ui.COM0PowerEdit->text().toUInt();
         if (value > seedcurmax)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
+            QMessageBox::warning(this, tr("Warning⚠"), tr("Out of range of current!"));
         else
         {
             //value = value * 109.2267;
@@ -210,14 +210,14 @@ void QtWidgetsApplication1::on_SetCOM0Button_clicked()
 void QtWidgetsApplication1::on_SetCOM1Button_clicked()
 {
     if (Comstatus == off)
-        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
+        QMessageBox::warning(this, tr("Warning⚠"), tr("Serial port is closed, communication failed!"));
     else
     {
         timer->stop();
         uint value = ui.COM1PowerEdit->text().toUInt();
 
         if (value > amp1curmax)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
+            QMessageBox::warning(this, tr("Warning⚠"), tr("Out of range of current!"));
         else
         {
 
@@ -238,13 +238,13 @@ void QtWidgetsApplication1::on_SetCOM1Button_clicked()
 void QtWidgetsApplication1::on_SetCOM2Button_clicked()
 {
     if (Comstatus == off)
-        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
+        QMessageBox::warning(this, tr("Warning⚠"), tr("Serial port is closed, communication failed!"));
     else
     {
         timer->stop();
         double value = ui.COM2PowerEdit->text().toDouble();
         if (value > amp2curmax)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
+            QMessageBox::warning(this, tr("Warning⚠"), tr("Out of range of current!"));
         else
         {
             //SetAmp2Data.resize(8);
@@ -266,17 +266,17 @@ void QtWidgetsApplication1::on_SetCOM2Button_clicked()
 void QtWidgetsApplication1::on_SetCOM3Button_clicked()
 {
     if (Comstatus == off)
-        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
+        QMessageBox::warning(this, tr("Warning⚠"), tr("Serial port is closed, communication failed!"));
     else if (Amp3.LD9wsetcur()<0.9)
     {
-        QMessageBox::warning(this, tr("警告"), tr("前一级尚未正确开启！"));
+        QMessageBox::warning(this, tr("Warning⚠"), tr("Pervious Amplifier NOT open properly, it need 1A at least !"));
     }
     else
     {
         timer->stop();
         double value = ui.COM3PowerEdit->text().toDouble();
         if (value > amp3curmax)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
+            QMessageBox::warning(this, tr("Warning⚠"), tr("Out of range of current!"));
         else
         {
         
@@ -297,17 +297,17 @@ void QtWidgetsApplication1::on_SetCOM3Button_clicked()
 void QtWidgetsApplication1::on_setCOM39WBtn_clicked()
 {
     if (Comstatus == off)
-        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
+        QMessageBox::warning(this, tr("Warning⚠"), tr("Serial port is closed, communication failed!"));
     else if (Amp2.LD9wsetcur() < 0.9)
     {
-        QMessageBox::warning(this, tr("警告"), tr("前一级尚未正确开启！"));
+        QMessageBox::warning(this, tr("Warning⚠"), tr("Pervious Amplifier NOT open properly, it need 1A at least !"));
     }
     else
     {
         timer->stop();
         double value = ui.COM39WEdit->text().toDouble();
         if (value > amp4curmax)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
+            QMessageBox::warning(this, tr("Warning⚠"), tr("Out of range of current!"));
         else
         {       
             Amp3.Set9Wcurrent(value);
@@ -362,18 +362,18 @@ void QtWidgetsApplication1::ReadData()
   */
 void QtWidgetsApplication1::on_SeedPowerEdit_returnPressed()
 {
-    if (Comstatus == off)
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
-    else
-    {
-        //int value = ui.SeedPowerEdit->text().toInt();
-       // SetSeedData[3] = value / 125;
-       // SetSeedData[4] = value % 125;
-        Senddata += SetSeedData;
-        serial->write(Senddata);
-        ui.SendtextEdit->clear();
-        ui.SendtextEdit->setText(Senddata.toHex().toUpper());
-    }
+    //if (Comstatus == off)
+    //    QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
+    //else
+    //{
+    //    //int value = ui.SeedPowerEdit->text().toInt();
+    //   // SetSeedData[3] = value / 125;
+    //   // SetSeedData[4] = value % 125;
+    //    Senddata += SetSeedData;
+    //    serial->write(Senddata);
+    //    ui.SendtextEdit->clear();
+    //    ui.SendtextEdit->setText(Senddata.toHex().toUpper());
+    //}
 
 }
 
@@ -575,7 +575,7 @@ void QtWidgetsApplication1::on_EnlaserButton_toggled(bool checked)
 {
     if (Comstatus == off)
     {
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
+        QMessageBox::warning(this, tr("Warning⚠"), tr("Serial port is closed, communication failed!"));
         ui.EnlaserButton->setChecked(0);
     }
 
@@ -584,7 +584,7 @@ void QtWidgetsApplication1::on_EnlaserButton_toggled(bool checked)
         if (checked)//开启
         {
 
-            ui.EnlaserButton->setText(tr("关闭激光器"));
+            ui.EnlaserButton->setText(tr("Close Laser"));
             ////只能用这种蠢方法一个个赋值吗？测试数据
             //QByteArray data;
             //data.resize(6);
@@ -610,9 +610,9 @@ void QtWidgetsApplication1::on_EnlaserButton_toggled(bool checked)
             //serial->write(data);
             //ui.SendtextEdit->setText(data.toHex());
             Laserstatus = Dislaser();
-            ui.EnlaserButton->setText(tr("使能激光器"));
+            ui.EnlaserButton->setText(tr("Enable Laser"));
             ui.GetLDStatusBtn->setChecked(0);
-            ui.GetLDStatusBtn->setText(tr("开始获取"));
+            ui.GetLDStatusBtn->setText(tr("Get Status"));
 
         }
     }
@@ -1101,10 +1101,10 @@ void QtWidgetsApplication1::LaserStatusQuery()
 {
     if (Comstatus == off || Laserstatus == off)
     {
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
+        QMessageBox::warning(this, tr("Warning⚠"), tr("Serial port is closed, communication failed!"));
         timer->stop();
         ui.GetLDStatusBtn->setChecked(0);
-        ui.GetLDStatusBtn->setText(tr("开始获取"));
+        ui.GetLDStatusBtn->setText(tr("Get Status"));
     }
     else
     {
@@ -1196,14 +1196,14 @@ void QtWidgetsApplication1::on_GetLDStatusBtn_toggled(bool checked)
 {
     if (Comstatus == off)
     {
-        QMessageBox::warning(this, "警告⚠", "串口是关闭状态，通讯失败!");
+        QMessageBox::warning(this, tr("Warning⚠"), tr("Serial port is closed, communication failed!"));
         ui.GetLDStatusBtn->setChecked(0);
     }
     else
     {
         if (checked)
         {
-            ui.GetLDStatusBtn->setText(tr("停止获取"));
+            ui.GetLDStatusBtn->setText(tr("Stop Get"));
             LaserQuery = on;
             ui.SendtextEdit->clear();
             timer->setInterval(1000);//先设1s
@@ -1215,7 +1215,7 @@ void QtWidgetsApplication1::on_GetLDStatusBtn_toggled(bool checked)
             timer->stop();
             LaserQuery = off;
             ui.SendtextEdit->clear();
-            ui.GetLDStatusBtn->setText(tr("开始获取"));
+            ui.GetLDStatusBtn->setText(tr("Get Status"));
         }
     }
 
@@ -1304,7 +1304,7 @@ bool QtWidgetsApplication1::SendDatabyte(const int com,  QByteArray senddata)
         senddata = Header + Comandlen + senddata + Senddata;
         break;
     default:
-        QMessageBox::warning(this, tr("警告⚠"), tr("Error Occured!"));
+        QMessageBox::warning(this, tr("Warning⚠"), tr("Error Occured!"));
         break;
     }
     Checksum(senddata);
@@ -1316,7 +1316,7 @@ bool QtWidgetsApplication1::SendDatabyte(const int com,  QByteArray senddata)
     ui.SendtextEdit->append(AddBlank(senddata));
     if (size == -1)
     {
-        QMessageBox::warning(this, tr("警告⚠"), tr("Error Occured!"));
+        QMessageBox::warning(this, tr("Warning⚠"), tr("Error Occured!"));
         isSend = 0;
     }
     else

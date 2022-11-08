@@ -103,14 +103,14 @@
     <widget class="QPushButton" name="SetCOM1Button">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>129</x>
        <y>50</y>
-       <width>80</width>
+       <width>91</width>
        <height>24</height>
       </rect>
      </property>
      <property name="text">
-      <string>设置电流</string>
+      <string>Set Current</string>
      </property>
     </widget>
     <widget class="QLCDNumber" name="COM1CurLcd">
@@ -196,40 +196,40 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_11">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>243</x>
        <y>20</y>
-       <width>54</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>LD电流：</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_12">
-     <property name="geometry">
-      <rect>
-       <x>270</x>
-       <y>90</y>
-       <width>54</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>LD温度：</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_13">
-     <property name="geometry">
-      <rect>
-       <x>270</x>
-       <y>50</y>
        <width>81</width>
        <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>LD功率：</string>
+      <string>LD Current：</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_12">
+     <property name="geometry">
+      <rect>
+       <x>253</x>
+       <y>90</y>
+       <width>71</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>LD Temp：</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_13">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>50</y>
+       <width>111</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>LD Power：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_25">
@@ -381,14 +381,14 @@ color: rgb(255, 255, 255);
     <widget class="QPushButton" name="SetCOM2Button">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>129</x>
        <y>30</y>
-       <width>80</width>
+       <width>91</width>
        <height>24</height>
       </rect>
      </property>
      <property name="text">
-      <string>设置电流</string>
+      <string>Set Current</string>
      </property>
     </widget>
     <widget class="QLCDNumber" name="COM29WCurLcd">
@@ -468,9 +468,9 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_16">
      <property name="geometry">
       <rect>
-       <x>263</x>
+       <x>243</x>
        <y>50</y>
-       <width>71</width>
+       <width>91</width>
        <height>20</height>
       </rect>
      </property>
@@ -480,33 +480,33 @@ color: rgb(255, 255, 255);
       </font>
      </property>
      <property name="text">
-      <string>背板温度：</string>
+      <string>Back Temp：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_15">
      <property name="geometry">
       <rect>
-       <x>253</x>
+       <x>243</x>
        <y>20</y>
-       <width>81</width>
+       <width>91</width>
        <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>9WLD电流：</string>
+      <string>9WLD Curr：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_14">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>250</x>
        <y>90</y>
-       <width>91</width>
-       <height>16</height>
+       <width>121</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>LD温度：</string>
+      <string>LD Temp：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_26">
@@ -658,14 +658,14 @@ color: rgb(255, 255, 255);
     <widget class="QPushButton" name="SetCOM3Button">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>129</x>
        <y>100</y>
-       <width>80</width>
+       <width>91</width>
        <height>24</height>
       </rect>
      </property>
      <property name="text">
-      <string>设置电流</string>
+      <string>Set Current</string>
      </property>
     </widget>
     <widget class="QLCDNumber" name="COM327WCurLcd">
@@ -758,20 +758,20 @@ color: rgb(255, 255, 255);
       </rect>
      </property>
      <property name="text">
-      <string>27W温度：</string>
+      <string>27WTemp：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_18">
      <property name="geometry">
       <rect>
-       <x>233</x>
+       <x>223</x>
        <y>20</y>
-       <width>91</width>
+       <width>101</width>
        <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>27WLD电流：</string>
+      <string>27WLD curr：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_27">
@@ -811,14 +811,14 @@ color: rgb(255, 255, 255);
     <widget class="QPushButton" name="setCOM39WBtn">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>129</x>
        <y>20</y>
-       <width>80</width>
+       <width>91</width>
        <height>24</height>
       </rect>
      </property>
      <property name="text">
-      <string>设置电流</string>
+      <string>Set Current</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="COM39WEdit">
@@ -868,22 +868,22 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_61">
      <property name="geometry">
       <rect>
-       <x>420</x>
+       <x>410</x>
        <y>20</y>
        <width>81</width>
        <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>9WLD电流：</string>
+      <string>9WLDCurr：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_20">
      <property name="geometry">
       <rect>
-       <x>253</x>
+       <x>240</x>
        <y>100</y>
-       <width>71</width>
+       <width>91</width>
        <height>20</height>
       </rect>
      </property>
@@ -893,7 +893,7 @@ color: rgb(255, 255, 255);
       </font>
      </property>
      <property name="text">
-      <string>背板温度：</string>
+      <string>Back Temp：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_19">
@@ -995,7 +995,7 @@ color: rgb(255, 255, 255);
      <string/>
     </property>
     <property name="title">
-     <string>连接状态</string>
+     <string>Connection Status</string>
     </property>
     <property name="flat">
      <bool>false</bool>
@@ -1006,14 +1006,14 @@ color: rgb(255, 255, 255);
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>320</x>
        <y>20</y>
-       <width>81</width>
+       <width>91</width>
        <height>21</height>
       </rect>
      </property>
      <property name="text">
-      <string>开启通讯</string>
+      <string>Start comm</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -1042,20 +1042,20 @@ color: rgb(255, 255, 255);
       </rect>
      </property>
      <property name="text">
-      <string>PC端口:</string>
+      <string>PC Port:</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>430</x>
+       <x>410</x>
        <y>40</y>
-       <width>71</width>
-       <height>16</height>
+       <width>91</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>通讯状态:</string>
+      <string>Comm Stat:</string>
      </property>
     </widget>
     <widget class="QLabel" name="statuslabel">
@@ -1084,15 +1084,15 @@ color: rgb(255, 255, 255);
       </rect>
      </property>
      <property name="text">
-      <string>获取端口</string>
+      <string>Get Port</string>
      </property>
     </widget>
     <widget class="QPushButton" name="EnlaserButton">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>320</x>
        <y>60</y>
-       <width>81</width>
+       <width>91</width>
        <height>21</height>
       </rect>
      </property>
@@ -1102,7 +1102,7 @@ color: rgb(255, 255, 255);
       </font>
      </property>
      <property name="text">
-      <string>使能激光器</string>
+      <string>Enable Laser</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -1114,14 +1114,14 @@ color: rgb(255, 255, 255);
     <widget class="QPushButton" name="GetLDStatusBtn">
      <property name="geometry">
       <rect>
-       <x>220</x>
+       <x>200</x>
        <y>20</y>
-       <width>81</width>
+       <width>111</width>
        <height>21</height>
       </rect>
      </property>
      <property name="text">
-      <string>获取LD状态</string>
+      <string>Get LD Status</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -1179,14 +1179,14 @@ color: rgb(255, 255, 255);
     <widget class="QPushButton" name="SetCOM0Button">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>129</x>
        <y>70</y>
-       <width>80</width>
+       <width>91</width>
        <height>24</height>
       </rect>
      </property>
      <property name="text">
-      <string>设置电流</string>
+      <string>Set Current</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="COM0PowerEdit">
@@ -1267,40 +1267,40 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>253</x>
        <y>130</y>
-       <width>54</width>
-       <height>16</height>
+       <width>71</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>LD温度：</string>
+      <string>LD Temp:</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_8">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>250</x>
        <y>80</y>
-       <width>54</width>
-       <height>16</height>
+       <width>81</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>LD功率：</string>
+      <string>LD Power：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_9">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>250</x>
        <y>40</y>
-       <width>71</width>
-       <height>16</height>
+       <width>91</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>LD电流：</string>
+      <string>LD Current：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_24">

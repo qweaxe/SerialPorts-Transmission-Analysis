@@ -66,7 +66,7 @@ private slots:
 
     void on_SetCOM2Button_clicked();
 
-    void on_SetCOM3Button_clicked();
+    //void on_SetCOM3Button_clicked();
 
    //void on_SetAmp4Button_clicked();
 
@@ -77,7 +77,11 @@ private slots:
     void on_GetLDStatusBtn_toggled(bool checked);
 
 
-    void on_setCOM39WBtn_clicked();
+    //void on_setCOM29WBtn_clicked();
+
+    void on_SeedSwitchButton_toggled(bool checked);
+
+    void on_AmpSwitchButton_toggled(bool checked);
 
 private:
     Ui::QtWidgetsApplication1Class ui;
@@ -94,7 +98,7 @@ private:
     QtLambdapump Seed;
     QtLambdapump Amp1;
     QtLambdapump Amp2;
-    QtLambdapump Amp3;
+    //QtLambdapump Amp3;
 
     QSerialPort* serial;//全局的串口对象
     QBuffer buffer;//

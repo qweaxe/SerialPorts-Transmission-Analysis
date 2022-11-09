@@ -48,7 +48,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>250</y>
+      <y>310</y>
       <width>581</width>
       <height>121</height>
      </rect>
@@ -73,8 +73,8 @@
       <rect>
        <x>220</x>
        <y>50</y>
-       <width>31</width>
-       <height>31</height>
+       <width>41</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="text">
@@ -104,7 +104,7 @@
      <property name="geometry">
       <rect>
        <x>140</x>
-       <y>50</y>
+       <y>20</y>
        <width>80</width>
        <height>24</height>
       </rect>
@@ -308,6 +308,19 @@ color: rgb(255, 255, 255);
       <bool>false</bool>
      </property>
     </widget>
+    <widget class="QPushButton" name="AmpSwitchButton">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>80</y>
+       <width>80</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>一键开启</string>
+     </property>
+    </widget>
     <zorder>COM1PowerEdit</zorder>
     <zorder>SetCOM1Button</zorder>
     <zorder>COM1CurLcd</zorder>
@@ -321,283 +334,7 @@ color: rgb(255, 255, 255);
     <zorder>label_32</zorder>
     <zorder>label_36</zorder>
     <zorder>label_37</zorder>
-   </widget>
-   <widget class="QGroupBox" name="groupBox3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>370</y>
-      <width>581</width>
-      <height>121</height>
-     </rect>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>581</width>
-      <height>81</height>
-     </size>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>581</width>
-      <height>121</height>
-     </size>
-    </property>
-    <property name="title">
-     <string>Amp2</string>
-    </property>
-    <widget class="QLabel" name="COM2Status">
-     <property name="geometry">
-      <rect>
-       <x>220</x>
-       <y>30</y>
-       <width>31</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="Resources/Resource.qrc">:/images/offline.png</pixmap>
-     </property>
-     <property name="scaledContents">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="COM2PowerEdit">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>30</y>
-       <width>71</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="maxLength">
-      <number>4</number>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="SetCOM2Button">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>30</y>
-       <width>80</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>设置电流</string>
-     </property>
-    </widget>
-    <widget class="QLCDNumber" name="COM29WCurLcd">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>20</y>
-       <width>64</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>11</pointsize>
-       <italic>false</italic>
-       <bold>true</bold>
-       <underline>false</underline>
-      </font>
-     </property>
-     <property name="contextMenuPolicy">
-      <enum>Qt::DefaultContextMenu</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLCDNumber
-{
-background:black;
-
-color: rgb(255, 255, 255);
-}</string>
-     </property>
-     <property name="segmentStyle">
-      <enum>QLCDNumber::Flat</enum>
-     </property>
-    </widget>
-    <widget class="QLCDNumber" name="COM2TempLcd">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>50</y>
-       <width>64</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLCDNumber
-{
-background:black;
-
-color: rgb(255, 255, 255);
-}</string>
-     </property>
-     <property name="segmentStyle">
-      <enum>QLCDNumber::Flat</enum>
-     </property>
-    </widget>
-    <widget class="QLCDNumber" name="COM227WLDTempLcd">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>90</y>
-       <width>64</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLCDNumber
-{
-background:black;
-
-color: rgb(255, 255, 255);
-}</string>
-     </property>
-     <property name="segmentStyle">
-      <enum>QLCDNumber::Flat</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_16">
-     <property name="geometry">
-      <rect>
-       <x>263</x>
-       <y>50</y>
-       <width>71</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>11</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>背板温度：</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_15">
-     <property name="geometry">
-      <rect>
-       <x>253</x>
-       <y>20</y>
-       <width>81</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>9WLD电流：</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_14">
-     <property name="geometry">
-      <rect>
-       <x>270</x>
-       <y>90</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>LD温度：</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_26">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>30</y>
-       <width>41</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>A</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_33">
-     <property name="geometry">
-      <rect>
-       <x>400</x>
-       <y>10</y>
-       <width>51</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>A</string>
-     </property>
-     <property name="scaledContents">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_38">
-     <property name="geometry">
-      <rect>
-       <x>400</x>
-       <y>40</y>
-       <width>51</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>°C</string>
-     </property>
-     <property name="scaledContents">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_39">
-     <property name="geometry">
-      <rect>
-       <x>400</x>
-       <y>80</y>
-       <width>51</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>°C</string>
-     </property>
-     <property name="scaledContents">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <zorder>COM2PowerEdit</zorder>
-    <zorder>SetCOM2Button</zorder>
-    <zorder>COM29WCurLcd</zorder>
-    <zorder>COM2TempLcd</zorder>
-    <zorder>COM227WLDTempLcd</zorder>
-    <zorder>COM2Status</zorder>
-    <zorder>label_16</zorder>
-    <zorder>label_15</zorder>
-    <zorder>label_14</zorder>
-    <zorder>label_26</zorder>
-    <zorder>label_33</zorder>
-    <zorder>label_38</zorder>
-    <zorder>label_39</zorder>
+    <zorder>AmpSwitchButton</zorder>
    </widget>
    <widget class="QGroupBox" name="groupBox4">
     <property name="geometry">
@@ -621,15 +358,15 @@ color: rgb(255, 255, 255);
      </size>
     </property>
     <property name="title">
-     <string>Amp3</string>
+     <string>Main Amp</string>
     </property>
-    <widget class="QLabel" name="COM3Status">
+    <widget class="QLabel" name="COM2Status">
      <property name="geometry">
       <rect>
        <x>220</x>
        <y>50</y>
-       <width>31</width>
-       <height>31</height>
+       <width>41</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="text">
@@ -642,11 +379,11 @@ color: rgb(255, 255, 255);
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLineEdit" name="COM3PowerEdit">
+    <widget class="QLineEdit" name="COM2PowerEdit">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>100</y>
+       <y>60</y>
        <width>71</width>
        <height>20</height>
       </rect>
@@ -655,11 +392,11 @@ color: rgb(255, 255, 255);
       <number>4</number>
      </property>
     </widget>
-    <widget class="QPushButton" name="SetCOM3Button">
+    <widget class="QPushButton" name="SetCOM2Button">
      <property name="geometry">
       <rect>
-       <x>140</x>
-       <y>100</y>
+       <x>130</x>
+       <y>60</y>
        <width>80</width>
        <height>24</height>
       </rect>
@@ -668,7 +405,7 @@ color: rgb(255, 255, 255);
       <string>设置电流</string>
      </property>
     </widget>
-    <widget class="QLCDNumber" name="COM327WCurLcd">
+    <widget class="QLCDNumber" name="COM227WCurLcd">
      <property name="geometry">
       <rect>
        <x>330</x>
@@ -700,7 +437,7 @@ color: rgb(255, 255, 255);
       <double>0.000000000000000</double>
      </property>
     </widget>
-    <widget class="QLCDNumber" name="COM3TempLcd">
+    <widget class="QLCDNumber" name="COM2TempLcd">
      <property name="geometry">
       <rect>
        <x>330</x>
@@ -727,7 +464,7 @@ color: rgb(255, 255, 255);
       <double>0.000000000000000</double>
      </property>
     </widget>
-    <widget class="QLCDNumber" name="COM39WCurLcd">
+    <widget class="QLCDNumber" name="COM29WCurLcd">
      <property name="geometry">
       <rect>
        <x>490</x>
@@ -774,19 +511,6 @@ color: rgb(255, 255, 255);
       <string>27WLD电流：</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_27">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>20</y>
-       <width>41</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>A</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_34">
      <property name="geometry">
       <rect>
@@ -808,34 +532,11 @@ color: rgb(255, 255, 255);
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="setCOM39WBtn">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>20</y>
-       <width>80</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>设置电流</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="COM39WEdit">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>20</y>
-       <width>71</width>
-       <height>20</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_60">
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>100</y>
+       <y>60</y>
        <width>41</width>
        <height>21</height>
       </rect>
@@ -844,7 +545,7 @@ color: rgb(255, 255, 255);
       <string>A</string>
      </property>
     </widget>
-    <widget class="QLCDNumber" name="COM327WTempLcd">
+    <widget class="QLCDNumber" name="COM227WTempLcd">
      <property name="geometry">
       <rect>
        <x>490</x>
@@ -950,20 +651,17 @@ color: rgb(255, 255, 255);
       <string>A</string>
      </property>
     </widget>
-    <zorder>COM3PowerEdit</zorder>
-    <zorder>SetCOM3Button</zorder>
-    <zorder>COM3Status</zorder>
-    <zorder>COM327WCurLcd</zorder>
-    <zorder>COM3TempLcd</zorder>
-    <zorder>COM39WCurLcd</zorder>
+    <zorder>COM2PowerEdit</zorder>
+    <zorder>SetCOM2Button</zorder>
+    <zorder>COM2Status</zorder>
+    <zorder>COM227WCurLcd</zorder>
+    <zorder>COM2TempLcd</zorder>
+    <zorder>COM29WCurLcd</zorder>
     <zorder>label_17</zorder>
     <zorder>label_18</zorder>
-    <zorder>label_27</zorder>
     <zorder>label_34</zorder>
-    <zorder>setCOM39WBtn</zorder>
-    <zorder>COM39WEdit</zorder>
     <zorder>label_60</zorder>
-    <zorder>COM327WTempLcd</zorder>
+    <zorder>COM227WTempLcd</zorder>
     <zorder>label_61</zorder>
     <zorder>label_20</zorder>
     <zorder>label_19</zorder>
@@ -1048,7 +746,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>430</x>
+       <x>440</x>
        <y>40</y>
        <width>71</width>
        <height>16</height>
@@ -1061,7 +759,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="statuslabel">
      <property name="geometry">
       <rect>
-       <x>500</x>
+       <x>520</x>
        <y>30</y>
        <width>41</width>
        <height>41</height>
@@ -1180,7 +878,7 @@ color: rgb(255, 255, 255);
      <property name="geometry">
       <rect>
        <x>140</x>
-       <y>70</y>
+       <y>30</y>
        <width>80</width>
        <height>24</height>
       </rect>
@@ -1250,8 +948,8 @@ color: rgb(255, 255, 255);
       <rect>
        <x>220</x>
        <y>70</y>
-       <width>31</width>
-       <height>31</height>
+       <width>41</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="text">
@@ -1380,6 +1078,22 @@ color: rgb(255, 255, 255);
      </property>
      <property name="scaledContents">
       <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="SeedSwitchButton">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>110</y>
+       <width>80</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>一键开启</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>

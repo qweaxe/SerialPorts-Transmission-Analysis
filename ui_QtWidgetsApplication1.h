@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'QtWidgetsApplication1tZERhZ.ui'
+** Form generated from reading UI file 'QtWidgetsApplication1lIRkqy.ui'
 **
 ** Created by: Qt User Interface Compiler version 6.2.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef QTWIDGETSAPPLICATION1TZERHZ_H
-#define QTWIDGETSAPPLICATION1TZERHZ_H
+#ifndef QTWIDGETSAPPLICATION1LIRKQY_H
+#define QTWIDGETSAPPLICATION1LIRKQY_H
 
 #include <QtCore/QVariant>
 #include <QtGui/QIcon>
@@ -45,35 +45,19 @@ public:
     QLabel *label_32;
     QLabel *label_36;
     QLabel *label_37;
-    QGroupBox *groupBox3;
+    QPushButton *AmpSwitchButton;
+    QGroupBox *groupBox4;
     QLabel *COM2Status;
     QLineEdit *COM2PowerEdit;
     QPushButton *SetCOM2Button;
-    QLCDNumber *COM29WCurLcd;
+    QLCDNumber *COM227WCurLcd;
     QLCDNumber *COM2TempLcd;
-    QLCDNumber *COM227WLDTempLcd;
-    QLabel *label_16;
-    QLabel *label_15;
-    QLabel *label_14;
-    QLabel *label_26;
-    QLabel *label_33;
-    QLabel *label_38;
-    QLabel *label_39;
-    QGroupBox *groupBox4;
-    QLabel *COM3Status;
-    QLineEdit *COM3PowerEdit;
-    QPushButton *SetCOM3Button;
-    QLCDNumber *COM327WCurLcd;
-    QLCDNumber *COM3TempLcd;
-    QLCDNumber *COM39WCurLcd;
+    QLCDNumber *COM29WCurLcd;
     QLabel *label_17;
     QLabel *label_18;
-    QLabel *label_27;
     QLabel *label_34;
-    QPushButton *setCOM39WBtn;
-    QLineEdit *COM39WEdit;
     QLabel *label_60;
-    QLCDNumber *COM327WTempLcd;
+    QLCDNumber *COM227WTempLcd;
     QLabel *label_61;
     QLabel *label_20;
     QLabel *label_19;
@@ -102,6 +86,7 @@ public:
     QLabel *label_30;
     QLabel *label_31;
     QLabel *label_35;
+    QPushButton *SeedSwitchButton;
     QGroupBox *groupBox;
     QLabel *label_4;
     QLabel *label_5;
@@ -134,12 +119,12 @@ public:
         centralWidget->setFont(font);
         groupBox2 = new QGroupBox(centralWidget);
         groupBox2->setObjectName(QString::fromUtf8("groupBox2"));
-        groupBox2->setGeometry(QRect(10, 250, 581, 121));
+        groupBox2->setGeometry(QRect(10, 310, 581, 121));
         groupBox2->setMinimumSize(QSize(581, 81));
         groupBox2->setMaximumSize(QSize(581, 121));
         COM1Status = new QLabel(groupBox2);
         COM1Status->setObjectName(QString::fromUtf8("COM1Status"));
-        COM1Status->setGeometry(QRect(220, 50, 31, 31));
+        COM1Status->setGeometry(QRect(220, 50, 41, 41));
         COM1Status->setPixmap(QPixmap(QString::fromUtf8(":/images/offline.png")));
         COM1Status->setScaledContents(true);
         COM1PowerEdit = new QLineEdit(groupBox2);
@@ -148,7 +133,7 @@ public:
         COM1PowerEdit->setMaxLength(4);
         SetCOM1Button = new QPushButton(groupBox2);
         SetCOM1Button->setObjectName(QString::fromUtf8("SetCOM1Button"));
-        SetCOM1Button->setGeometry(QRect(140, 50, 80, 24));
+        SetCOM1Button->setGeometry(QRect(140, 20, 80, 24));
         COM1CurLcd = new QLCDNumber(groupBox2);
         COM1CurLcd->setObjectName(QString::fromUtf8("COM1CurLcd"));
         COM1CurLcd->setGeometry(QRect(330, 20, 64, 23));
@@ -215,6 +200,9 @@ public:
         label_37->setGeometry(QRect(400, 40, 51, 41));
         label_37->setFont(font2);
         label_37->setScaledContents(false);
+        AmpSwitchButton = new QPushButton(groupBox2);
+        AmpSwitchButton->setObjectName(QString::fromUtf8("AmpSwitchButton"));
+        AmpSwitchButton->setGeometry(QRect(140, 80, 80, 24));
         COM1PowerEdit->raise();
         SetCOM1Button->raise();
         COM1CurLcd->raise();
@@ -228,33 +216,52 @@ public:
         label_32->raise();
         label_36->raise();
         label_37->raise();
-        groupBox3 = new QGroupBox(centralWidget);
-        groupBox3->setObjectName(QString::fromUtf8("groupBox3"));
-        groupBox3->setGeometry(QRect(10, 370, 581, 121));
-        groupBox3->setMinimumSize(QSize(581, 81));
-        groupBox3->setMaximumSize(QSize(581, 121));
-        COM2Status = new QLabel(groupBox3);
+        AmpSwitchButton->raise();
+        groupBox4 = new QGroupBox(centralWidget);
+        groupBox4->setObjectName(QString::fromUtf8("groupBox4"));
+        groupBox4->setGeometry(QRect(10, 490, 581, 141));
+        groupBox4->setMinimumSize(QSize(581, 81));
+        groupBox4->setMaximumSize(QSize(581, 141));
+        COM2Status = new QLabel(groupBox4);
         COM2Status->setObjectName(QString::fromUtf8("COM2Status"));
-        COM2Status->setGeometry(QRect(220, 30, 31, 31));
+        COM2Status->setGeometry(QRect(220, 50, 41, 41));
         COM2Status->setPixmap(QPixmap(QString::fromUtf8(":/images/offline.png")));
         COM2Status->setScaledContents(true);
-        COM2PowerEdit = new QLineEdit(groupBox3);
+        COM2PowerEdit = new QLineEdit(groupBox4);
         COM2PowerEdit->setObjectName(QString::fromUtf8("COM2PowerEdit"));
-        COM2PowerEdit->setGeometry(QRect(20, 30, 71, 20));
+        COM2PowerEdit->setGeometry(QRect(20, 60, 71, 20));
         COM2PowerEdit->setMaxLength(4);
-        SetCOM2Button = new QPushButton(groupBox3);
+        SetCOM2Button = new QPushButton(groupBox4);
         SetCOM2Button->setObjectName(QString::fromUtf8("SetCOM2Button"));
-        SetCOM2Button->setGeometry(QRect(140, 30, 80, 24));
-        COM29WCurLcd = new QLCDNumber(groupBox3);
+        SetCOM2Button->setGeometry(QRect(130, 60, 80, 24));
+        COM227WCurLcd = new QLCDNumber(groupBox4);
+        COM227WCurLcd->setObjectName(QString::fromUtf8("COM227WCurLcd"));
+        COM227WCurLcd->setGeometry(QRect(330, 20, 64, 23));
+        COM227WCurLcd->setFont(font);
+        COM227WCurLcd->setStyleSheet(QString::fromUtf8("QLCDNumber\n"
+"{\n"
+"background:black;\n"
+"\n"
+"color: rgb(255, 255, 255);\n"
+"}"));
+        COM227WCurLcd->setSmallDecimalPoint(false);
+        COM227WCurLcd->setSegmentStyle(QLCDNumber::Flat);
+        COM227WCurLcd->setProperty("value", QVariant(0.000000000000000));
+        COM2TempLcd = new QLCDNumber(groupBox4);
+        COM2TempLcd->setObjectName(QString::fromUtf8("COM2TempLcd"));
+        COM2TempLcd->setGeometry(QRect(330, 100, 64, 23));
+        COM2TempLcd->setStyleSheet(QString::fromUtf8("QLCDNumber\n"
+"{\n"
+"background:black;\n"
+"\n"
+"color: rgb(255, 255, 255);\n"
+"}"));
+        COM2TempLcd->setSmallDecimalPoint(false);
+        COM2TempLcd->setSegmentStyle(QLCDNumber::Flat);
+        COM2TempLcd->setProperty("value", QVariant(0.000000000000000));
+        COM29WCurLcd = new QLCDNumber(groupBox4);
         COM29WCurLcd->setObjectName(QString::fromUtf8("COM29WCurLcd"));
-        COM29WCurLcd->setGeometry(QRect(330, 20, 64, 23));
-        QFont font3;
-        font3.setPointSize(11);
-        font3.setBold(true);
-        font3.setItalic(false);
-        font3.setUnderline(false);
-        COM29WCurLcd->setFont(font3);
-        COM29WCurLcd->setContextMenuPolicy(Qt::DefaultContextMenu);
+        COM29WCurLcd->setGeometry(QRect(490, 20, 64, 23));
         COM29WCurLcd->setStyleSheet(QString::fromUtf8("QLCDNumber\n"
 "{\n"
 "background:black;\n"
@@ -262,152 +269,30 @@ public:
 "color: rgb(255, 255, 255);\n"
 "}"));
         COM29WCurLcd->setSegmentStyle(QLCDNumber::Flat);
-        COM2TempLcd = new QLCDNumber(groupBox3);
-        COM2TempLcd->setObjectName(QString::fromUtf8("COM2TempLcd"));
-        COM2TempLcd->setGeometry(QRect(330, 50, 64, 23));
-        COM2TempLcd->setStyleSheet(QString::fromUtf8("QLCDNumber\n"
-"{\n"
-"background:black;\n"
-"\n"
-"color: rgb(255, 255, 255);\n"
-"}"));
-        COM2TempLcd->setSegmentStyle(QLCDNumber::Flat);
-        COM227WLDTempLcd = new QLCDNumber(groupBox3);
-        COM227WLDTempLcd->setObjectName(QString::fromUtf8("COM227WLDTempLcd"));
-        COM227WLDTempLcd->setGeometry(QRect(330, 90, 64, 23));
-        COM227WLDTempLcd->setStyleSheet(QString::fromUtf8("QLCDNumber\n"
-"{\n"
-"background:black;\n"
-"\n"
-"color: rgb(255, 255, 255);\n"
-"}"));
-        COM227WLDTempLcd->setSegmentStyle(QLCDNumber::Flat);
-        label_16 = new QLabel(groupBox3);
-        label_16->setObjectName(QString::fromUtf8("label_16"));
-        label_16->setGeometry(QRect(263, 50, 71, 20));
-        label_16->setFont(font);
-        label_15 = new QLabel(groupBox3);
-        label_15->setObjectName(QString::fromUtf8("label_15"));
-        label_15->setGeometry(QRect(253, 20, 81, 20));
-        label_14 = new QLabel(groupBox3);
-        label_14->setObjectName(QString::fromUtf8("label_14"));
-        label_14->setGeometry(QRect(270, 90, 91, 16));
-        label_26 = new QLabel(groupBox3);
-        label_26->setObjectName(QString::fromUtf8("label_26"));
-        label_26->setGeometry(QRect(100, 30, 41, 21));
-        label_33 = new QLabel(groupBox3);
-        label_33->setObjectName(QString::fromUtf8("label_33"));
-        label_33->setGeometry(QRect(400, 10, 51, 41));
-        label_33->setFont(font2);
-        label_33->setScaledContents(false);
-        label_38 = new QLabel(groupBox3);
-        label_38->setObjectName(QString::fromUtf8("label_38"));
-        label_38->setGeometry(QRect(400, 40, 51, 41));
-        label_38->setFont(font2);
-        label_38->setScaledContents(false);
-        label_39 = new QLabel(groupBox3);
-        label_39->setObjectName(QString::fromUtf8("label_39"));
-        label_39->setGeometry(QRect(400, 80, 51, 41));
-        label_39->setFont(font2);
-        label_39->setScaledContents(false);
-        COM2PowerEdit->raise();
-        SetCOM2Button->raise();
-        COM29WCurLcd->raise();
-        COM2TempLcd->raise();
-        COM227WLDTempLcd->raise();
-        COM2Status->raise();
-        label_16->raise();
-        label_15->raise();
-        label_14->raise();
-        label_26->raise();
-        label_33->raise();
-        label_38->raise();
-        label_39->raise();
-        groupBox4 = new QGroupBox(centralWidget);
-        groupBox4->setObjectName(QString::fromUtf8("groupBox4"));
-        groupBox4->setGeometry(QRect(10, 490, 581, 141));
-        groupBox4->setMinimumSize(QSize(581, 81));
-        groupBox4->setMaximumSize(QSize(581, 141));
-        COM3Status = new QLabel(groupBox4);
-        COM3Status->setObjectName(QString::fromUtf8("COM3Status"));
-        COM3Status->setGeometry(QRect(220, 50, 31, 31));
-        COM3Status->setPixmap(QPixmap(QString::fromUtf8(":/images/offline.png")));
-        COM3Status->setScaledContents(true);
-        COM3PowerEdit = new QLineEdit(groupBox4);
-        COM3PowerEdit->setObjectName(QString::fromUtf8("COM3PowerEdit"));
-        COM3PowerEdit->setGeometry(QRect(20, 100, 71, 20));
-        COM3PowerEdit->setMaxLength(4);
-        SetCOM3Button = new QPushButton(groupBox4);
-        SetCOM3Button->setObjectName(QString::fromUtf8("SetCOM3Button"));
-        SetCOM3Button->setGeometry(QRect(140, 100, 80, 24));
-        COM327WCurLcd = new QLCDNumber(groupBox4);
-        COM327WCurLcd->setObjectName(QString::fromUtf8("COM327WCurLcd"));
-        COM327WCurLcd->setGeometry(QRect(330, 20, 64, 23));
-        COM327WCurLcd->setFont(font);
-        COM327WCurLcd->setStyleSheet(QString::fromUtf8("QLCDNumber\n"
-"{\n"
-"background:black;\n"
-"\n"
-"color: rgb(255, 255, 255);\n"
-"}"));
-        COM327WCurLcd->setSmallDecimalPoint(false);
-        COM327WCurLcd->setSegmentStyle(QLCDNumber::Flat);
-        COM327WCurLcd->setProperty("value", QVariant(0.000000000000000));
-        COM3TempLcd = new QLCDNumber(groupBox4);
-        COM3TempLcd->setObjectName(QString::fromUtf8("COM3TempLcd"));
-        COM3TempLcd->setGeometry(QRect(330, 100, 64, 23));
-        COM3TempLcd->setStyleSheet(QString::fromUtf8("QLCDNumber\n"
-"{\n"
-"background:black;\n"
-"\n"
-"color: rgb(255, 255, 255);\n"
-"}"));
-        COM3TempLcd->setSmallDecimalPoint(false);
-        COM3TempLcd->setSegmentStyle(QLCDNumber::Flat);
-        COM3TempLcd->setProperty("value", QVariant(0.000000000000000));
-        COM39WCurLcd = new QLCDNumber(groupBox4);
-        COM39WCurLcd->setObjectName(QString::fromUtf8("COM39WCurLcd"));
-        COM39WCurLcd->setGeometry(QRect(490, 20, 64, 23));
-        COM39WCurLcd->setStyleSheet(QString::fromUtf8("QLCDNumber\n"
-"{\n"
-"background:black;\n"
-"\n"
-"color: rgb(255, 255, 255);\n"
-"}"));
-        COM39WCurLcd->setSegmentStyle(QLCDNumber::Flat);
         label_17 = new QLabel(groupBox4);
         label_17->setObjectName(QString::fromUtf8("label_17"));
         label_17->setGeometry(QRect(420, 100, 71, 21));
         label_18 = new QLabel(groupBox4);
         label_18->setObjectName(QString::fromUtf8("label_18"));
         label_18->setGeometry(QRect(233, 20, 91, 20));
-        label_27 = new QLabel(groupBox4);
-        label_27->setObjectName(QString::fromUtf8("label_27"));
-        label_27->setGeometry(QRect(100, 20, 41, 21));
         label_34 = new QLabel(groupBox4);
         label_34->setObjectName(QString::fromUtf8("label_34"));
         label_34->setGeometry(QRect(400, 15, 41, 31));
         label_34->setFont(font2);
         label_34->setScaledContents(false);
-        setCOM39WBtn = new QPushButton(groupBox4);
-        setCOM39WBtn->setObjectName(QString::fromUtf8("setCOM39WBtn"));
-        setCOM39WBtn->setGeometry(QRect(140, 20, 80, 24));
-        COM39WEdit = new QLineEdit(groupBox4);
-        COM39WEdit->setObjectName(QString::fromUtf8("COM39WEdit"));
-        COM39WEdit->setGeometry(QRect(20, 20, 71, 20));
         label_60 = new QLabel(groupBox4);
         label_60->setObjectName(QString::fromUtf8("label_60"));
-        label_60->setGeometry(QRect(100, 100, 41, 21));
-        COM327WTempLcd = new QLCDNumber(groupBox4);
-        COM327WTempLcd->setObjectName(QString::fromUtf8("COM327WTempLcd"));
-        COM327WTempLcd->setGeometry(QRect(490, 100, 64, 23));
-        COM327WTempLcd->setStyleSheet(QString::fromUtf8("QLCDNumber\n"
+        label_60->setGeometry(QRect(100, 60, 41, 21));
+        COM227WTempLcd = new QLCDNumber(groupBox4);
+        COM227WTempLcd->setObjectName(QString::fromUtf8("COM227WTempLcd"));
+        COM227WTempLcd->setGeometry(QRect(490, 100, 64, 23));
+        COM227WTempLcd->setStyleSheet(QString::fromUtf8("QLCDNumber\n"
 "{\n"
 "background:black;\n"
 "\n"
 "color: rgb(255, 255, 255);\n"
 "}"));
-        COM327WTempLcd->setSegmentStyle(QLCDNumber::Flat);
+        COM227WTempLcd->setSegmentStyle(QLCDNumber::Flat);
         label_61 = new QLabel(groupBox4);
         label_61->setObjectName(QString::fromUtf8("label_61"));
         label_61->setGeometry(QRect(420, 20, 81, 20));
@@ -427,20 +312,17 @@ public:
         label_22->setObjectName(QString::fromUtf8("label_22"));
         label_22->setGeometry(QRect(560, 10, 51, 41));
         label_22->setFont(font2);
-        COM3PowerEdit->raise();
-        SetCOM3Button->raise();
-        COM3Status->raise();
-        COM327WCurLcd->raise();
-        COM3TempLcd->raise();
-        COM39WCurLcd->raise();
+        COM2PowerEdit->raise();
+        SetCOM2Button->raise();
+        COM2Status->raise();
+        COM227WCurLcd->raise();
+        COM2TempLcd->raise();
+        COM29WCurLcd->raise();
         label_17->raise();
         label_18->raise();
-        label_27->raise();
         label_34->raise();
-        setCOM39WBtn->raise();
-        COM39WEdit->raise();
         label_60->raise();
-        COM327WTempLcd->raise();
+        COM227WTempLcd->raise();
         label_61->raise();
         label_20->raise();
         label_19->raise();
@@ -466,10 +348,10 @@ public:
         label->setGeometry(QRect(10, 40, 54, 16));
         label_2 = new QLabel(groupBox0);
         label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(430, 40, 71, 16));
+        label_2->setGeometry(QRect(440, 40, 71, 16));
         statuslabel = new QLabel(groupBox0);
         statuslabel->setObjectName(QString::fromUtf8("statuslabel"));
-        statuslabel->setGeometry(QRect(500, 30, 41, 41));
+        statuslabel->setGeometry(QRect(520, 30, 41, 41));
         statuslabel->setPixmap(QPixmap(QString::fromUtf8(":/images/off.png")));
         statuslabel->setScaledContents(true);
         GetcomButton = new QPushButton(groupBox0);
@@ -478,9 +360,9 @@ public:
         EnlaserButton = new QPushButton(groupBox0);
         EnlaserButton->setObjectName(QString::fromUtf8("EnlaserButton"));
         EnlaserButton->setGeometry(QRect(330, 60, 81, 21));
-        QFont font4;
-        font4.setPointSize(10);
-        EnlaserButton->setFont(font4);
+        QFont font3;
+        font3.setPointSize(10);
+        EnlaserButton->setFont(font3);
         EnlaserButton->setCheckable(true);
         EnlaserButton->setChecked(false);
         GetLDStatusBtn = new QPushButton(groupBox0);
@@ -505,7 +387,7 @@ public:
         COM0CurLcd->setSegmentStyle(QLCDNumber::Flat);
         SetCOM0Button = new QPushButton(groupBox1);
         SetCOM0Button->setObjectName(QString::fromUtf8("SetCOM0Button"));
-        SetCOM0Button->setGeometry(QRect(140, 70, 80, 24));
+        SetCOM0Button->setGeometry(QRect(140, 30, 80, 24));
         COM0PowerEdit = new QLineEdit(groupBox1);
         COM0PowerEdit->setObjectName(QString::fromUtf8("COM0PowerEdit"));
         COM0PowerEdit->setGeometry(QRect(20, 70, 71, 20));
@@ -530,7 +412,7 @@ public:
         COM0TempLcd->setSegmentStyle(QLCDNumber::Flat);
         COM0Status = new QLabel(groupBox1);
         COM0Status->setObjectName(QString::fromUtf8("COM0Status"));
-        COM0Status->setGeometry(QRect(220, 70, 31, 31));
+        COM0Status->setGeometry(QRect(220, 70, 41, 41));
         COM0Status->setPixmap(QPixmap(QString::fromUtf8(":/images/offline.png")));
         COM0Status->setScaledContents(true);
         label_6 = new QLabel(groupBox1);
@@ -561,6 +443,10 @@ public:
         label_35->setGeometry(QRect(400, 120, 51, 41));
         label_35->setFont(font2);
         label_35->setScaledContents(false);
+        SeedSwitchButton = new QPushButton(groupBox1);
+        SeedSwitchButton->setObjectName(QString::fromUtf8("SeedSwitchButton"));
+        SeedSwitchButton->setGeometry(QRect(140, 110, 80, 24));
+        SeedSwitchButton->setCheckable(true);
         groupBox = new QGroupBox(centralWidget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
         groupBox->setGeometry(QRect(10, 670, 581, 151));
@@ -617,24 +503,13 @@ public:
         label_32->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "mA", nullptr));
         label_36->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\302\260C", nullptr));
         label_37->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "mW", nullptr));
-        groupBox3->setTitle(QCoreApplication::translate("QtWidgetsApplication1Class", "Amp2", nullptr));
+        AmpSwitchButton->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\344\270\200\351\224\256\345\274\200\345\220\257", nullptr));
+        groupBox4->setTitle(QCoreApplication::translate("QtWidgetsApplication1Class", "Main Amp", nullptr));
         COM2Status->setText(QString());
         SetCOM2Button->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\350\256\276\347\275\256\347\224\265\346\265\201", nullptr));
-        label_16->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\350\203\214\346\235\277\346\270\251\345\272\246\357\274\232", nullptr));
-        label_15->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "9WLD\347\224\265\346\265\201\357\274\232", nullptr));
-        label_14->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "LD\346\270\251\345\272\246\357\274\232", nullptr));
-        label_26->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "A", nullptr));
-        label_33->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "A", nullptr));
-        label_38->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\302\260C", nullptr));
-        label_39->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\302\260C", nullptr));
-        groupBox4->setTitle(QCoreApplication::translate("QtWidgetsApplication1Class", "Amp3", nullptr));
-        COM3Status->setText(QString());
-        SetCOM3Button->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\350\256\276\347\275\256\347\224\265\346\265\201", nullptr));
         label_17->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "27W\346\270\251\345\272\246\357\274\232", nullptr));
         label_18->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "27WLD\347\224\265\346\265\201\357\274\232", nullptr));
-        label_27->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "A", nullptr));
         label_34->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "A", nullptr));
-        setCOM39WBtn->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\350\256\276\347\275\256\347\224\265\346\265\201", nullptr));
         label_60->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "A", nullptr));
         label_61->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "9WLD\347\224\265\346\265\201\357\274\232", nullptr));
         label_20->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\350\203\214\346\235\277\346\270\251\345\272\246\357\274\232", nullptr));
@@ -662,6 +537,7 @@ public:
         label_30->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "mA", nullptr));
         label_31->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "mW", nullptr));
         label_35->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\302\260C", nullptr));
+        SeedSwitchButton->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\344\270\200\351\224\256\345\274\200\345\220\257", nullptr));
         groupBox->setTitle(QCoreApplication::translate("QtWidgetsApplication1Class", "\346\224\266\345\217\221\346\225\260\346\215\256", nullptr));
         label_4->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\345\217\221\351\200\201\357\274\232", nullptr));
         label_5->setText(QCoreApplication::translate("QtWidgetsApplication1Class", "\346\216\245\346\224\266:", nullptr));
@@ -676,4 +552,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // QTWIDGETSAPPLICATION1TZERHZ_H
+#endif // QTWIDGETSAPPLICATION1LIRKQY_H

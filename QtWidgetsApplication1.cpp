@@ -267,7 +267,7 @@ void QtWidgetsApplication1::on_SetCOM2Button_clicked()
 {
     if (Comstatus == off)
         QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
-    else if (Amp2.LD9wsetcur()<0.9)
+    else if (Amp1.LDsetcur()<600)
     {
         QMessageBox::warning(this, tr("警告"), tr("前一级尚未正确开启！"));
     }
@@ -875,17 +875,17 @@ Status QtWidgetsApplication1::Enlaser()
 {
     bool status = 0;
     //timer->stop();
-    //初始化数据
-    SetSeedData[2] = 0x03;//开始获取数据
-    SetSeedData[3] = 0x73;
-    SetSeedData[4] = 0x73;
-    
+    ////初始化数据
+    //setseeddata[2] = 0x03;//开始获取数据
+    //setseeddata[3] = 0x73;
+    //setseeddata[4] = 0x73;
+    //
     //开启命令，看返回值是否正常来判断通信
    
-   // 设置Golight开启关闭状态的控制位;
-    QByteArray temp;
-    temp.resize(1);
-    temp[0] = 0x04;
+   //// 设置Golight开启关闭状态的控制位;
+   // QByteArray temp;
+   // temp.resize(1);
+   // temp[0] = 0x04;
 
 
     //逐级发送数据
@@ -1343,19 +1343,37 @@ void QtWidgetsApplication1::on_SeedSwitchButton_toggled(bool checked)
     {
         if (checked)//开启
         {
-
-            //ui.EnlaserButton->setText(tr("关闭激光器"));
-  
-           // Laserstatus = Enlaser();
+            timer->stop();
+            Seed.Setcurrent(100);
+            SendDatabyte(0, Seed.Datasend());
+            Sleep(200);
+            Seed.Setcurrent(200);
+            SendDatabyte(0, Seed.Datasend());
+            Sleep(200);
+            Seed.Setcurrent(300);
+            SendDatabyte(0, Seed.Datasend());
+            Sleep(200);
+            Seed.Setcurrent(400);
+            SendDatabyte(0, Seed.Datasend());
+            Sleep(200);
+            Seed.Setcurrent(500);
+            SendDatabyte(0, Seed.Datasend());
+            Sleep(200);
+            Seed.Setcurrent(400);
+            SendDatabyte(0, Seed.Datasend());
+            Sleep(200);
+            Seed.Setcurrent(300);
+            SendDatabyte(0, Seed.Datasend());
+            Sleep(200);
+            Seed.Setcurrent(300);
+            SendDatabyte(0, Seed.Datasend());
+            Sleep(200);
         }
         else//关闭，seed发送停止获取数据，1、2、4发送关闭命令，3设置电流为0？
         {
-
-            //Laserstatus = Dislaser();
-            //ui.EnlaserButton->setText(tr("使能激光器"));
-            //ui.GetLDStatusBtn->setChecked(0);
-            //ui.GetLDStatusBtn->setText(tr("开始获取"));
-
+            timer->stop();
+            Seed.Setcurrent(0);
+            SendDatabyte(0, Seed.Datasend());
         }
     }
 }
@@ -1373,18 +1391,33 @@ void QtWidgetsApplication1::on_AmpSwitchButton_toggled(bool checked)
     {
         if (checked)//开启
         {
-
-            //ui.EnlaserButton->setText(tr("关闭激光器"));
-
-           // Laserstatus = Enlaser();
+            timer->stop();
+            Amp1.Setcurrent(200);
+            SendDatabyte(1, Amp1.Datasend());
+            Sleep(200);
+            Amp1.Setcurrent(400);
+            SendDatabyte(1, Amp1.Datasend());
+            Sleep(200);
+            Amp1.Setcurrent(600);
+            SendDatabyte(1, Amp1.Datasend());
+            Sleep(200);
+            Amp1.Setcurrent(800);
+            SendDatabyte(1, Amp1.Datasend());
         }
         else//关闭，seed发送停止获取数据，1、2、4发送关闭命令，3设置电流为0？
         {
-
-            //Laserstatus = Dislaser();
-            //ui.EnlaserButton->setText(tr("使能激光器"));
-            //ui.GetLDStatusBtn->setChecked(0);
-            //ui.GetLDStatusBtn->setText(tr("开始获取"));
+            timer->stop();
+            Amp1.Setcurrent(600);
+            SendDatabyte(1, Amp1.Datasend());
+            Sleep(200);
+            Amp1.Setcurrent(400);
+            SendDatabyte(1, Amp1.Datasend());
+            Sleep(200);
+            Amp1.Setcurrent(200);
+            SendDatabyte(1, Amp1.Datasend());
+            Sleep(200);
+            Amp1.Setcurrent(0);
+            SendDatabyte(1, Amp1.Datasend());
 
         }
     }

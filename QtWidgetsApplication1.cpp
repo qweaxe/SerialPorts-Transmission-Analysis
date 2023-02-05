@@ -61,7 +61,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     //接收子线程发送的数据，并更新进度条
     //connect(Mainwork, &MainThread::working, this, [=]int l);
     //connect(Processwork, &ProcessThread::working, this, [=]int l);
-    //connect(Processwork, &ProcessThread::processed, this, &QtWidgetsApplication1::COM0Changed);
+    connect(Processwork, &ProcessThread::processed, this, &QtWidgetsApplication1::COMChanged);
 
     t2->start();
     emit QtWidgetsApplication1::starting2();
@@ -73,6 +73,10 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     connect(this, &QtWidgetsApplication1::SetSerialPortName, Processwork, &ProcessThread::SerialPortName);
     //connect发送函数
     connect(this, &QtWidgetsApplication1::senddata, Processwork, &ProcessThread::send);
+    //connect显示发送内容函数
+    connect(Processwork, &ProcessThread::DisplayReData, this, &QtWidgetsApplication1::DisplayReData);
+    connect(Processwork, &ProcessThread::DisplaySeData, this, &QtWidgetsApplication1::DisplaySeData);
+    
     
 }
      
@@ -346,28 +350,28 @@ void QtWidgetsApplication1::on_setCOM39WBtn_clicked()
   */
 void QtWidgetsApplication1::ReadData()
 {
-    //读取
-    QByteArray buf = serial->readAll();//2022年4月15日：测试版本先用readline()；大电流驱动板对应不了！还是用readAll()+判断
-    QByteArray enter("\n");
-    //enter.resize(1);
-    //enter[0] = '\n';
+    ////读取
+    //QByteArray buf = serial->readAll();//2022年4月15日：测试版本先用readline()；大电流驱动板对应不了！还是用readAll()+判断
+    //QByteArray enter("\n");
+    ////enter.resize(1);
+    ////enter[0] = '\n';
    
-    redatatxt.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append);
-    reerrortxt.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
-    if (!buf.isEmpty())
-    {
-        //circularBuffer.append(buf);
-        //emit starting2(buf);
-        redatatxt.write(buf.toHex(' ').toUpper());
-        redatatxt.write(enter);
-        //emit starting2(buf);
-        AnalysisData(buf);
-        DisplayData(buf);
-    }
-    redatatxt.close();
-    reerrortxt.close();
-    buf.clear();
-    //buffer.close();
+    //redatatxt.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append);
+    //reerrortxt.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
+    //if (!buf.isEmpty())
+    //{
+    //    //circularBuffer.append(buf);
+    //    //emit starting2(buf);
+    //    redatatxt.write(buf.toHex(' ').toUpper());
+    //    redatatxt.write(enter);
+    //    //emit starting2(buf);
+    //    AnalysisData(buf);
+    //    DisplayData(buf);
+    //}
+    //redatatxt.close();
+    //reerrortxt.close();
+    //buf.clear();
+    ////buffer.close();
 }
 
 
@@ -397,19 +401,34 @@ void QtWidgetsApplication1::on_SeedPowerEdit_returnPressed()
 
 
 /**
-  * @Function Name  : DisplayData
+  * @Function Name  : DisplayReData
   * @
   * @brief 显示收到的字符串
   * @param buf  返回的数据
   * @retval void
   */
-void QtWidgetsApplication1::DisplayData(const QByteArray buf)
+void QtWidgetsApplication1::DisplayReData(const QByteArray buf)
 {
     QByteArray buf1 = buf;
     QString str = AddBlank(buf1);
     ui.ReceivetextEdit->clear();
     ui.ReceivetextEdit->append(str);
     
+}
+
+/**
+  * @Function Name  : DisplaySeData
+  * @
+  * @brief 显示收到的字符串
+  * @param buf  返回的数据
+  * @retval void
+  */
+void QtWidgetsApplication1::DisplaySeData(const QByteArray buf)
+{
+    QByteArray buf1 = buf;
+    ui.SendtextEdit->clear();
+    ui.SendtextEdit->append(AddBlank(buf1));
+
 }
 
 //处理收到的数据
@@ -1321,7 +1340,7 @@ void QtWidgetsApplication1::change_ampstatus()
 {
 }
 
-void QtWidgetsApplication1::COM0Changed(int n, QtLambdapump* Amp0)
+void QtWidgetsApplication1::COMChanged(int n, QtLambdapump* Amp0)
 {
     switch (n)
     {
@@ -1333,13 +1352,22 @@ void QtWidgetsApplication1::COM0Changed(int n, QtLambdapump* Amp0)
         break;
     case 1:
         Amp1.SetStatus(Amp0);
-        ui.COM0CurLcd->display(Amp1.Pumpcurrent());
+        ui.COM1CurLcd->display(Amp1.Pumpcurrent());
+        ui.COM1PowerLcd->display(Amp1.Pumppower());
+        ui.COM1TempLcd->display(Amp1.Pumptemp());
         break;
     case 2:
-
+        Amp2.SetStatus(Amp0);
+        ui.COM29WCurLcd->display(Amp2.LD9wcur());
+        ui.COM2TempLcd->display(Amp2.Pumptemp());
+        ui.COM227WLDTempLcd->display(Amp2.Pumptemp());
         break;
     case 3:
-
+        Amp3.SetStatus(Amp0);
+        ui.COM327WCurLcd->display(Amp3.LD27wcur());
+        ui.COM39WCurLcd->display(Amp3.LD9wcur());
+        ui.COM3TempLcd->display(Amp3.Modeltemp());
+        ui.COM327WTempLcd->display(Amp3.LD27wtemp());
         break;
     case 4:
 

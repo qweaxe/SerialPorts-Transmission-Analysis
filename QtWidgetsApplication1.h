@@ -25,7 +25,7 @@ public:
     QtWidgetsApplication1(QWidget* parent = Q_NULLPTR);
 
     //QtWidgetsApplication1();
-    void DisplayData(const QByteArray buf);
+
     void AnalysisData(const QByteArray buf);
     void SetData();
     void QStringtoHex(QString str, QByteArray& SendData);//貌似没有
@@ -55,9 +55,12 @@ public slots:
     void on_pushButton_toggled(bool checked);
     void change_ampstatus();
 
-    void COM0Changed(int n, QtLambdapump* Amp0);
+    void COMChanged(int n, QtLambdapump* Amp0);
     
     void SerialPortChanged(QString info);
+
+    void DisplayReData(const QByteArray buf);
+    void DisplaySeData(const QByteArray buf);
 
 private slots:
     void on_ComComboBox_currentIndexChanged(int index);

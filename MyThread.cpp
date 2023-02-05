@@ -38,6 +38,7 @@ void ProcessThread::begin()
 	//Process(processdata);
 	//SetSerialPortList();
 	SetData();
+	connect(this, &ProcessThread::ReadyProcess, this, &ProcessThread::Process);
 	//qDebug() << "portName() = " << serialport->portName();
 	//qDebug() << "isOpen = " << serialport->isOpen();
 	//qDebug() << "Error is " << serialport->error();
@@ -112,6 +113,7 @@ bool ProcessThread::send(const int com, QByteArray data)//发送函数，改成b
 	Checksum(data);
 	data = data + Ender;
 	qint64 size = serialport->write(data);
+	emit DisplaySeData(data);
 	serialport->waitForBytesWritten(10);
 	qDebug() << "Current Thread is : " << QThread::currentThread();
 	Sleep(30);//考虑下需不需要这句话？
@@ -163,30 +165,22 @@ bool ProcessThread::SetSerialPort(QString comName)
 		//serial->setPortName(ui.ComComboBox->currentText());
 		serialport->setPortName(comName);
 		//serialport->setPortName("COM10");
-		//打开串口，读写F
-		//serial->open(QIODevice::ReadWrite);
+		//打开串口，读写
 		bool stat=serialport->open(QIODevice::ReadWrite);
 		//设置波特率，后面改成可变的
-		//serial->setBaudRate(QSerialPort::Baud115200);
 		serialport->setBaudRate(QSerialPort::Baud115200);
 		//设置数据位数，后面改成可变的
-		//serial->setDataBits(QSerialPort::Data8);
 		serialport->setDataBits(QSerialPort::Data8);
 		//设置校验位，后面改成可变的
-		//serial->setParity(QSerialPort::NoParity);
 		serialport->setParity(QSerialPort::NoParity);
 		//设置停止位，后面改成可变的
-		//serial->setStopBits(QSerialPort::OneStop);
 		serialport->setStopBits(QSerialPort::OneStop);
 		//设置流控制
-		//serial->setFlowControl(QSerialPort::NoFlowControl);
 		serialport->setFlowControl(QSerialPort::NoFlowControl);
 		//设置读取数据的缓存大小，后面改成可变的
-		//serial->setReadBufferSize(1024);
 		serialport->setReadBufferSize(1024);
 		////关闭设置菜单使能（好像不要这个功能）
 		//连接信号槽，点开始通信后就开始，下位机一有数据发送过来就会相应此槽函数：connect（ob1，sig1，ob2，slot1）
-		//QObject::connect(serial, &QSerialPort::readyRead, this, &QtWidgetsApplication1::ReadData);
 		QObject::connect(serialport, &QSerialPort::readyRead, this, &ProcessThread::Read);
 
 
@@ -207,12 +201,70 @@ void ProcessThread::CloseSerialPort()
 	qDebug() << "串口关闭状态 : "<<serialport->isOpen();
 }
 
-QByteArray ProcessThread::Read()
+void ProcessThread::Read()//改返回值为bool型或者别的
 {
+	int head = buffer.size();//添加一个变量指向当前buffer存储的位置，即当前添加后的第一个位置
 	buffer.append(serialport->readAll());
 	int length = buffer.size();
 	//想想怎么分情况讨论
-	
+	// 
+	//分情况讨论，三种情况
+		//1°半句+一句：前面的残留以及后面的完整一句（或者不完整） 
+		// 
+		//2° 只有半句：后面的剩余不一定完整，要分情况讨论；如果接的后半句+buffer为空，直接舍弃掉，不空就保留；如果为前半句，先保留；
+		// 
+		//3°完整一句：直接截取一句
+	    //
+	    //4°全是残缺，55 AA 在中间：
+
+		//这里处理有问题，需要修改，没有处理要舍弃的情况，或者是多余的情况，检测是否有 AA 55，分两种情况
+	if (buffer.size() == 0) {
+		return;
+	}
+	else if (head != 0) {//原本里面有缓存
+		if ((unsigned char)buffer[0] == 0xAA && (unsigned char)buffer[1] == 0x55) {
+			if ((buffer.size() == (unsigned char)buffer[3] + 7)||((buffer.size()>(unsigned char)buffer[3]+7)&&buffer[(unsigned int)buffer[3]+7]==0xAA)) {//1.半句+半句；2.半句+多余的，凑成一句+开头
+				qDebug() << "输出的字符串为：" << buffer.chopped(length - ((unsigned char)buffer[3] + 7));
+				//emit ReadyProcess(buffer.chopped(length - ((unsigned char)buffer[3] + 7)));
+				data = buffer.chopped(length - ((unsigned char)buffer[3] + 7));//chop：前半部分
+				buffer=buffer.sliced((unsigned char)buffer[3] + 7);//slice:从该位置开始的后半部分
+			}
+			else {//半句+一句多,不考虑后续超过一句的情况？
+
+			}
+			//保留剩下的部分
+		}
+	}
+	else if ((unsigned char)buffer[head] != 0xAA || (unsigned char)buffer[head + 1] != 0x55) {//1°, 4°, 2°.1
+		//两种情况：1.单纯半条 1.1前半条 1.2 后半条; 2.半条+一条
+		int headAA = buffer.indexOf(0xAA, head+1);
+		int head55 = buffer.indexOf(0x55, head+2);
+		if (headAA != -1 && head55 != -1 && headAA == head55 + 1) {
+			buffer = buffer.sliced(headAA);
+			if (buffer.size() == (unsigned char)buffer[3] + 7) {//感觉条件会出问题
+				data = buffer;
+				buffer.clear();
+				buffer.resize(0);
+			}
+		}
+		else {
+			buffer.clear();
+			buffer.resize(0);
+		}
+	}
+	else if(head==0&&(unsigned char)buffer[head]==0xAA&&(unsigned char)buffer[head+1]==0x55){//2°.2, 3°
+		if (length != (unsigned char)(buffer[head + 3]) + 7) {
+
+			return;
+		}
+		data = buffer;
+		buffer.clear();//已经扩展成固定的长度但是clear不会改变其长度
+		buffer.resize(0);
+	}
+	//else if ((unsigned char)buffer[head]==0xAA&&(unsigned char)buffer[head+1]==0x55&& length != (unsigned char)(buffer[head + 3]) + 7) {
+
+	//	return;
+	//}
 	//if (data[0] != 0xAA && data[1] != 0x55)
 	//{
 	//	
@@ -235,7 +287,10 @@ QByteArray ProcessThread::Read()
 	//	}
 	//}
 	qDebug() << QString(buffer) << "当前线程ID：" << QThread::currentThreadId();
-	return data;
+	//改成发送信号通知可以进行后续处理了
+	emit ReadyProcess(data);
+	emit DisplayReData(data);
+	return ;
 }
 
 void ProcessThread::SetData()
@@ -259,31 +314,29 @@ void ProcessThread::SetData()
 void ProcessThread::Process(QByteArray data)
 {
 	uint length = data.size();
-	if (data[0]!=0xAA&&data[1]!=0x55)//判断字头
+	if (data[0]!=0xAA&&data[1]!=0x55)//判断字头，判断放到read函数中去，至少部分要放进去以判断长度等
 	{
-		//分情况讨论，三种情况
-		//1°半句+一句：前面的残留以及后面的完整一句（或者不完整） 
-		// 
-		//2° 只有半句：后面的剩余不一定完整，要分情况讨论
-		// 
-		//3°其他情况
-
-		//这里处理有问题，需要修改，没有处理要舍弃的情况，或者是多余的情况，检测是否有 AA 55，分两种情况
-		//不如在此直接read就完事了，处理放到后面去，切片，缓存等手续直接和处理分析一起
-
-
+		
+		qDebug() << "帧头不对，处理函数中接收到的：" << data;
+		data.clear();
+		data.resize(0);
+		return;
 
 	}
 	else if (data[3]!=length-7)//长度校验
 	{
-		if (data[3]>length-7)
-		{
+		//if (data[3]>length-7)
+		//{
 
-		}
-		else if (data[3]<length-7)
-		{
+		//}
+		//else if (data[3]<length-7)
+		//{
 
-		}
+		//}
+		qDebug() << "长度不对，处理函数中接收到的：" << data;
+		data.clear();
+		data.resize(0);
+		return;
 
 	}
 	//校验和校验，先省略
@@ -302,10 +355,12 @@ void ProcessThread::Process(QByteArray data)
 			emit processed(1, Amp1);
 			break;
 		case 0x02://com2
-
+			Amp2->ReInfoData(data);
+			emit processed(2, Amp2);
 			break;
 		case 0x03://com3
-
+			Amp3->ReInfoData(data);
+			emit processed(3, Amp3);
 			break;
 		case 0x04://com4
 
@@ -322,7 +377,8 @@ void ProcessThread::Process(QByteArray data)
 		default:
 			break;
 		}
-
+		data.clear();
+		data.resize(0);
 	}
 	
 }

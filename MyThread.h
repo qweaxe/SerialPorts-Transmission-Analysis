@@ -29,15 +29,16 @@ public:
 	
 	//~ProcessThread();
 	void SetData();
-	void Process(QByteArray data);
+
 	QSerialPort* port;
 	void Checksum(QByteArray& data);
 	void CRC16Checksum(QByteArray& data);
 	QStringList GetSerialAvailable();
 
 public slots:
-	QByteArray Read();
-
+	void Read();
+	
+	void Process(QByteArray data);//接受完之后的处理函数
 	void begin();//需要在子线程分配的资源，全部在此函数进行，该槽函数绑定到线程的started()信号上
 	bool send(const int com, QByteArray data);//数值还是直接发整理好的内容？
 	bool SetSerialPort(QString comName);
@@ -50,6 +51,9 @@ signals:
 	void finish(QString elapsedTime);//可以传递多个参数，槽会匹配并忽略多余的参数
 	void processed(int n, QtLambdapump* Amp);
 	void SerialPortChanged(QString info);
+	void ReadyProcess(QByteArray data);
+	void DisplayReData(QByteArray data);
+	void DisplaySeData(QByteArray data);
 
 private:
 	QByteArray buffer;
@@ -63,8 +67,8 @@ private:
 	bool isSend = 0;
 	QtLambdapump *Amp0=new QtLambdapump;
 	QtLambdapump *Amp1=new QtLambdapump;
-	QtLambdapump Amp2;
-	QtLambdapump Amp3;
+	QtLambdapump *Amp2=new QtLambdapump;
+	QtLambdapump *Amp3=new QtLambdapump;
 	QtGolightpump Amp4;
 	QtGolightpump Amp5;
 	QElapsedTimer time;

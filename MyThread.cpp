@@ -230,7 +230,14 @@ void ProcessThread::Read()//改返回值为bool型或者别的
 				buffer=buffer.sliced((unsigned char)buffer[3] + 7);//slice:从该位置开始的后半部分
 			}
 			else {//半句+一句多,不考虑后续超过一句的情况？
+				int head1 = buffer.indexOf(0xAA, head);
+				int head2 = buffer.indexOf(0x55, head);
+				if (head1 != -1 && head2 != -1) {
+					buffer = buffer.sliced(head1);
+					if (buffer.size() != (unsigned char)buffer[3] + 7) {
 
+					}
+				}
 			}
 			//保留剩下的部分
 		}

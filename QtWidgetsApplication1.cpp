@@ -442,162 +442,162 @@ void QtWidgetsApplication1::DisplaySeData(const QByteArray buf)
   */
 void QtWidgetsApplication1::AnalysisData(QByteArray buf)//const
 {
-    //转换
-    uint length = buf.size();
-    double curvalue = 0;
-    double tempvalue = 0;
-    int powervalue = 0;
-    int backcurvalue = 0;//应该要改成double类型才对
-    int size = 0;
-    QByteArray enter("\n");
-    //如果要写中文应该用QString
-    QByteArray byteframe("error type：frame  Data：");
-    QByteArray bytelength("error type: length  Data：");
-    QByteArray bytechecksum("error type: checksum  Data：");
-    
-    //帧头验证
-    if (buf[0] != 0xAA && buf[1] != 0x55)
-    {
-        //QMessageBox::warning(this, tr("警告⚠"), tr("舍弃"));
-        reerrortxt.write(byteframe);
-        reerrortxt.write(enter);
-        reerrortxt.write(buf.toHex(' ').toUpper());
-        reerrortxt.write(enter);
-        reerrortxt.close();
+    ////转换
+    //uint length = buf.size();
+    //double curvalue = 0;
+    //double tempvalue = 0;
+    //int powervalue = 0;
+    //int backcurvalue = 0;//应该要改成double类型才对
+    //int size = 0;
+    //QByteArray enter("\n");
+    ////如果要写中文应该用QString
+    //QByteArray byteframe("error type：frame  Data：");
+    //QByteArray bytelength("error type: length  Data：");
+    //QByteArray bytechecksum("error type: checksum  Data：");
+    //
+    ////帧头验证
+    //if (buf[0] != 0xAA && buf[1] != 0x55)
+    //{
+    //    //QMessageBox::warning(this, tr("警告⚠"), tr("舍弃"));
+    //    reerrortxt.write(byteframe);
+    //    reerrortxt.write(enter);
+    //    reerrortxt.write(buf.toHex(' ').toUpper());
+    //    reerrortxt.write(enter);
+    //    reerrortxt.close();
 
-    }
-      
-    //长度验证
+    //}
+    //  
+    ////长度验证
+    ////else
+    ////{
+    ////    size = buf[3] + 5;
+    ////    buf.resize(size);
+    ////}
+    //else if ((unsigned char)buf[3] != length - 7)
+    //{
+    //    //QMessageBox::warning(this, "错误❌", "收到数据长度不对");
+    //    reerrortxt.write(bytelength);
+    //    reerrortxt.write(enter);
+    //    reerrortxt.write(buf.toHex(' ').toUpper());
+    //    reerrortxt.write(enter);
+    //    reerrortxt.close();
+    //}
     //else
     //{
-    //    size = buf[3] + 5;
-    //    buf.resize(size);
+    //    //(选)获取命令字、数据长度
+    //    buf.resize(length - 2);//把空格删掉了
+    //    temp.resize(length - 2);
+    //    //检验校验和
+    //    temp = buf;
+    //    //Checksum(temp);
+    //    if (checksum[0] != buf[length - 3])
+    //    {
+    //        //QMessageBox::warning(this, tr("警告⚠"), tr("校验和不正确"));
+    //        reerrortxt.write(bytechecksum);
+    //        reerrortxt.write(enter);
+    //        reerrortxt.write(buf.toHex(' ').toUpper());
+    //        reerrortxt.write(enter);
+    //        reerrortxt.close();
+    //    }
+    //        //目前这样，感觉不太对
+    //    else
+    //    {
+    //        switch (buf[2])
+    //        {
+
+    //        case 0x00://case[seed]
+    //            //QMessageBox::information(this, "收到消息", "这个是Seed端返回的信号！");
+
+    //            Seed.ReInfoData(buf);
+    //          /*  if (Seed.Ampstatus() == on)
+    //                ui.COM0Status->setPixmap(QPixmap(":/images/online.png"));*/
+    //            switch (Seed.Ampstatus())//感觉这样不太好
+    //            {
+    //            case on:
+    //                ui.COM0Status->setPixmap(QPixmap(":/images/online.png"));
+    //                break;
+
+    //             case off:
+    //                 ui.COM0Status->setPixmap(QPixmap(":/images/offline.png"));
+    //                 break;
+    //            default:
+    //                break;
+    //            }
+    //            ui.COM0TempLcd->display(Seed.Pumptemp());
+    //            //ui.COM0CoolcurLcd->display(Seed.Tempcurrent());
+    //            ui.COM0PowerLcd->display(Seed.Pumppower());
+    //            ui.COM0CurLcd->display(Seed.Pumpcurrent());
+    //            //ui.COM0CavtempLcd->display(Seed.Cavtemp());
+    //            break;
+
+    //        case 0x01: //case[amp1]
+    //            //QMessageBox::information(this, "收到消息", "这个是Amp1端返回的信号！");
+    //            Amp1.ReInfoData(buf);
+    //            switch (Amp1.Ampstatus())//感觉这样不太好
+    //            {
+    //            case on:
+    //                ui.COM1Status->setPixmap(QPixmap(":/images/online.png"));
+    //                break;
+
+    //            case off:
+    //                ui.COM1Status->setPixmap(QPixmap(":/images/offline.png"));
+    //                break;
+    //            default:
+    //                break;
+    //            }
+    //            ui.COM1TempLcd->display(Amp1.Pumptemp());
+    //            ui.COM1PowerLcd->display(Amp1.Pumppower());
+    //            ui.COM1CurLcd->display(Amp1.Pumpcurrent());
+    //            break;
+
+    //        case 0x02: //case[amp2]
+    //            //QMessageBox::information(this, "收到消息", "这个是Amp2端返回的信号！");
+    //            Amp2.ReInfoData(buf);
+    //            switch (Amp2.Ampstatus())//感觉这样不太好
+    //            {
+    //            case on:
+    //                ui.COM2Status->setPixmap(QPixmap(":/images/online.png"));
+    //                break;
+
+    //            case off:
+    //                ui.COM2Status->setPixmap(QPixmap(":/images/offline.png"));
+    //                break;
+    //            default:
+    //                break;
+    //            }
+    //            //com2仅连了一个9W泵
+    //            ui.COM2TempLcd->display(Amp2.Modeltemp());
+    //            ui.COM227WLDTempLcd->display(Amp2.LD27wtemp());
+    //            ui.COM29WCurLcd->display(Amp2.LD9wcur());
+    //            break;
+
+    //        case 0x03://case[amp3]
+    //            //QMessageBox::information(this, "收到消息", "这个是Amp3端返回的信号！");
+    //            Amp3.ReInfoData(buf);
+    //            switch (Amp3.Ampstatus())//感觉这样不太好
+    //            {
+    //            case on:
+    //                ui.COM3Status->setPixmap(QPixmap(":/images/online.png"));
+    //                break;
+
+    //            case off:
+    //                ui.COM3Status->setPixmap(QPixmap(":/images/offline.png"));
+    //                break;
+    //            default:
+    //                break;
+    //            }
+    //            ui.COM3TempLcd->display(Amp3.Modeltemp());
+    //            ui.COM327WTempLcd->display(Amp3.LD27wtemp());
+    //            ui.COM327WCurLcd->display(Amp3.LD27wcur());
+    //            ui.COM39WCurLcd->display(Amp3.LD9wcur());
+    //            break;
+    //      
+    //        default:
+    //            break;
+    //        }
+    //    }
+
     //}
-    else if ((unsigned char)buf[3] != length - 7)
-    {
-        //QMessageBox::warning(this, "错误❌", "收到数据长度不对");
-        reerrortxt.write(bytelength);
-        reerrortxt.write(enter);
-        reerrortxt.write(buf.toHex(' ').toUpper());
-        reerrortxt.write(enter);
-        reerrortxt.close();
-    }
-    else
-    {
-        //(选)获取命令字、数据长度
-        buf.resize(length - 2);//把空格删掉了
-        temp.resize(length - 2);
-        //检验校验和
-        temp = buf;
-        //Checksum(temp);
-        if (checksum[0] != buf[length - 3])
-        {
-            //QMessageBox::warning(this, tr("警告⚠"), tr("校验和不正确"));
-            reerrortxt.write(bytechecksum);
-            reerrortxt.write(enter);
-            reerrortxt.write(buf.toHex(' ').toUpper());
-            reerrortxt.write(enter);
-            reerrortxt.close();
-        }
-            //目前这样，感觉不太对
-        else
-        {
-            switch (buf[2])
-            {
-
-            case 0x00://case[seed]
-                //QMessageBox::information(this, "收到消息", "这个是Seed端返回的信号！");
-
-                Seed.ReInfoData(buf);
-              /*  if (Seed.Ampstatus() == on)
-                    ui.COM0Status->setPixmap(QPixmap(":/images/online.png"));*/
-                switch (Seed.Ampstatus())//感觉这样不太好
-                {
-                case on:
-                    ui.COM0Status->setPixmap(QPixmap(":/images/online.png"));
-                    break;
-
-                 case off:
-                     ui.COM0Status->setPixmap(QPixmap(":/images/offline.png"));
-                     break;
-                default:
-                    break;
-                }
-                ui.COM0TempLcd->display(Seed.Pumptemp());
-                //ui.COM0CoolcurLcd->display(Seed.Tempcurrent());
-                ui.COM0PowerLcd->display(Seed.Pumppower());
-                ui.COM0CurLcd->display(Seed.Pumpcurrent());
-                //ui.COM0CavtempLcd->display(Seed.Cavtemp());
-                break;
-
-            case 0x01: //case[amp1]
-                //QMessageBox::information(this, "收到消息", "这个是Amp1端返回的信号！");
-                Amp1.ReInfoData(buf);
-                switch (Amp1.Ampstatus())//感觉这样不太好
-                {
-                case on:
-                    ui.COM1Status->setPixmap(QPixmap(":/images/online.png"));
-                    break;
-
-                case off:
-                    ui.COM1Status->setPixmap(QPixmap(":/images/offline.png"));
-                    break;
-                default:
-                    break;
-                }
-                ui.COM1TempLcd->display(Amp1.Pumptemp());
-                ui.COM1PowerLcd->display(Amp1.Pumppower());
-                ui.COM1CurLcd->display(Amp1.Pumpcurrent());
-                break;
-
-            case 0x02: //case[amp2]
-                //QMessageBox::information(this, "收到消息", "这个是Amp2端返回的信号！");
-                Amp2.ReInfoData(buf);
-                switch (Amp2.Ampstatus())//感觉这样不太好
-                {
-                case on:
-                    ui.COM2Status->setPixmap(QPixmap(":/images/online.png"));
-                    break;
-
-                case off:
-                    ui.COM2Status->setPixmap(QPixmap(":/images/offline.png"));
-                    break;
-                default:
-                    break;
-                }
-                //com2仅连了一个9W泵
-                ui.COM2TempLcd->display(Amp2.Modeltemp());
-                ui.COM227WLDTempLcd->display(Amp2.LD27wtemp());
-                ui.COM29WCurLcd->display(Amp2.LD9wcur());
-                break;
-
-            case 0x03://case[amp3]
-                //QMessageBox::information(this, "收到消息", "这个是Amp3端返回的信号！");
-                Amp3.ReInfoData(buf);
-                switch (Amp3.Ampstatus())//感觉这样不太好
-                {
-                case on:
-                    ui.COM3Status->setPixmap(QPixmap(":/images/online.png"));
-                    break;
-
-                case off:
-                    ui.COM3Status->setPixmap(QPixmap(":/images/offline.png"));
-                    break;
-                default:
-                    break;
-                }
-                ui.COM3TempLcd->display(Amp3.Modeltemp());
-                ui.COM327WTempLcd->display(Amp3.LD27wtemp());
-                ui.COM327WCurLcd->display(Amp3.LD27wcur());
-                ui.COM39WCurLcd->display(Amp3.LD9wcur());
-                break;
-          
-            default:
-                break;
-            }
-        }
-
-    }
     //检验数据
     //读取数据，分发
 }
@@ -1382,6 +1382,7 @@ void QtWidgetsApplication1::COMChanged(int n, QtLambdapump* Amp0)
 
         break;
     default:
+        qDebug() << "无法解析接收到的指令！";
         break;
     }
 

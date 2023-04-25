@@ -321,7 +321,11 @@ void ProcessThread::SetData()
 void ProcessThread::Process(QByteArray data)
 {
 	uint length = data.size();
-	if (data[0]!=0xAA&&data[1]!=0x55)//判断字头，判断放到read函数中去，至少部分要放进去以判断长度等
+	if (length == 0)
+	{
+		return;
+	}
+	else if (data[0]!=0xAA&&data[1]!=0x55)//判断字头，判断放到read函数中去，至少部分要放进去以判断长度等
 	{
 		
 		qDebug() << "帧头不对，处理函数中接收到的：" << data;

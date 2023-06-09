@@ -19,7 +19,7 @@ public:
     QtLambdapump();
     void SetData();
     void Setcurrent(const int value);//要不基类写个虚函数要子类去重构？
-    void SetMMcurrent(const double value);
+    void Set27Wcurrent(const double value);
     void Set9Wcurrent(const double value);
     void StatusQuery();
     void ReInfoData(const QByteArray data);

@@ -29,13 +29,14 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     //理论上这些应该全放到构造函数里去
    // QStringList comlist;
     QIntValidator* SMvalidator = new QIntValidator(curmin, seedcurmax, this);
+    QIntValidator* Ampvalidator = new QIntValidator(curmin, seedcurmax + 200, this);
     QDoubleValidator* MMvalidator = new QDoubleValidator(amp4curmin, amp4curmax, 1, this);
     QDoubleValidator* Mainvalidator = new QDoubleValidator(mainmin, mainmax, 1, this);
     redatatxt.setFileName(txtfilename);
     reerrortxt.setFileName(errortxtfilename);
 
     ui.COM0PowerEdit->setValidator(SMvalidator);
-    ui.COM1PowerEdit->setValidator(SMvalidator);
+    ui.COM1PowerEdit->setValidator(Ampvalidator);
     ui.COM2PowerEdit->setValidator(MMvalidator);
     ui.COM3PowerEdit->setValidator(MMvalidator);
     //comlist.clear();
@@ -268,7 +269,7 @@ void QtWidgetsApplication1::on_SetCOM2Button_clicked()
         {
             //SetAmp2Data.resize(8);
             
-            Amp2.Set9Wcurrent(value);
+            Amp2.Set27Wcurrent(value);
             //SendDatabyte(2, Amp2.Datasend());
             emit senddata(2, Amp2.Datasend());
         }
@@ -300,7 +301,7 @@ void QtWidgetsApplication1::on_SetCOM3Button_clicked()
         else
         {
         
-            Amp3.SetMMcurrent(value);
+            Amp3.Set27Wcurrent(value);
             //SendDatabyte(3, Amp3.Datasend());
             emit senddata(3, Amp3.Datasend());
         }
@@ -894,19 +895,23 @@ Status QtWidgetsApplication1::Enlaser()
     //Seed
    // Seed.OnstatusQuery();
    // SendDatabyte(0, Seed.Datasend());
-
+    Seed.OnstatusQuery();
+    emit senddata(0, Seed.Datasend());
    // //Amp1，这种就可以放到类里作为一个方法
    // Amp1.OnstatusQuery();
    // SendDatabyte(1, Amp1.Datasend());
-
+    Amp1.OnstatusQuery();
+    emit senddata(1, Amp1.Datasend());
    ////Amp2
    // Amp2.MMOnstatusQuery();
    // SendDatabyte(2, Amp2.Datasend());
-
+    Amp2.MMOnstatusQuery();
+    emit senddata(2, Amp2.Datasend());
    // //Amp3，读模块号
    // Amp3.MMOnstatusQuery();
    // SendDatabyte(3, Amp3.Datasend());
-
+    Amp3.MMOnstatusQuery();
+    emit senddata(3, Amp3.Datasend());
     ////Amp4
     //Amp4.Onofflaser(temp);
     //SendDatabyte(4, Amp4.Datasend());
@@ -965,96 +970,28 @@ Status QtWidgetsApplication1::Enlaser()
   */
 Status QtWidgetsApplication1::Dislaser()
 {
-    timer->stop();
-    //Senddata.resize(1);
-    
-    //SetSeedData.resize(5);//停止获取数据
-    ////SetSeedData.fromHex("0x55,0x0A,0x03,0x70,0x70");
-    //SetSeedData[0] = 0x55;
-    //SetSeedData[1] = 0xAA;
-    //SetSeedData[2] = 0x03;
-    //SetSeedData[3] = 0x70;
-    //SetSeedData[4] = 0x70;
-
-    ////关闭命令，看返回值是否正常
-    //QByteArray temp;
-    //temp.resize(1);
-    //temp[0] = 0x05;
-   
-    //SetAmp1Data.resize(6);
-    //SetAmp1Data[0] = 0xEF;
-    //SetAmp1Data[1] = 0xEF;
-    //SetAmp1Data[2] = 0x03;
-    //SetAmp1Data[3] = 0xFF;
-    //SetAmp1Data[4] = 0x05;
-
-    ////关闭命令，看返回值是否正常
-    //
-    //SetAmp2Data.resize(6);
-    //SetAmp2Data[0] = 0xEF;
-    //SetAmp2Data[1] = 0xEF;
-    //SetAmp2Data[2] = 0x03;
-    //SetAmp2Data[3] = 0xFF;
-    //SetAmp2Data[4] = 0x05;
-
-    ////设置pump电流为0算了，也不好弄，3月24日
-    //SetAmp3Data.resize(8);
-    //SetAmp3Data[0] = 0x00;
-    //SetAmp3Data[1] = 0x06;
-    //SetAmp3Data[2] = 0x55;
-    //SetAmp3Data[3] = 0x7E;
-    //SetAmp3Data[4] = 0x00;//hi
-    //SetAmp3Data[5] = 0x00;//low
-    //SetAmp3Data[6] = 0xF8;
-    //SetAmp3Data[7] = 0x1E;
-
-    ////关闭命令，看返回值是否正常
-    //Amp4.Onofflaser(temp);
-    //SetAmp4Data.resize(6);
-    //SetAmp4Data[0] = 0xEF;
-    //SetAmp4Data[1] = 0xEF;
-    //SetAmp4Data[2] = 0x05;
-    //SetAmp4Data[3] = 0xFF;
-    //SetAmp4Data[4] = 0x00;
-
-    //SetMainData.resize(9);//不知道是power还是global power,先用前者
-    //SetMainData[0] = 0x50;//P
-    //SetMainData[1] = 0x4F;//O
-    //SetMainData[2] = 0x57;//W
-    //SetMainData[3] = 0x45;//E
-    //SetMainData[4] = 0x52;//R
-    //SetMainData[5] = 0x20;//space
-    //SetMainData[6] = 0x30;//0
-    //SetMainData[7] = 0x0D;//CR
-    //SetMainData[8] = 0x0A;//LF
-
-    //逐级发送数据
-
-  //Senddata[0] = 0x00;//Seed
-  //Senddata[1] = 0x00;
-  //Senddata = SetSeedData + Senddata;
-  //Checksum(Senddata);
-  //serial->write(Senddata);
-  //Senddata.clear();
-  //Senddata.resize(2);
-    //Comandlen[0] = 0x00;
-   
+    timer->stop();  
   //  //Seed
   //  Seed.Setcurrent(1);
   //  SendDatabyte(0, Seed.Datasend());
+    Seed.Setcurrent(1);
+    emit senddata(0, Seed.Datasend());
 
   ////Amp1
   //  Amp1.Setcurrent(1);
   //  SendDatabyte(1, Amp1.Datasend());
-
+    Amp1.Setcurrent(1);
+    emit senddata(1, Amp1.Datasend());
   // //Amp2
   //  Amp2.Set9Wcurrent(0.001);
   //  SendDatabyte(2, Amp2.Datasend());
-
+    Amp2.Set9Wcurrent(0.001);
+    emit senddata(2, Amp2.Datasend());
   //  //Amp3，还不知道问啥，直接电流设置为0，9W
   //  Amp3.Set9Wcurrent(0.001);
   //  SendDatabyte(3, Amp3.Datasend());
-
+    Amp3.Set9Wcurrent(0.001);
+    emit senddata(3, Amp3.Datasend());
     ////Amp4
     //Comandlen[0] = 0x04;
     //Amp4.Onofflaser(temp);
@@ -1113,17 +1050,21 @@ void QtWidgetsApplication1::LaserStatusQuery()
     {
         //Seed.StatusQuery();
         //SendDatabyte(0, Seed.Datasend());
-
+        Seed.StatusQuery();
+        emit senddata(0, Seed.Datasend());
         //Amp1.StatusQuery();
         //SendDatabyte(1, Amp1.Datasend());
-
+        Amp1.StatusQuery();
+        emit senddata(1, Amp1.Datasend());
         //Amp2.MMstatusQuery();
         //SendDatabyte(2, Amp2.Datasend());
-       
+        Amp2.MMstatusQuery();
+        emit senddata(2, Amp2.Datasend());
         ////com3想连大电流驱动，预计要改
         //Amp3.MMstatusQuery();
         //SendDatabyte(3, Amp3.Datasend());
-
+        Amp3.MMstatusQuery();
+        emit senddata(3, Amp3.Datasend());
         ////com4 
         //Amp4.CurrentQuery();
         //SendDatabyte(4, Amp4.Datasend());

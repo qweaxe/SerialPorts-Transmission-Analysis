@@ -77,7 +77,7 @@ void QtLambdapump::Setcurrent(const int value)
   * @param value 电流值，单位A
   * @retval void
   */
-void QtLambdapump::SetMMcurrent(const double value)
+void QtLambdapump::Set27Wcurrent(const double value)
 {
     uint temp = value * 1000;
     this->datasend.resize(6);

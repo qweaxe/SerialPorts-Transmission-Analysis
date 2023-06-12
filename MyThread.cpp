@@ -370,8 +370,8 @@ void ProcessThread::Process(QByteArray data)
 			emit processed(2, Amp2);
 			break;
 		case 0x03://com3
-			Amp3->ReInfoData(data);
-			emit processed(3, Amp3);
+			//Amp3->ReInfoData(data);
+			//emit processed(3, Amp3);
 			break;
 		case 0x04://com4
 

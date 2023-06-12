@@ -38,7 +38,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     ui.COM0PowerEdit->setValidator(SMvalidator);
     ui.COM1PowerEdit->setValidator(Ampvalidator);
     ui.COM2PowerEdit->setValidator(MMvalidator);
-    ui.COM3PowerEdit->setValidator(MMvalidator);
+    //ui.COM3PowerEdit->setValidator(MMvalidator);
     //comlist.clear();
 
     //这句语法不太熟悉
@@ -277,69 +277,69 @@ void QtWidgetsApplication1::on_SetCOM2Button_clicked()
             timer->start();
     }
 }
-/**
-  * @Function Name  : on_SetCOM3Button_clicked
-  * @
-  * @brief 发送com3的数据
-  * @param None
-  * @retval void
-  */
-void QtWidgetsApplication1::on_SetCOM3Button_clicked()
-{
-    if (Comstatus == off)
-        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
-    else if (Amp3.LD9wsetcur()<0.9)
-    {
-        QMessageBox::warning(this, tr("警告"), tr("前一级尚未正确开启！"));
-    }
-    else
-    {
-        timer->stop();
-        double value = ui.COM3PowerEdit->text().toDouble();
-        if (value > amp3curmax)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
-        else
-        {
-        
-            Amp3.Set27Wcurrent(value);
-            //SendDatabyte(3, Amp3.Datasend());
-            emit senddata(3, Amp3.Datasend());
-        }
-        if (LaserQuery == on)
-            timer->start();
-    }
-}
-/**
-  * @Function Name  : on_SetCOM39WButton_clicked
-  * @
-  * @brief 发送com3，9w泵的数据
-  * @param None
-  * @retval void
-  */
-void QtWidgetsApplication1::on_setCOM39WBtn_clicked()
-{
-    if (Comstatus == off)
-        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
-    else if (Amp2.LD9wsetcur() < 0.9)
-    {
-        QMessageBox::warning(this, tr("警告"), tr("前一级尚未正确开启！"));
-    }
-    else
-    {
-        timer->stop();
-        double value = ui.COM39WEdit->text().toDouble();
-        if (value > amp4curmax)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
-        else
-        {       
-            Amp3.Set9Wcurrent(value);
-            //SendDatabyte(3, Amp3.Datasend());
-            emit senddata(3, Amp3.Datasend());
-        }
-        if (LaserQuery == on)
-            timer->start();
-    }
-}
+///**
+//  * @Function Name  : on_SetCOM3Button_clicked
+//  * @
+//  * @brief 发送com3的数据
+//  * @param None
+//  * @retval void
+//  */
+//void QtWidgetsApplication1::on_SetCOM3Button_clicked()
+//{
+//    if (Comstatus == off)
+//        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
+//    else if (Amp3.LD9wsetcur()<0.9)
+//    {
+//        QMessageBox::warning(this, tr("警告"), tr("前一级尚未正确开启！"));
+//    }
+//    else
+//    {
+//        timer->stop();
+//        double value = ui.COM3PowerEdit->text().toDouble();
+//        if (value > amp3curmax)
+//            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
+//        else
+//        {
+//        
+//            Amp3.Set27Wcurrent(value);
+//            //SendDatabyte(3, Amp3.Datasend());
+//            emit senddata(3, Amp3.Datasend());
+//        }
+//        if (LaserQuery == on)
+//            timer->start();
+//    }
+//}
+///**
+//  * @Function Name  : on_SetCOM39WButton_clicked
+//  * @
+//  * @brief 发送com3，9w泵的数据
+//  * @param None
+//  * @retval void
+//  */
+//void QtWidgetsApplication1::on_setCOM39WBtn_clicked()
+//{
+//    if (Comstatus == off)
+//        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
+//    else if (Amp2.LD9wsetcur() < 0.9)
+//    {
+//        QMessageBox::warning(this, tr("警告"), tr("前一级尚未正确开启！"));
+//    }
+//    else
+//    {
+//        timer->stop();
+//        double value = ui.COM39WEdit->text().toDouble();
+//        if (value > amp4curmax)
+//            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
+//        else
+//        {       
+//            Amp3.Set9Wcurrent(value);
+//            //SendDatabyte(3, Amp3.Datasend());
+//            emit senddata(3, Amp3.Datasend());
+//        }
+//        if (LaserQuery == on)
+//            timer->start();
+//    }
+//}
 
 
 /**
@@ -910,8 +910,10 @@ Status QtWidgetsApplication1::Enlaser()
    // //Amp3，读模块号
    // Amp3.MMOnstatusQuery();
    // SendDatabyte(3, Amp3.Datasend());
-    Amp3.MMOnstatusQuery();
-    emit senddata(3, Amp3.Datasend());
+   
+    //Amp3.MMOnstatusQuery();
+    //emit senddata(3, Amp3.Datasend());
+   
     ////Amp4
     //Amp4.Onofflaser(temp);
     //SendDatabyte(4, Amp4.Datasend());
@@ -990,8 +992,10 @@ Status QtWidgetsApplication1::Dislaser()
   //  //Amp3，还不知道问啥，直接电流设置为0，9W
   //  Amp3.Set9Wcurrent(0.001);
   //  SendDatabyte(3, Amp3.Datasend());
-    Amp3.Set9Wcurrent(0.001);
-    emit senddata(3, Amp3.Datasend());
+  
+    //Amp3.Set9Wcurrent(0.001);
+    //emit senddata(3, Amp3.Datasend());
+    
     ////Amp4
     //Comandlen[0] = 0x04;
     //Amp4.Onofflaser(temp);
@@ -1063,8 +1067,10 @@ void QtWidgetsApplication1::LaserStatusQuery()
         ////com3想连大电流驱动，预计要改
         //Amp3.MMstatusQuery();
         //SendDatabyte(3, Amp3.Datasend());
-        Amp3.MMstatusQuery();
-        emit senddata(3, Amp3.Datasend());
+        
+        //Amp3.MMstatusQuery();
+        //emit senddata(3, Amp3.Datasend());
+        
         ////com4 
         //Amp4.CurrentQuery();
         //SendDatabyte(4, Amp4.Datasend());
@@ -1299,16 +1305,16 @@ void QtWidgetsApplication1::COMChanged(int n, QtLambdapump* Amp0)
         break;
     case 2:
         Amp2.SetStatus(Amp0);
-        ui.COM29WCurLcd->display(Amp2.LD9wcur());
+        ui.COM227WCurLcd->display(Amp2.LD27wcur());
         ui.COM2TempLcd->display(Amp2.Pumptemp());
         ui.COM227WLDTempLcd->display(Amp2.Pumptemp());
         break;
     case 3:
-        Amp3.SetStatus(Amp0);
-        ui.COM327WCurLcd->display(Amp3.LD27wcur());
-        ui.COM39WCurLcd->display(Amp3.LD9wcur());
-        ui.COM3TempLcd->display(Amp3.Modeltemp());
-        ui.COM327WTempLcd->display(Amp3.LD27wtemp());
+        //Amp3.SetStatus(Amp0);
+        //ui.COM327WCurLcd->display(Amp3.LD27wcur());
+        //ui.COM39WCurLcd->display(Amp3.LD9wcur());
+        //ui.COM3TempLcd->display(Amp3.Modeltemp());
+        //ui.COM327WTempLcd->display(Amp3.LD27wtemp());
         break;
     case 4:
 

@@ -78,7 +78,7 @@ private slots:
 
     void on_SetCOM2Button_clicked();
 
-    void on_SetCOM3Button_clicked();
+    //void on_SetCOM3Button_clicked();
 
    //void on_SetAmp4Button_clicked();
 
@@ -89,7 +89,7 @@ private slots:
     void on_GetLDStatusBtn_toggled(bool checked);
 
 
-    void on_setCOM39WBtn_clicked();
+    //void on_setCOM39WBtn_clicked();
 
 private:
     Ui::QtWidgetsApplication1Class ui;
@@ -98,15 +98,15 @@ private:
     Status Seedstatus = off;
     Status Amp1status = off;
     Status Amp2status = off;
-    Status Amp3status = off;
-    Status Amp4status = off;
+    //Status Amp3status = off;
+    //Status Amp4status = off;
     Status Mainstatus = off;
     Status LaserQuery = off;
     //bool isSend = 0;
     QtLambdapump Seed;
     QtLambdapump Amp1;
     QtLambdapump Amp2;
-    QtLambdapump Amp3;
+    //QtLambdapump Amp3;
 
     QSerialPort* serial;//全局的串口对象
     QBuffer buffer;//
@@ -117,8 +117,8 @@ private:
     QByteArray SetSeedData;
     QByteArray SetAmp1Data;
     QByteArray SetAmp2Data;
-    QByteArray SetAmp3Data;
-    QByteArray SetAmp4Data;
+    //QByteArray SetAmp3Data;
+    //QByteArray SetAmp4Data;
     QByteArray SetMainData;
     QByteArray SetSeedzero;
     QByteArray SetAmp1zero;

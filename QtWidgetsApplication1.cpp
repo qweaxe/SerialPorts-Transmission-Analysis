@@ -28,8 +28,8 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
 
     //理论上这些应该全放到构造函数里去
    // QStringList comlist;
-    QIntValidator* SMvalidator = new QIntValidator(curmin, seedcurmax, this);
-    QIntValidator* Ampvalidator = new QIntValidator(curmin, seedcurmax + 200, this);
+    QDoubleValidator* SMvalidator = new QDoubleValidator(amp4curmin, seedcurmax, 1, this);
+    QDoubleValidator* Ampvalidator = new QDoubleValidator(amp4curmin, seedcurmax, 1, this);
     QDoubleValidator* MMvalidator = new QDoubleValidator(amp4curmin, amp4curmax, 1, this);
     QDoubleValidator* Mainvalidator = new QDoubleValidator(mainmin, mainmax, 1, this);
     redatatxt.setFileName(txtfilename);
@@ -63,6 +63,7 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     //connect(Mainwork, &MainThread::working, this, [=]int l);
     //connect(Processwork, &ProcessThread::working, this, [=]int l);
     connect(Processwork, &ProcessThread::processed, this, &QtWidgetsApplication1::COMChanged);
+    connect(Processwork, &ProcessThread::mmprocessed, this, &QtWidgetsApplication1::mmCOMChanged);
 
     t2->start();
     emit QtWidgetsApplication1::starting2();
@@ -205,15 +206,15 @@ void QtWidgetsApplication1::on_SetCOM0Button_clicked()
     {
         //serial->write(SetSeedData);
         timer->stop();
-        uint value = ui.COM0PowerEdit->text().toUInt();
-        if (value > seedcurmax)
+        float value = ui.COM0PowerEdit->text().toFloat();
+        if (value > 1000.0)
             QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
         else
         {
             //value = value * 109.2267;
-            Seed.Setcurrent(value);
+            SeedandAmp1.SetLD1current(value);
             //SendDatabyte(0, Seed.Datasend());
-            emit senddata(0, Seed.Datasend());
+            emit senddata(0, SeedandAmp1.Datasend());
         }
         if (LaserQuery == on)
             timer->start();
@@ -233,16 +234,16 @@ void QtWidgetsApplication1::on_SetCOM1Button_clicked()
     else
     {
         timer->stop();
-        uint value = ui.COM1PowerEdit->text().toUInt();
+        float value = ui.COM1PowerEdit->text().toFloat();
 
-        if (value > amp1curmax)
+        if (value >1000.0)
             QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
         else
         {
 
-            Amp1.Setcurrent(value);
+            SeedandAmp1.SetLD2current(value);
             //SendDatabyte(1, Amp1.Datasend());
-            emit senddata(1, Amp1.Datasend());
+            emit senddata(0, SeedandAmp1.Datasend());
         }
         if (LaserQuery == on)
             timer->start();
@@ -262,14 +263,14 @@ void QtWidgetsApplication1::on_SetCOM2Button_clicked()
     else
     {
         timer->stop();
-        double value = ui.COM2PowerEdit->text().toDouble();
+        float value = ui.COM2PowerEdit->text().toFloat();
         if (value > amp2curmax)
             QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
         else
         {
             //SetAmp2Data.resize(8);
             
-            Amp2.Set27Wcurrent(value);
+            Amp2.SetMMLDcurrent(value);
             //SendDatabyte(2, Amp2.Datasend());
             emit senddata(2, Amp2.Datasend());
         }
@@ -288,58 +289,55 @@ void QtWidgetsApplication1::on_SetCOM3Button_clicked()
 {
     if (Comstatus == off)
         QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
-    else if (Amp3.LD9wsetcur()<0.9)
-    {
-        QMessageBox::warning(this, tr("警告"), tr("前一级尚未正确开启！"));
-    }
     else
     {
         timer->stop();
-        double value = ui.COM3PowerEdit->text().toDouble();
+        float value = ui.COM3PowerEdit->text().toFloat();
         if (value > amp3curmax)
             QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
         else
         {
-        
-            Amp3.Set27Wcurrent(value);
-            //SendDatabyte(3, Amp3.Datasend());
-            emit senddata(3, Amp3.Datasend());
+            //SetAmp2Data.resize(8);
+
+            Amp3.SetMMLDcurrent(value);
+            //SendDatabyte(2, Amp2.Datasend());
+            emit senddata(2, Amp3.Datasend());
         }
         if (LaserQuery == on)
             timer->start();
     }
 }
-/**
-  * @Function Name  : on_SetCOM39WButton_clicked
-  * @
-  * @brief 发送com3，9w泵的数据
-  * @param None
-  * @retval void
-  */
-void QtWidgetsApplication1::on_setCOM39WBtn_clicked()
-{
-    if (Comstatus == off)
-        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
-    else if (Amp2.LD9wsetcur() < 0.9)
-    {
-        QMessageBox::warning(this, tr("警告"), tr("前一级尚未正确开启！"));
-    }
-    else
-    {
-        timer->stop();
-        double value = ui.COM39WEdit->text().toDouble();
-        if (value > amp4curmax)
-            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
-        else
-        {       
-            Amp3.Set9Wcurrent(value);
-            //SendDatabyte(3, Amp3.Datasend());
-            emit senddata(3, Amp3.Datasend());
-        }
-        if (LaserQuery == on)
-            timer->start();
-    }
-}
+///**
+//  * @Function Name  : on_SetCOM39WButton_clicked
+//  * @
+//  * @brief 发送com3，9w泵的数据
+//  * @param None
+//  * @retval void
+//  */
+//void QtWidgetsApplication1::on_setCOM39WBtn_clicked()
+//{
+//    if (Comstatus == off)
+//        QMessageBox::warning(this, tr("警告⚠"), tr("串口是关闭状态，通讯失败!"));
+//    else if (Amp2.LD9wsetcur() < 0.9)
+//    {
+//        QMessageBox::warning(this, tr("警告"), tr("前一级尚未正确开启！"));
+//    }
+//    else
+//    {
+//        timer->stop();
+//        double value = ui.COM327WEdit->text().toDouble();
+//        if (value > amp4curmax)
+//            QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
+//        else
+//        {       
+//            Amp3.Set9Wcurrent(value);
+//            //SendDatabyte(3, Amp3.Datasend());
+//            emit senddata(3, Amp3.Datasend());
+//        }
+//        if (LaserQuery == on)
+//            timer->start();
+//    }
+//}
 
 
 /**
@@ -895,23 +893,23 @@ Status QtWidgetsApplication1::Enlaser()
     //Seed
    // Seed.OnstatusQuery();
    // SendDatabyte(0, Seed.Datasend());
-    Seed.OnstatusQuery();
-    emit senddata(0, Seed.Datasend());
-   // //Amp1，这种就可以放到类里作为一个方法
-   // Amp1.OnstatusQuery();
-   // SendDatabyte(1, Amp1.Datasend());
-    Amp1.OnstatusQuery();
-    emit senddata(1, Amp1.Datasend());
+    SeedandAmp1.Onofflaser(1);
+    emit senddata(0, SeedandAmp1.Datasend());
+
+    SeedandAmp1.Onoffenginmode(1);
+    emit senddata(0, SeedandAmp1.Datasend());
+
+    Amp2.Onofflaser(1);
+    emit senddata(1, Amp2.Datasend());
    ////Amp2
    // Amp2.MMOnstatusQuery();
    // SendDatabyte(2, Amp2.Datasend());
-    Amp2.MMOnstatusQuery();
-    emit senddata(2, Amp2.Datasend());
+    Amp3.Onofflaser(1);
+    emit senddata(2, Amp3.Datasend());
    // //Amp3，读模块号
    // Amp3.MMOnstatusQuery();
    // SendDatabyte(3, Amp3.Datasend());
-    Amp3.MMOnstatusQuery();
-    emit senddata(3, Amp3.Datasend());
+   
     ////Amp4
     //Amp4.Onofflaser(temp);
     //SendDatabyte(4, Amp4.Datasend());
@@ -928,36 +926,6 @@ Status QtWidgetsApplication1::Enlaser()
     //Amp7.Onofflaser(temp);
     //SendDatabyte(7, Amp7.Datasend());
 
-    ////Main
-    //Mainamp.OnOffstatusQuery();
-    //Comandlen[0] = 0x05;
-    //Comandlen[1] = Mainamp.Datasend().size();
-    //Senddata[0] = 0x00;
-    //Senddata = Header + Comandlen + Mainamp.Datasend() + Senddata;
-    //Checksum(Senddata);
-    //Senddata = Senddata + Ender;
-    //serial->write(Senddata);
-    //serial->waitForBytesWritten(10);
-    //Sleep(10);
-    //ui.SendtextEdit->append(AddBlank(Senddata));
-    //Senddata.clear();
-    //Senddata.resize(1);
-    ////再开启，只有main需要
-    //Mainamp.OnOffDevice();
-    //Comandlen[0] = 0x05;
-    //Comandlen[1] = Mainamp.Datasend().size();
-    //Senddata[0] = 0x00;
-    //Senddata = Header + Comandlen + Mainamp.Datasend() + Senddata;
-    //Checksum(Senddata);
-    //Senddata = Senddata + Ender;
-    //serial->write(Senddata);
-    //serial->waitForBytesWritten(10);
-    //Sleep(10);
-    //ui.SendtextEdit->append(AddBlank(Senddata));
-    //Senddata.clear();
-    //Senddata.resize(1);
-    ////timer->start();
-    //Sleep(10);//不知道有没有用
     return on;
 }
 
@@ -974,24 +942,24 @@ Status QtWidgetsApplication1::Dislaser()
   //  //Seed
   //  Seed.Setcurrent(1);
   //  SendDatabyte(0, Seed.Datasend());
-    Seed.Setcurrent(1);
-    emit senddata(0, Seed.Datasend());
+    SeedandAmp1.Onoffenginmode(0);
+    emit senddata(0, SeedandAmp1.Datasend());
+    SeedandAmp1.Onofflaser(0);
+    emit senddata(0, SeedandAmp1.Datasend());
 
-  ////Amp1
-  //  Amp1.Setcurrent(1);
-  //  SendDatabyte(1, Amp1.Datasend());
-    Amp1.Setcurrent(1);
-    emit senddata(1, Amp1.Datasend());
-  // //Amp2
-  //  Amp2.Set9Wcurrent(0.001);
-  //  SendDatabyte(2, Amp2.Datasend());
-    Amp2.Set9Wcurrent(0.001);
-    emit senddata(2, Amp2.Datasend());
+    Amp2.Onofflaser(0);
+    emit senddata(1, Amp2.Datasend());
+
+    ////Amp2
+    // Amp2.MMOnstatusQuery();
+    // SendDatabyte(2, Amp2.Datasend());
+    Amp3.Onofflaser(0);
+    emit senddata(2, Amp3.Datasend());
+
   //  //Amp3，还不知道问啥，直接电流设置为0，9W
   //  Amp3.Set9Wcurrent(0.001);
   //  SendDatabyte(3, Amp3.Datasend());
-    Amp3.Set9Wcurrent(0.001);
-    emit senddata(3, Amp3.Datasend());
+
     ////Amp4
     //Comandlen[0] = 0x04;
     //Amp4.Onofflaser(temp);
@@ -1010,22 +978,6 @@ Status QtWidgetsApplication1::Dislaser()
     //Comandlen[0] = 0x07;
     //Amp7.Onofflaser(temp);
     //SendDatabyte(7, Amp7.Datasend());
-    ////Main
-    //Mainamp.OnOffDevice();
-    //Comandlen[0] = 0x05;
-    //Comandlen[1] = Mainamp.Datasend().size();
-    //Senddata[0] = 0x00;
-    //Senddata = Header + Comandlen + Mainamp.Datasend() + Senddata;
-    //Checksum(Senddata);
-    //Senddata = Senddata + Ender;
-    //serial->write(Senddata);
-    //serial->waitForBytesWritten(10);
-    //Sleep(sleeptime);
-    //ui.SendtextEdit->append(AddBlank(Senddata));
-    //Senddata.clear();
-    //Senddata.resize(1);
-    ////timer->start();
-    //Sleep(sleeptime);
     
     return off;
 }
@@ -1050,20 +1002,22 @@ void QtWidgetsApplication1::LaserStatusQuery()
     {
         //Seed.StatusQuery();
         //SendDatabyte(0, Seed.Datasend());
-        Seed.StatusQuery();
-        emit senddata(0, Seed.Datasend());
+        SeedandAmp1.LD1curQuery();
+        emit senddata(0, SeedandAmp1.Datasend());
+        //Amp1.StatusQuery();
+       //SendDatabyte(1, Amp1.Datasend());
+        SeedandAmp1.LD2curQuery();
+        emit senddata(0, SeedandAmp1.Datasend());
         //Amp1.StatusQuery();
         //SendDatabyte(1, Amp1.Datasend());
-        Amp1.StatusQuery();
-        emit senddata(1, Amp1.Datasend());
         //Amp2.MMstatusQuery();
         //SendDatabyte(2, Amp2.Datasend());
-        Amp2.MMstatusQuery();
-        emit senddata(2, Amp2.Datasend());
+        Amp2.MMLDcurQuery();
+        emit senddata(1, Amp2.Datasend());
         ////com3想连大电流驱动，预计要改
         //Amp3.MMstatusQuery();
         //SendDatabyte(3, Amp3.Datasend());
-        Amp3.MMstatusQuery();
+        Amp3.MMLDcurQuery();
         emit senddata(3, Amp3.Datasend());
         ////com4 
         //Amp4.CurrentQuery();
@@ -1281,34 +1235,62 @@ void QtWidgetsApplication1::change_ampstatus()
 {
 }
 
-void QtWidgetsApplication1::COMChanged(int n, QtLambdapump* Amp0)
+void QtWidgetsApplication1::COMChanged(int n, QtDhkjpump* Amp0)
 {
     switch (n)
     {
     case 0:
-        Seed.SetStatus(Amp0);
-        ui.COM0CurLcd->display(Seed.Pumpcurrent());
-        ui.COM0PowerLcd->display(Seed.Pumppower());
-        ui.COM0TempLcd->display(Seed.Pumptemp());
+        SeedandAmp1.SetStatus(Amp0);
+        ui.COM0CurLcd->display(SeedandAmp1.LD1current());
+
+        ui.COM1CurLcd->display(SeedandAmp1.LD2current());
+
         break;
     case 1:
-        Amp1.SetStatus(Amp0);
-        ui.COM1CurLcd->display(Amp1.Pumpcurrent());
-        ui.COM1PowerLcd->display(Amp1.Pumppower());
-        ui.COM1TempLcd->display(Amp1.Pumptemp());
+ 
         break;
     case 2:
-        Amp2.SetStatus(Amp0);
-        ui.COM29WCurLcd->display(Amp2.LD9wcur());
-        ui.COM2TempLcd->display(Amp2.Pumptemp());
-        ui.COM227WLDTempLcd->display(Amp2.Pumptemp());
+
         break;
     case 3:
+
+        break;
+    case 4:
+
+        break;
+    case 5:
+
+        break;
+    case 6:
+
+        break;
+    case 7:
+
+        break;
+    default:
+        qDebug() << "无法解析接收到的指令！";
+        break;
+    }
+
+}
+void QtWidgetsApplication1::mmCOMChanged(int n, QtDhkjMMpump* Amp0)
+{
+    switch (n)
+    {
+    case 0:
+
+        break;
+    case 1:
+        Amp2.SetStatus(Amp0);
+        ui.COM1CurLcd->display(Amp2.MMLDcurrent());
+        break;
+    case 2:
         Amp3.SetStatus(Amp0);
-        ui.COM327WCurLcd->display(Amp3.LD27wcur());
-        ui.COM39WCurLcd->display(Amp3.LD9wcur());
-        ui.COM3TempLcd->display(Amp3.Modeltemp());
-        ui.COM327WTempLcd->display(Amp3.LD27wtemp());
+        ui.COM29WCurLcd->display(Amp2.MMLDcurrent());
+
+        break;
+    case 3:
+
         break;
     case 4:
 

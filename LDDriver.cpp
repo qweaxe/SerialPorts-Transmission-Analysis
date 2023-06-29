@@ -47,10 +47,7 @@ QtLambdapump::QtLambdapump()
   * @param None
   * @retval void
   */
-void QtLambdapump::SetData()
-{
 
-}
 /**
   * @Function Name  : Setcurrent
   * @
@@ -293,40 +290,153 @@ void QtLambdapump::SetStatus(QtLambdapump* Amp)
   */
 QtDhkjpump::QtDhkjpump()
 {
-    datasend.resize(5);
-    //datasend.fromHex("0x55,0xAA,0x03,0x73,0x73");
-    datasend[0] = 0x55;
-    datasend[1] = 0xAA;
-    datasend[2] = 0x03;
-    datasend[3] = 0x73;
-    datasend[4] = 0x73;
-    R7 = 0.0;
-    lnR7 = 0.0;
-    recavtemp = 25.0;
-    repumpcurrent = 0.0;
-    repumppower = 0.0;
-    repumptemp = 25.0;
-    resetcurrent = 0;
-    retempcur = 0.0;
-    r = 0;
-    setcurvalue = 0;
-    u3 = 0;
+    setpump1cur = 0.0;
+    setpump2cur = 0.0;
+    resetpump1cur = 0.0;
+    resetpump2cur = 0.0;
+    repump1cur = 0.0;
+    repump2cur = 0.0;
 }
 /**
-  * @Function Name  :Setcurrent
+  * @Function Name  : Onoffenginmode
+  * @
+  * @brief 东辉科技的工程模式开关
+  * @param s 开关的指令
+  */
+void QtDhkjpump::Onoffenginmode(bool s)
+{
+    if (s == on)
+    {
+        this->datasend.resize(12);
+        this->datasend[0] = 0x5A;
+        this->datasend[1] = 0x06;
+        this->datasend[2] = 0x00;
+        this->datasend[3] = 0xEC;
+        this->datasend[4] = 0x00;
+        this->datasend[5] = 0x00;
+        this->datasend[6] = 0x00;
+        this->datasend[7] = 0x00;
+        this->datasend[8] = 0x00;
+        this->datasend[9] = 0x00;//校验和
+        this->datasend[10] = 0x00;//校验和
+        this->datasend[11] = 0xA5;
+    }
+    else if (s == off)
+    {
+        this->datasend.resize(12);
+        this->datasend[0] = 0x5A;
+        this->datasend[1] = 0x06;
+        this->datasend[2] = 0x00;
+        this->datasend[3] = 0xCE;
+        this->datasend[4] = 0x00;
+        this->datasend[5] = 0x00;
+        this->datasend[6] = 0x00;
+        this->datasend[7] = 0x00;
+        this->datasend[8] = 0x00;
+        this->datasend[9] = 0x00;//校验和
+        this->datasend[10] = 0x00;//校验和
+        this->datasend[11] = 0xA5;
+    }
+}
+/**
+  * @Function Name  : Onofflaser
+  * @
+  * @brief 东辉科技的激光器开关
+  * @param s 开关的指令
+  */
+void QtDhkjpump::Onofflaser(bool s)
+{
+    if (s == on)
+    {
+        this->datasend.resize(12);
+        this->datasend[0] = 0x5A;
+        this->datasend[1] = 0x06;
+        this->datasend[2] = 0xAA;
+        this->datasend[3] = 0x00;
+        this->datasend[4] = 0x40;
+        this->datasend[5] = 0x00;
+        this->datasend[6] = 0x01;
+        this->datasend[7] = 0x00;
+        this->datasend[8] = 0x00;
+        this->datasend[9] = 0x00;//校验和
+        this->datasend[10] = 0x00;//校验和
+        this->datasend[11] = 0xA5;
+
+    }
+    else if (s == off)
+    {
+        this->datasend.resize(12);
+        this->datasend[0] = 0x5A;
+        this->datasend[1] = 0x06;
+        this->datasend[2] = 0xAA;
+        this->datasend[3] = 0x00;
+        this->datasend[4] = 0x40;
+        this->datasend[5] = 0x00;
+        this->datasend[6] = 0x00;
+        this->datasend[7] = 0x00;
+        this->datasend[8] = 0x00;
+        this->datasend[9] = 0x00;//校验和
+        this->datasend[10] = 0x00;//校验和
+        this->datasend[11] = 0xA5;
+    }
+}
+/**
+  * @Function Name  : OnoffstatusQuery
+  * @
+  * @brief 东辉科技的激光器开关状态查询
+  * @param 
+  */
+void QtDhkjpump::OnoffstatusQuery()
+{
+    this->datasend.resize(12);
+    this->datasend[0] = 0x5A;
+    this->datasend[1] = 0x06;
+    this->datasend[2] = 0xBB;
+    this->datasend[3] = 0x00;
+    this->datasend[4] = 0x40;
+    this->datasend[5] = 0x00;
+    this->datasend[6] = 0x00;
+    this->datasend[7] = 0x00;
+    this->datasend[8] = 0x00;
+    this->datasend[9] = 0x00;//校验和
+    this->datasend[10] = 0x00;//校验和
+    this->datasend[11] = 0xA5;
+}
+/**
+  * @Function Name  :SetLD1current
   * @
   * @brief 设置电流
   * @param value 设置的值
   * @retval void
   */
-void QtDhkjpump::Setcurrent(double value)
+void QtDhkjpump::SetLD1current(float value)
 {
-    this->datasend.resize(5);
-    this->datasend[0] = 0x55;
-    this->datasend[1] = 0xAA;
-    this->datasend[2] = 0x02;
-    this->datasend[3] = value / 256;
-    this->datasend[4] = (uint)value % 256;
+    this->datasend.resize(12);
+    this->datasend[0] = 0x5A;
+    this->datasend[1] = 0x06;
+    this->datasend[2] = 0xAA;
+    this->datasend[3] = 0x11;
+    this->datasend[4] = 0xF4;
+    floatToIEEE754(value);
+    this->datasend[11] = 0xA5;
+}
+/**
+  * @Function Name  :SetLD1current
+  * @
+  * @brief 设置电流
+  * @param value 设置的值
+  * @retval void
+  */
+void QtDhkjpump::SetLD2current(float value)
+{
+    this->datasend.resize(12);
+    this->datasend[0] = 0x5A;
+    this->datasend[1] = 0x06;
+    this->datasend[2] = 0xAA;
+    this->datasend[3] = 0x11;
+    this->datasend[4] = 0xF5;
+    floatToIEEE754(value);
+    this->datasend[11] = 0xA5;
 }
 /**
   * @Function Name  : ReInfoData
@@ -337,30 +447,364 @@ void QtDhkjpump::Setcurrent(double value)
   */
 void QtDhkjpump::ReInfoData(const QByteArray data)
 {
-    this->reseed->resize(4);
-    this->reseed[0] = data.sliced(4, 4);//空
-    this->reseed[1] = data.sliced(8, 4);//空
-    this->reseed[2] = data.sliced(12, 4);//空
-    this->reseed[3] = data.sliced(16, 4);//泵浦激光器温度
-    this->reseed[4] = data.sliced(20, 4);//泵浦制冷电流
-    this->reseed[5] = data.sliced(24, 4);//泵浦激光器功率
-    this->reseed[6] = data.sliced(28, 4);//泵浦激光器驱动电流
-    this->reseed[7] = data.sliced(32, 4);//激光腔温度
-    //temperature
-    this->u3 = ((reseed[3][2] & 0x03) * 256 + reseed[3][3]) * 2;
-    this->r = (10000 * u3) / (2048 - u3);
-    this->repumptemp = (37000 - r) / 600;
-    //temperature current
-    this->retempcur = ((((unsigned char)reseed[4][2]) & 0x03) * 256 + (unsigned char)reseed[4][3]) * 2 * 1.4;
-    //pump power
-    this->repumppower = ((((unsigned char)reseed[5][2]) & 0x03) * 256 + (unsigned char)reseed[5][3]) * 2 * 0.36361;
-    //pump current
-    this->repumpcurrent = ((((unsigned char)reseed[6][2]) & 0x03) * 256 + (unsigned char)reseed[6][3]) * 2 * 0.4;
-    //pump temperature
-    this->R7 = (((unsigned char)reseed[7][2]) * 256 + ((unsigned char)reseed[7][3])) * 1.0 * 0.625;
-    this->lnR7 = log(R7);
-    this->recavtemp = pow(((1.141256846 * pow(10, -3)) + 2.325154750 * pow(10, -4) * lnR7 + lnR7 * lnR7 * lnR7 * 0.9126356973 * pow(10, -7)), -1) - 273.15;
+    switch ((unsigned char)data[2])
+    {
+    case 0x00:
+        if ((unsigned char)data[3] == 0xEC)
+        {
+            enginmodes = on;
+        }
+        else if ((unsigned char)data[3] == 0xCE)
+        {
+            enginmodes = off;
+        }
+        else
+            qDebug() << "Status Error ! Command: "<<data;
+        break;
+    case 0xAA:
+        switch ((unsigned char)data[03])
+        {
+            case 0x00:
+                if ((unsigned char)data[06] == 0x00)
+                    ampstatus = off;
+                else if ((unsigned char)data[06] == 0x01)
+                    ampstatus = on;
+                break;
+            case 0x11://pump电流设置
+
+                break;
+        }
+        break;
+
+    case 0xBB:
+        switch ((unsigned char)data[3])
+        {
+            case 0x00:
+                if ((unsigned char)data[6] == 0x01)
+                    this->ampstatus = on;
+                else if ((unsigned char)data[6] == 0x00)
+                    this->ampstatus = off;
+            break;
+            case 0x10://实时电流
+
+             break;
+            case 0x11://设置电流
+
+             break;
+            case 0x14://最大设置电流
+
+             break;
+        }
+        break;
+    default:
+
+        break;
+    }
 }
+/**
+  * @Function Name  : LD1curQuery
+  * @
+  * @brief 东辉科技的LD1电流询问指令
+  * @param
+  */
+void QtDhkjpump::LD1curQuery()
+{
+    this->datasend.resize(12);
+    this->datasend[0] = 0x5A;
+    this->datasend[1] = 0x06;
+    this->datasend[2] = 0xBB;
+    this->datasend[3] = 0x10;
+    this->datasend[4] = 0xF4;
+    this->datasend[5] = 0x00;
+    this->datasend[6] = 0x00;
+    this->datasend[7] = 0x00;
+    this->datasend[8] = 0x00;
+    this->datasend[9] = 0x00;//校验和
+    this->datasend[10] = 0x00;//校验和
+    this->datasend[11] = 0xA5;
+}
+/**
+  * @Function Name  : LD2curQuery
+  * @
+  * @brief 东辉科技的LD2电流询问指令
+  * @param 
+  */
+void QtDhkjpump::LD2curQuery()
+{
+    this->datasend.resize(12);
+    this->datasend[0] = 0x5A;
+    this->datasend[1] = 0x06;
+    this->datasend[2] = 0xBB;
+    this->datasend[3] = 0x10;
+    this->datasend[4] = 0xF5;
+    this->datasend[5] = 0x00;
+    this->datasend[6] = 0x00;
+    this->datasend[7] = 0x00;
+    this->datasend[8] = 0x00;
+    this->datasend[9] = 0x00;//校验和
+    this->datasend[10] = 0x00;//校验和
+    this->datasend[11] = 0xA5;
+}
+/**
+  * @Function Name  : LD1SetcurQuery
+  * @
+  * @brief 东辉科技的LD1设置电流询问指令
+  * @param
+  */
+void QtDhkjpump::LD1SetcurQuery()
+{
+    this->datasend.resize(12);
+    this->datasend[0] = 0x5A;
+    this->datasend[1] = 0x06;
+    this->datasend[2] = 0xBB;
+    this->datasend[3] = 0x11;
+    this->datasend[4] = 0xF4;
+    this->datasend[5] = 0x00;
+    this->datasend[6] = 0x00;
+    this->datasend[7] = 0x00;
+    this->datasend[8] = 0x00;
+    this->datasend[9] = 0x00;//校验和
+    this->datasend[10] = 0x00;//校验和
+    this->datasend[11] = 0xA5;
+}
+/**
+  * @Function Name  : LD2SetcurQuery
+  * @
+  * @brief 东辉科技的LD2设置电流询问指令
+  * @param
+  */
+void QtDhkjpump::LD2SetcurQuery()
+{
+    this->datasend.resize(12);
+    this->datasend[0] = 0x5A;
+    this->datasend[1] = 0x06;
+    this->datasend[2] = 0xBB;
+    this->datasend[3] = 0x14;
+    this->datasend[4] = 0xF5;
+    this->datasend[5] = 0x00;
+    this->datasend[6] = 0x00;
+    this->datasend[7] = 0x00;
+    this->datasend[8] = 0x00;
+    this->datasend[9] = 0x00;//校验和
+    this->datasend[10] = 0x00;//校验和
+    this->datasend[11] = 0xA5;
+}
+/**
+  * @Function Name  : LD1maxcurQuery
+  * @
+  * @brief 东辉科技的LD1最大设置电流询问指令
+  * @param
+  */
+void QtDhkjpump::LD1maxcurQuery()
+{
+    this->datasend.resize(12);
+    this->datasend[0] = 0x5A;
+    this->datasend[1] = 0x06;
+    this->datasend[2] = 0xBB;
+    this->datasend[3] = 0x14;
+    this->datasend[4] = 0xF4;
+    this->datasend[5] = 0x00;
+    this->datasend[6] = 0x00;
+    this->datasend[7] = 0x00;
+    this->datasend[8] = 0x00;
+    this->datasend[9] = 0x00;//校验和
+    this->datasend[10] = 0x00;//校验和
+    this->datasend[11] = 0xA5;
+}
+/**
+  * @Function Name  : LD2maxcurQuery
+  * @
+  * @brief 东辉科技的LD2最大设置电流询问指令
+  * @param
+  */
+void QtDhkjpump::LD2maxcurQuery()
+{
+    this->datasend.resize(12);
+    this->datasend[0] = 0x5A;
+    this->datasend[1] = 0x06;
+    this->datasend[2] = 0xBB;
+    this->datasend[3] = 0x14;
+    this->datasend[4] = 0xF5;
+    this->datasend[5] = 0x00;
+    this->datasend[6] = 0x00;
+    this->datasend[7] = 0x00;
+    this->datasend[8] = 0x00;
+    this->datasend[9] = 0x00;//校验和
+    this->datasend[10] = 0x00;//校验和
+    this->datasend[11] = 0xA5;
+}
+/**
+  * @Function Name  : FloatToIEEE754
+  * @
+  * @brief 将单精度浮点数转换为4个32位
+  * @param value 待转换数值
+  * @retval 对应的字符串
+  */
+void QtDhkjpump::floatToIEEE754(float value)//顺序可能要改一下
+{
+    //unsigned int intValue = *reinterpret_cast<unsigned int*>(&value);
+    //std::bitset<sizeof(float) * 8> bits(intValue);
+   
+    myfloat.f = value;
+    this->datasend[5] = myfloat.buf[3];
+    this->datasend[6] = myfloat.buf[2];
+    this->datasend[7] = myfloat.buf[1];
+    this->datasend[8] = myfloat.buf[0];
+}
+
+void QtDhkjpump::SetStatus(QtDhkjpump* Amp)
+{
+    this->repump1cur = Amp->repump1cur;
+    this->repump2cur = Amp->repump2cur;
+
+}
+/**
+  * @Function Name  : QtdhkjMMpump
+  * @
+  * @brief 东辉科技多模泵的构造函数
+  * @param
+  */
+QtDhkjMMpump::QtDhkjMMpump()
+{
+    resetpumpcur = 0.0;
+    repumpcur = 0.0;
+}
+
+/**
+  * @Function Name  : Onofflaser
+  * @
+  * @brief 东辉科技多模泵的开关
+  * @param s 开关状态指令
+  */
+void QtDhkjMMpump::Onofflaser(bool s)
+{
+    if (s == on)
+    {
+        this->datasend.resize(12);
+        this->datasend[0] = 0x5A;
+        this->datasend[1] = 0x08;
+        this->datasend[2] = 0x77;
+        this->datasend[3] = 0x00;
+        this->datasend[4] = 0x00;
+        this->datasend[5] = 0x00;
+        this->datasend[6] = 0x00;
+        this->datasend[7] = 0x00;
+        this->datasend[8] = 0x00;
+        this->datasend[9] = 0x00;//校验和
+        this->datasend[10] = 0x77;//校验和
+        this->datasend[11] = 0xA5;
+
+    }
+    else if (s == off)
+    {
+        this->datasend.resize(12);
+        this->datasend[0] = 0x5A;
+        this->datasend[1] = 0x08;
+        this->datasend[2] = 0x55;
+        this->datasend[3] = 0x00;
+        this->datasend[4] = 0x40;
+        this->datasend[5] = 0x00;
+        this->datasend[6] = 0x00;
+        this->datasend[7] = 0x00;
+        this->datasend[8] = 0x00;
+        this->datasend[9] = 0x00;//校验和
+        this->datasend[10] = 0x55;//校验和
+        this->datasend[11] = 0xA5;
+    }
+}
+
+/**
+  * @Function Name  : SetMMLDcurrent
+  * @
+  * @brief 东辉科技多模泵的设置电流
+  * @param
+  */
+void QtDhkjMMpump::SetMMLDcurrent(float value)
+{
+    myfloat.f = value;
+    this->datasend.resize(12);
+    this->datasend[0] = 0x5A;
+    this->datasend[1] = 0x48;
+    this->datasend[2] = 0xAA;
+    this->datasend[3] = 0x11;
+    this->datasend[4] = 0xF5;
+    floatToIEEE754(value);
+    this->datasend[9] = 0x00;//校验和
+    this->datasend[10] = 0x55;//校验和
+    this->datasend[11] = 0xA5;
+}
+
+/**
+  * @Function Name  : ReInfoData
+  * @
+  * @brief 东辉科技多模泵的返回指令解析
+  * @param data 返回的指令
+  */
+void QtDhkjMMpump::ReInfoData(const QByteArray data)
+{
+    switch ((unsigned char)data[1])
+    {
+    case 0x88:
+        if ((unsigned char)data[7] == 0x00 && (unsigned char)data[8] == 0x01)
+            this->ampstatus = on;
+        else if ((unsigned char)data[7] == 0x00 && (unsigned char)data[8] == 0x00)
+            this->ampstatus = off;
+        break;
+    case 0xC8:
+
+        break;
+
+    default:
+
+        break;
+   }
+}
+
+/**
+  * @Function Name  : MMLDcurQuery
+  * @
+  * @brief 东辉科技多模泵的电流查询
+  * @param data 返回的指令
+  */
+void QtDhkjMMpump::MMLDcurQuery()
+{
+    this->datasend.resize(12);
+    this->datasend[0] = 0x5A;
+    this->datasend[1] = 0x48;
+    this->datasend[2] = 0xBB;
+    this->datasend[3] = 0x10;
+    this->datasend[4] = 0xF5;
+    this->datasend[5] = 0x00;
+    this->datasend[6] = 0x00;
+    this->datasend[7] = 0x00;
+    this->datasend[8] = 0x00;
+    this->datasend[9] = 0x01;//校验和
+    this->datasend[10] = 0xC0;//校验和
+    this->datasend[11] = 0xA5;
+}
+
+/**
+  * @Function Name  : FloatToIEEE754
+  * @
+  * @brief 将单精度浮点数转换为4个32位
+  * @param value 待转换数值
+  * @retval 对应的字符串
+  */
+void QtDhkjMMpump::floatToIEEE754(float value)
+{
+        myfloat.f = value;
+        this->datasend[5] = myfloat.buf[3];
+        this->datasend[6] = myfloat.buf[2];
+        this->datasend[7] = myfloat.buf[1];
+        this->datasend[8] = myfloat.buf[0];
+}
+
+void QtDhkjMMpump::SetStatus(QtDhkjMMpump* Amp)
+{
+    this->repumpcur = this->repumpcur;
+
+}
+
 
 /**
   * @Function Name  : Golightpump
@@ -470,6 +914,7 @@ void QtGolightpump::BacklightQuery()
     this->datasend[4] = 0x03;//决定具体的行为
    // QtWidgetsApplication1::Checksum(datasend);
 }
+
 /**
   * @Function Name  : ReInfoData
   * @
@@ -765,3 +1210,4 @@ Status QtCotek::OnOffDevice()
 
     return this->ampstatus;
 }
+

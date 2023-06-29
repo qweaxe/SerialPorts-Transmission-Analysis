@@ -33,6 +33,7 @@ public:
 	QSerialPort* port;
 	void Checksum(QByteArray& data);
 	void CRC16Checksum(QByteArray& data);
+	void DhkjChecksum(QByteArray& data);
 	QStringList GetSerialAvailable();
 
 public slots:
@@ -49,7 +50,8 @@ public slots:
 signals:
 	void working(int num);
 	void finish(QString elapsedTime);//可以传递多个参数，槽会匹配并忽略多余的参数
-	void processed(int n, QtLambdapump* Amp);
+	void processed(int n, QtDhkjpump* Amp);
+	void mmprocessed(int n, QtDhkjMMpump* Amp);
 	void SerialPortChanged(QString info);
 	void ReadyProcess(QByteArray data);
 	void DisplayReData(QByteArray data);
@@ -65,12 +67,9 @@ private:
 	QByteArray Ender;
 	QByteArray checksum;
 	bool isSend = 0;
-	QtLambdapump *Amp0=new QtLambdapump;
-	QtLambdapump *Amp1=new QtLambdapump;
-	QtLambdapump *Amp2=new QtLambdapump;
-	QtLambdapump *Amp3=new QtLambdapump;
-	QtGolightpump Amp4;
-	QtGolightpump Amp5;
+	QtDhkjpump *SeedandAmp1=new QtDhkjpump;
+	QtDhkjpump*Amp2=new QtDhkjpump;
+	QtDhkjpump*Amp3=new QtDhkjpump;
 	QElapsedTimer time;
 	QTimer* timer;
 	//QSerialPort serial;

@@ -5,6 +5,8 @@
 #include<QObject>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
+#include<bitset>
+#include<QDebug>
 
 enum Status
 {
@@ -12,12 +14,15 @@ enum Status
     on,
     broken
 };
+union {
+    float f;
+    quint8 buf[4];
+}myfloat;
 
 class QtLambdapump :public QObject//:public QtWidgetsApplication1
 {
 public:
     QtLambdapump();
-    void SetData();
     void Setcurrent(const int value);//要不基类写个虚函数要子类去重构？
     void Set27Wcurrent(const double value);
     void Set9Wcurrent(const double value);
@@ -72,42 +77,62 @@ private:
 
 };
 
-class QtDhkjpump : public QSerialPort //:public QtWidgetsApplication1
+class QtDhkjpump : public QObject//:public QtWidgetsApplication1
 {
 public:
     QtDhkjpump();
-    void SetData();
-    void Setcurrent(double value);
-    void SetcavTemp(double value);
+    void Onoffenginmode(bool s);
+    void Onofflaser(bool s);
+    void OnoffstatusQuery();
+    void SetLD1current(float value);
+    void SetLD2current(float value);
     void ReInfoData(const QByteArray data);
-    double Pumpcurrent() { return repumpcurrent; }
-    double Pumppower() { return repumppower; }
-    double Pumptemp() { return repumptemp; }
-    double Tempcurrent() { return retempcur; }
-    double Cavtemp() { return recavtemp; }
+    void LD1curQuery();
+    void LD2curQuery();
+    void LD1SetcurQuery();
+    void LD2SetcurQuery();
+    void LD1maxcurQuery();
+    void LD2maxcurQuery();
+    float LD1current() { return repump1cur; }
+    float LD2current() { return repump2cur; }
     Status& Ampstatus() { return ampstatus; }
     QByteArray Datasend() { return datasend; }
+   void floatToIEEE754(float value);
+   void SetStatus(QtDhkjpump* Amp);
+private:
+    Status ampstatus = off;
+    Status enginmodes = off;
+    QByteArray datasend;
+    QByteArray datareceive;
+    float setpump1cur;
+    float setpump2cur;
+    float resetpump1cur;
+    float resetpump2cur;
+    float repump1cur;
+    float repump2cur;
+
+};
+class QtDhkjMMpump : public QObject//
+{
+public:
+    QtDhkjMMpump();
+    void Onofflaser(bool s);
+    void SetMMLDcurrent(float value);
+    void ReInfoData(const QByteArray data);
+    void MMLDcurQuery();
+    float MMLDcurrent() { return repumpcur; }
+    Status& Ampstatus() { return ampstatus; }
+    QByteArray Datasend() { return datasend; }
+    void floatToIEEE754(float value);
+    void SetStatus(QtDhkjMMpump* Amp);
 private:
     Status ampstatus = off;
     QByteArray datasend;
     QByteArray datareceive;
-    QByteArray setzero;
-    int setcurvalue;
-    int resetcurrent;
-    double repumpcurrent;
-    double repumppower;
-    double repumptemp;
-    double retempcur;
-    double recavtemp;
-    int u3;
-    int r;
-    double R7;
-    double lnR7;
-    //data received
-    QByteArray reseed[8];
+    float resetpumpcur;
+    float repumpcur;
 
 };
-
 class QtGolightpump :public QSerialPort//:public QtWidgetsApplication1
 {
 public:

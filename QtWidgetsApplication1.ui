@@ -72,7 +72,7 @@
      <property name="geometry">
       <rect>
        <x>220</x>
-       <y>50</y>
+       <y>60</y>
        <width>31</width>
        <height>31</height>
       </rect>
@@ -116,7 +116,7 @@
     <widget class="QLCDNumber" name="COM1CurLcd">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>340</x>
        <y>20</y>
        <width>64</width>
        <height>23</height>
@@ -152,7 +152,7 @@ color: rgb(255, 255, 255);
     <widget class="QLCDNumber" name="COM1TempLcd">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>340</x>
        <y>100</y>
        <width>64</width>
        <height>23</height>
@@ -172,7 +172,7 @@ color: rgb(255, 255, 255);
     <widget class="QLCDNumber" name="COM1PowerLcd">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>340</x>
        <y>60</y>
        <width>64</width>
        <height>23</height>
@@ -196,7 +196,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_11">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>280</x>
        <y>20</y>
        <width>54</width>
        <height>21</height>
@@ -209,7 +209,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_12">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>280</x>
        <y>100</y>
        <width>54</width>
        <height>21</height>
@@ -222,7 +222,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_13">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>280</x>
        <y>60</y>
        <width>81</width>
        <height>21</height>
@@ -248,7 +248,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_32">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>410</x>
        <y>10</y>
        <width>51</width>
        <height>31</height>
@@ -269,7 +269,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_36">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>410</x>
        <y>90</y>
        <width>51</width>
        <height>41</height>
@@ -290,7 +290,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_37">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>410</x>
        <y>60</y>
        <width>51</width>
        <height>21</height>
@@ -394,7 +394,7 @@ color: rgb(255, 255, 255);
     <widget class="QLCDNumber" name="COM29WCurLcd">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>340</x>
        <y>20</y>
        <width>64</width>
        <height>23</height>
@@ -426,7 +426,7 @@ color: rgb(255, 255, 255);
     <widget class="QLCDNumber" name="COM2TempLcd">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>340</x>
        <y>50</y>
        <width>64</width>
        <height>23</height>
@@ -447,7 +447,7 @@ color: rgb(255, 255, 255);
     <widget class="QLCDNumber" name="COM227WLDTempLcd">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>340</x>
        <y>90</y>
        <width>64</width>
        <height>23</height>
@@ -486,14 +486,14 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_15">
      <property name="geometry">
       <rect>
-       <x>253</x>
+       <x>270</x>
        <y>20</y>
        <width>81</width>
        <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>9WLD电流：</string>
+      <string>LD电流：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_14">
@@ -525,7 +525,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_33">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>410</x>
        <y>10</y>
        <width>51</width>
        <height>41</height>
@@ -546,7 +546,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_38">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>410</x>
        <y>40</y>
        <width>51</width>
        <height>41</height>
@@ -567,7 +567,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_39">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>410</x>
        <y>80</y>
        <width>51</width>
        <height>41</height>
@@ -605,7 +605,7 @@ color: rgb(255, 255, 255);
       <x>10</x>
       <y>500</y>
       <width>581</width>
-      <height>141</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -627,7 +627,7 @@ color: rgb(255, 255, 255);
      <property name="geometry">
       <rect>
        <x>220</x>
-       <y>50</y>
+       <y>40</y>
        <width>31</width>
        <height>31</height>
       </rect>
@@ -646,7 +646,7 @@ color: rgb(255, 255, 255);
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>100</y>
+       <y>40</y>
        <width>71</width>
        <height>20</height>
       </rect>
@@ -659,7 +659,7 @@ color: rgb(255, 255, 255);
      <property name="geometry">
       <rect>
        <x>140</x>
-       <y>100</y>
+       <y>40</y>
        <width>80</width>
        <height>24</height>
       </rect>
@@ -671,8 +671,8 @@ color: rgb(255, 255, 255);
     <widget class="QLCDNumber" name="COM327WCurLcd">
      <property name="geometry">
       <rect>
-       <x>330</x>
-       <y>20</y>
+       <x>340</x>
+       <y>40</y>
        <width>64</width>
        <height>23</height>
       </rect>
@@ -700,98 +700,24 @@ color: rgb(255, 255, 255);
       <double>0.000000000000000</double>
      </property>
     </widget>
-    <widget class="QLCDNumber" name="COM3TempLcd">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>100</y>
-       <width>64</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLCDNumber
-{
-background:black;
-
-color: rgb(255, 255, 255);
-}</string>
-     </property>
-     <property name="smallDecimalPoint">
-      <bool>false</bool>
-     </property>
-     <property name="segmentStyle">
-      <enum>QLCDNumber::Flat</enum>
-     </property>
-     <property name="value" stdset="0">
-      <double>0.000000000000000</double>
-     </property>
-    </widget>
-    <widget class="QLCDNumber" name="COM39WCurLcd">
-     <property name="geometry">
-      <rect>
-       <x>490</x>
-       <y>20</y>
-       <width>64</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLCDNumber
-{
-background:black;
-
-color: rgb(255, 255, 255);
-}</string>
-     </property>
-     <property name="segmentStyle">
-      <enum>QLCDNumber::Flat</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_17">
-     <property name="geometry">
-      <rect>
-       <x>420</x>
-       <y>100</y>
-       <width>71</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>27W温度：</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_18">
      <property name="geometry">
       <rect>
-       <x>233</x>
-       <y>20</y>
-       <width>91</width>
-       <height>20</height>
+       <x>270</x>
+       <y>40</y>
+       <width>61</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>27WLD电流：</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_27">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>20</y>
-       <width>41</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>A</string>
+      <string>LD电流：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_34">
      <property name="geometry">
       <rect>
-       <x>400</x>
-       <y>15</y>
+       <x>420</x>
+       <y>40</y>
        <width>41</width>
        <height>31</height>
       </rect>
@@ -808,143 +734,14 @@ color: rgb(255, 255, 255);
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="setCOM39WBtn">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>20</y>
-       <width>80</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>设置电流</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="COM39WEdit">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>20</y>
-       <width>71</width>
-       <height>20</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_60">
+    <widget class="QLabel" name="label_27">
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>100</y>
+       <y>40</y>
        <width>41</width>
        <height>21</height>
       </rect>
-     </property>
-     <property name="text">
-      <string>A</string>
-     </property>
-    </widget>
-    <widget class="QLCDNumber" name="COM327WTempLcd">
-     <property name="geometry">
-      <rect>
-       <x>490</x>
-       <y>100</y>
-       <width>64</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLCDNumber
-{
-background:black;
-
-color: rgb(255, 255, 255);
-}</string>
-     </property>
-     <property name="segmentStyle">
-      <enum>QLCDNumber::Flat</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_61">
-     <property name="geometry">
-      <rect>
-       <x>420</x>
-       <y>20</y>
-       <width>81</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>9WLD电流：</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_20">
-     <property name="geometry">
-      <rect>
-       <x>253</x>
-       <y>100</y>
-       <width>71</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>11</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>背板温度：</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_19">
-     <property name="geometry">
-      <rect>
-       <x>400</x>
-       <y>90</y>
-       <width>51</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>°C</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_21">
-     <property name="geometry">
-      <rect>
-       <x>560</x>
-       <y>90</y>
-       <width>51</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>°C</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_22">
-     <property name="geometry">
-      <rect>
-       <x>560</x>
-       <y>10</y>
-       <width>51</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>14</pointsize>
-      </font>
      </property>
      <property name="text">
       <string>A</string>
@@ -954,21 +751,9 @@ color: rgb(255, 255, 255);
     <zorder>SetCOM3Button</zorder>
     <zorder>COM3Status</zorder>
     <zorder>COM327WCurLcd</zorder>
-    <zorder>COM3TempLcd</zorder>
-    <zorder>COM39WCurLcd</zorder>
-    <zorder>label_17</zorder>
     <zorder>label_18</zorder>
-    <zorder>label_27</zorder>
     <zorder>label_34</zorder>
-    <zorder>setCOM39WBtn</zorder>
-    <zorder>COM39WEdit</zorder>
-    <zorder>label_60</zorder>
-    <zorder>COM327WTempLcd</zorder>
-    <zorder>label_61</zorder>
-    <zorder>label_20</zorder>
-    <zorder>label_19</zorder>
-    <zorder>label_21</zorder>
-    <zorder>label_22</zorder>
+    <zorder>label_27</zorder>
    </widget>
    <widget class="QGroupBox" name="groupBox0">
     <property name="geometry">
@@ -1155,7 +940,7 @@ color: rgb(255, 255, 255);
     <widget class="QLCDNumber" name="COM0CurLcd">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>340</x>
        <y>20</y>
        <width>64</width>
        <height>23</height>
@@ -1208,7 +993,7 @@ color: rgb(255, 255, 255);
     <widget class="QLCDNumber" name="COM0PowerLcd">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>340</x>
        <y>70</y>
        <width>64</width>
        <height>23</height>
@@ -1228,7 +1013,7 @@ color: rgb(255, 255, 255);
     <widget class="QLCDNumber" name="COM0TempLcd">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>340</x>
        <y>120</y>
        <width>64</width>
        <height>23</height>
@@ -1248,7 +1033,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="COM0Status">
      <property name="geometry">
       <rect>
-       <x>230</x>
+       <x>220</x>
        <y>70</y>
        <width>31</width>
        <height>31</height>
@@ -1267,7 +1052,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>280</x>
        <y>120</y>
        <width>54</width>
        <height>21</height>
@@ -1280,7 +1065,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_8">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>280</x>
        <y>70</y>
        <width>54</width>
        <height>21</height>
@@ -1293,7 +1078,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_9">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>280</x>
        <y>20</y>
        <width>71</width>
        <height>21</height>
@@ -1322,7 +1107,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_30">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>410</x>
        <y>10</y>
        <width>51</width>
        <height>41</height>
@@ -1343,7 +1128,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_31">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>410</x>
        <y>60</y>
        <width>51</width>
        <height>41</height>
@@ -1364,7 +1149,7 @@ color: rgb(255, 255, 255);
     <widget class="QLabel" name="label_35">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>410</x>
        <y>110</y>
        <width>51</width>
        <height>41</height>

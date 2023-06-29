@@ -55,26 +55,26 @@ bool ProcessThread::send(const int com, QByteArray data)//发送函数，改成b
 	{
 	case 0x00:
 		Comandlen[0] = 0x00;
-		CRC16Checksum(data);
+		DhkjChecksum(data);
 		Comandlen[1] = data.size();
 		data = Header + Comandlen + data + Senddata;
 		break;
 	case 0x01:
-		Comandlen[0] = 0x01;
-		CRC16Checksum(data);
+		Comandlen[0] = 0x00;
+		DhkjChecksum(data);
 		Comandlen[1] = data.size();
 		data = Header + Comandlen + data + Senddata;
 		break;
 	case 0x02:
 		Comandlen[0] = 0x02;
-		CRC16Checksum(data);
+		DhkjChecksum(data);
 		Comandlen[1] = data.size();
 		data = Header + Comandlen + data + Senddata;
 		break;
 
 	case 0x03:
 		Comandlen[0] = 0x03;
-		CRC16Checksum(data);
+		DhkjChecksum(data);
 		Comandlen[1] = data.size();
 		data = Header + Comandlen + data + Senddata;
 		break;
@@ -357,13 +357,13 @@ void ProcessThread::Process(QByteArray data)
 		switch (data[2])
 		{
 		case 0x00://com0
-			Amp0->ReInfoData(data);
-			emit processed(0, Amp0);
+			SeedandAmp1->ReInfoData(data);
+			emit processed(0, SeedandAmp1);
 
 			break;
 		case 0x01://com1
-			Amp1->ReInfoData(data);
-			emit processed(1, Amp1);
+			SeedandAmp1->ReInfoData(data);
+			emit processed(0, SeedandAmp1);
 			break;
 		case 0x02://com2
 			Amp2->ReInfoData(data);
@@ -393,7 +393,13 @@ void ProcessThread::Process(QByteArray data)
 	}
 	
 }
-
+/**
+  * @Function Name  :Checksum
+  * @
+  * @brief 计算校验和
+  * @param data 需要计算的指令
+  * @retval void
+  */
 void ProcessThread::Checksum(QByteArray& data)
 {
 	int length = data.size();
@@ -409,7 +415,26 @@ void ProcessThread::Checksum(QByteArray& data)
 	data[length - 1] = temp;
 	checksum[0] = data[length - 1];
 }
-
+/**
+  * @Function Name  :DhkjChecksum
+  * @
+  * @brief 东辉科技的校验和计算
+  * @param data 需要计算的指令
+  * @retval void
+  */
+void ProcessThread::DhkjChecksum(QByteArray& data)
+{
+	int length = data.size();
+	data[length - 2] = 0x00;
+	data[length - 3] = 0x00;
+	uint temp;
+	for (int i = 2; i < length-3; i++)
+	{
+		temp += (unsigned char)data[i];
+	}
+	data[length - 3] = temp >> 8;
+	data[length - 2] = temp % 256;
+}
 void ProcessThread::CRC16Checksum(QByteArray& data)
 {
 	int len = data.size();
@@ -439,6 +464,8 @@ void ProcessThread::CRC16Checksum(QByteArray& data)
 	data[len] = low;
 	data[len + 1] = high;
 }
+
+
 
 QStringList ProcessThread::GetSerialAvailable()
 {

@@ -55,8 +55,9 @@ public slots:
     void on_pushButton_toggled(bool checked);
     void change_ampstatus();
 
-    void COMChanged(int n, QtLambdapump* Amp0);
-    
+    void COMChanged(int n, QtDhkjpump* Amp0);
+    void mmCOMChanged(int n, QtDhkjMMpump* Amp0);
+
     void SerialPortChanged(QString info);
 
     void DisplayReData(const QByteArray buf);
@@ -89,7 +90,7 @@ private slots:
     void on_GetLDStatusBtn_toggled(bool checked);
 
 
-    void on_setCOM39WBtn_clicked();
+    //void on_setCOM39WBtn_clicked();
 
 private:
     Ui::QtWidgetsApplication1Class ui;
@@ -103,10 +104,9 @@ private:
     Status Mainstatus = off;
     Status LaserQuery = off;
     //bool isSend = 0;
-    QtLambdapump Seed;
-    QtLambdapump Amp1;
-    QtLambdapump Amp2;
-    QtLambdapump Amp3;
+    QtDhkjpump SeedandAmp1;
+    QtDhkjMMpump Amp2;
+    QtDhkjMMpump Amp3;
 
     QSerialPort* serial;//全局的串口对象
     QBuffer buffer;//
@@ -132,8 +132,8 @@ private:
     QTimer* sendtime = new QTimer(this);
     qint64 maxcommand = 40;
     int curmin = 0;
-    int seedcurmax = 1000;
-    int amp1curmax = 1000;
+    int seedcurmax = 1000.0;
+    int amp1curmax = 1000.0;
     double amp2curmax = 10.0;
     double amp3curmax = 10.0;
     double amp4curmin = 0.0;

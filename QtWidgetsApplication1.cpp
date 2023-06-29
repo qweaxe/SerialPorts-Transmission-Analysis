@@ -236,7 +236,7 @@ void QtWidgetsApplication1::on_SetCOM1Button_clicked()
         timer->stop();
         float value = ui.COM1PowerEdit->text().toFloat();
 
-        if (value >1000.0)
+        if (value >10000.0)
             QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
         else
         {
@@ -270,7 +270,7 @@ void QtWidgetsApplication1::on_SetCOM2Button_clicked()
         {
             //SetAmp2Data.resize(8);
             
-            Amp2.SetMMLDcurrent(value);
+            Amp2.SetMMLDcurrent(value*1000);
             //SendDatabyte(2, Amp2.Datasend());
             emit senddata(2, Amp2.Datasend());
         }
@@ -299,7 +299,7 @@ void QtWidgetsApplication1::on_SetCOM3Button_clicked()
         {
             //SetAmp2Data.resize(8);
 
-            Amp3.SetMMLDcurrent(value);
+            Amp3.SetMMLDcurrent(value*1000);
             //SendDatabyte(2, Amp2.Datasend());
             emit senddata(2, Amp3.Datasend());
         }

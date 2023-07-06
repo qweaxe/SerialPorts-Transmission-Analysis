@@ -119,11 +119,11 @@ void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
             Comstatus = on;
             ui.statuslabel->setPixmap(QPixmap(":/images/on.png"));
             ui.pushButton->setText(tr("关闭串口"));
-            ////connect，循环访问信息
-            //QObject::connect(timer, &QTimer::timeout, this, &QtWidgetsApplication1::LaserStatusQuery);
-            //qDebug() << "portName() = " << serial->portName();
-            //qDebug() << "isOpen = " << serial->isOpen();
-            //qDebug() << "Error is " << serial->error();
+            //connect，循环访问信息
+            QObject::connect(timer, &QTimer::timeout, this, &QtWidgetsApplication1::LaserStatusQuery);
+            qDebug() << "portName() = " << serial->portName();
+            qDebug() << "isOpen = " << serial->isOpen();
+            qDebug() << "Error is " << serial->error();
 
     }
     else

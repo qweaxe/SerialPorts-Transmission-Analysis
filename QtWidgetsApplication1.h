@@ -5,6 +5,7 @@
 //#include <QtSerialPort/QSerialPort>
 //#include <QtSerialPort/QSerialPortInfo>
 #include<QBuffer>
+#include<QDebug>
 #include<qtimer.h>
 #include<Windows.h>
 #include<QFile>

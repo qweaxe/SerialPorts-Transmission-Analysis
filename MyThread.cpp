@@ -60,7 +60,7 @@ bool ProcessThread::send(const int com, QByteArray data)//发送函数，改成b
 		data = Header + Comandlen + data + Senddata;
 		break;
 	case 0x01:
-		Comandlen[0] = 0x00;
+		Comandlen[0] = 0x01;
 		DhkjChecksum(data);
 		Comandlen[1] = data.size();
 		data = Header + Comandlen + data + Senddata;
@@ -114,9 +114,9 @@ bool ProcessThread::send(const int com, QByteArray data)//发送函数，改成b
 	data = data + Ender;
 	qint64 size = serialport->write(data);
 	emit DisplaySeData(data);
-	serialport->waitForBytesWritten(10);
+	serialport->waitForBytesWritten(30);
 	qDebug() << "Current Thread is : " << QThread::currentThread();
-	Sleep(30);//考虑下需不需要这句话？
+	//Sleep(30);//考虑下需不需要这句话？好像
 	//ui.SendtextEdit->clear();
 	//ui.SendtextEdit->append(AddBlank(senddata));
 	if (size == -1)
@@ -206,6 +206,7 @@ void ProcessThread::Read()//改返回值为bool型或者别的
 	int head = buffer.size();//添加一个变量指向当前buffer存储的位置，即当前添加后的第一个位置
 	buffer.append(serialport->readAll());
 	int length = buffer.size();
+	qDebug() << "接收的字符串为：" << buffer.toHex(' ');
 	//想想怎么分情况讨论
 	// 
 	//分情况讨论，三种情况
@@ -224,7 +225,7 @@ void ProcessThread::Read()//改返回值为bool型或者别的
 	else if (head != 0) {//原本里面有缓存
 		if ((unsigned char)buffer[0] == 0xAA && (unsigned char)buffer[1] == 0x55) {
 			if ((buffer.size() == (unsigned char)buffer[3] + 7)||((buffer.size()>(unsigned char)buffer[3]+7)&&buffer[(unsigned int)buffer[3]+7]==0xAA)) {//1.半句+半句；2.半句+多余的，凑成一句+开头
-				qDebug() << "输出的字符串为：" << buffer.chopped(length - ((unsigned char)buffer[3] + 7));
+				qDebug() << "输出的字符串为：" << buffer.chopped(length - ((unsigned char)buffer[3] + 7)).toHex(1);
 				//emit ReadyProcess(buffer.chopped(length - ((unsigned char)buffer[3] + 7)));
 				data = buffer.chopped(length - ((unsigned char)buffer[3] + 7));//chop：前半部分
 				buffer=buffer.sliced((unsigned char)buffer[3] + 7);//slice:从该位置开始的后半部分
@@ -295,8 +296,10 @@ void ProcessThread::Read()//改返回值为bool型或者别的
 	//}
 	qDebug() << QString(buffer) << "当前线程ID：" << QThread::currentThreadId();
 	//改成发送信号通知可以进行后续处理了
-	emit ReadyProcess(data);
 	emit DisplayReData(data);
+	emit ReadyProcess(data);
+
+
 	return ;
 }
 
@@ -354,24 +357,24 @@ void ProcessThread::Process(QByteArray data)
 
 	else//正常情况
 	{
+		QByteArray bytes = data.sliced(4, 12);
 		switch (data[2])
 		{
 		case 0x00://com0
-			SeedandAmp1->ReInfoData(data);
+			SeedandAmp1->ReInfoData(bytes);
 			emit processed(0, SeedandAmp1);
 
 			break;
 		case 0x01://com1
-			SeedandAmp1->ReInfoData(data);
-			emit processed(0, SeedandAmp1);
+			Amp2->ReInfoData(bytes);
+			emit processed(1, Amp2);
 			break;
 		case 0x02://com2
-			Amp2->ReInfoData(data);
-			emit processed(2, Amp2);
+			Amp3->ReInfoData(bytes);
+			emit processed(2, Amp3);
 			break;
 		case 0x03://com3
-			Amp3->ReInfoData(data);
-			emit processed(3, Amp3);
+
 			break;
 		case 0x04://com4
 
@@ -427,7 +430,7 @@ void ProcessThread::DhkjChecksum(QByteArray& data)
 	int length = data.size();
 	data[length - 2] = 0x00;
 	data[length - 3] = 0x00;
-	uint temp;
+	uint temp=0x00;//默认值居然不为0……
 	for (int i = 2; i < length-3; i++)
 	{
 		temp += (unsigned char)data[i];

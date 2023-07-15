@@ -121,9 +121,9 @@ void QtWidgetsApplication1::on_pushButton_toggled(bool checked)
             ui.pushButton->setText(tr("关闭串口"));
             //connect，循环访问信息
             QObject::connect(timer, &QTimer::timeout, this, &QtWidgetsApplication1::LaserStatusQuery);
-            qDebug() << "portName() = " << serial->portName();
-            qDebug() << "isOpen = " << serial->isOpen();
-            qDebug() << "Error is " << serial->error();
+            //qDebug() << "portName() = " << serial->portName();
+            //qDebug() << "isOpen = " << serial->isOpen();
+            //qDebug() << "Error is " << serial->error();
 
     }
     else
@@ -236,7 +236,7 @@ void QtWidgetsApplication1::on_SetCOM1Button_clicked()
         timer->stop();
         float value = ui.COM1PowerEdit->text().toFloat();
 
-        if (value >10000.0)
+        if (value >1000.0)
             QMessageBox::warning(this, tr("警告⚠"), tr("超过最大范围"));
         else
         {
@@ -272,7 +272,7 @@ void QtWidgetsApplication1::on_SetCOM2Button_clicked()
             
             Amp2.SetMMLDcurrent(value*1000);
             //SendDatabyte(2, Amp2.Datasend());
-            emit senddata(2, Amp2.Datasend());
+            emit senddata(1, Amp2.Datasend());
         }
         if (LaserQuery == on)
             timer->start();
@@ -893,19 +893,24 @@ Status QtWidgetsApplication1::Enlaser()
     //Seed
    // Seed.OnstatusQuery();
    // SendDatabyte(0, Seed.Datasend());
-    SeedandAmp1.Onofflaser(1);
-    emit senddata(0, SeedandAmp1.Datasend());
 
     SeedandAmp1.Onoffenginmode(1);
     emit senddata(0, SeedandAmp1.Datasend());
+    Sleep(50);
+    SeedandAmp1.Onofflaser(1);
+    emit senddata(0, SeedandAmp1.Datasend());
+    Sleep(55);
+
 
     Amp2.Onofflaser(1);
     emit senddata(1, Amp2.Datasend());
+    Sleep(55);
    ////Amp2
    // Amp2.MMOnstatusQuery();
    // SendDatabyte(2, Amp2.Datasend());
     Amp3.Onofflaser(1);
     emit senddata(2, Amp3.Datasend());
+    Sleep(55);
    // //Amp3，读模块号
    // Amp3.MMOnstatusQuery();
    // SendDatabyte(3, Amp3.Datasend());
@@ -942,19 +947,25 @@ Status QtWidgetsApplication1::Dislaser()
   //  //Seed
   //  Seed.Setcurrent(1);
   //  SendDatabyte(0, Seed.Datasend());
-    SeedandAmp1.Onoffenginmode(0);
-    emit senddata(0, SeedandAmp1.Datasend());
-    SeedandAmp1.Onofflaser(0);
-    emit senddata(0, SeedandAmp1.Datasend());
+
+    Amp3.Onofflaser(0);
+    emit senddata(2, Amp3.Datasend());
 
     Amp2.Onofflaser(0);
     emit senddata(1, Amp2.Datasend());
 
+    SeedandAmp1.Onofflaser(0);
+    emit senddata(0, SeedandAmp1.Datasend());
+
+    SeedandAmp1.Onoffenginmode(0);
+    emit senddata(0, SeedandAmp1.Datasend());
+
+
+
     ////Amp2
     // Amp2.MMOnstatusQuery();
     // SendDatabyte(2, Amp2.Datasend());
-    Amp3.Onofflaser(0);
-    emit senddata(2, Amp3.Datasend());
+
 
   //  //Amp3，还不知道问啥，直接电流设置为0，9W
   //  Amp3.Set9Wcurrent(0.001);
@@ -1241,6 +1252,17 @@ void QtWidgetsApplication1::COMChanged(int n, QtDhkjpump* Amp0)
     {
     case 0:
         SeedandAmp1.SetStatus(Amp0);
+        if (SeedandAmp1.Ampstatus() == on)
+        {
+            ui.COM0Status->setPixmap(QPixmap(":/images/online.png"));
+            ui.COM1Status->setPixmap(QPixmap(":/images/online.png"));
+
+        }
+        else if (SeedandAmp1.Ampstatus() == off)
+        {
+            ui.COM0Status->setPixmap(QPixmap(":/images/offline.png"));
+            ui.COM1Status->setPixmap(QPixmap(":/images/online.png"));
+        }
         ui.COM0CurLcd->display(SeedandAmp1.LD1current());
 
         ui.COM1CurLcd->display(SeedandAmp1.LD2current());
@@ -1282,11 +1304,12 @@ void QtWidgetsApplication1::mmCOMChanged(int n, QtDhkjMMpump* Amp0)
         break;
     case 1:
         Amp2.SetStatus(Amp0);
-        ui.COM1CurLcd->display(Amp2.MMLDcurrent());
+
+        ui.COM29WCurLcd->display(Amp2.MMLDcurrent());
         break;
     case 2:
         Amp3.SetStatus(Amp0);
-        ui.COM29WCurLcd->display(Amp2.MMLDcurrent());
+        ui.COM327WCurLcd->display(Amp2.MMLDcurrent());
 
         break;
     case 3:

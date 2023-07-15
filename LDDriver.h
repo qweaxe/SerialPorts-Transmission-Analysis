@@ -99,6 +99,10 @@ public:
     QByteArray Datasend() { return datasend; }
    void floatToIEEE754(float value);
    void SetStatus(QtDhkjpump* Amp);
+   float resetpump1cur;
+   float resetpump2cur;
+   float repump1cur;
+   float repump2cur;
 private:
     Status ampstatus = off;
     Status enginmodes = off;
@@ -106,10 +110,7 @@ private:
     QByteArray datareceive;
     float setpump1cur;
     float setpump2cur;
-    float resetpump1cur;
-    float resetpump2cur;
-    float repump1cur;
-    float repump2cur;
+
 
 };
 class QtDhkjMMpump : public QObject//
@@ -125,12 +126,13 @@ public:
     QByteArray Datasend() { return datasend; }
     void floatToIEEE754(float value);
     void SetStatus(QtDhkjMMpump* Amp);
+    float resetpumpcur;
+    float repumpcur;
 private:
     Status ampstatus = off;
     QByteArray datasend;
     QByteArray datareceive;
-    float resetpumpcur;
-    float repumpcur;
+
 
 };
 class QtGolightpump :public QSerialPort//:public QtWidgetsApplication1

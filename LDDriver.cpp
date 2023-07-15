@@ -309,7 +309,7 @@ void QtDhkjpump::Onoffenginmode(bool s)
     {
         this->datasend.resize(12);
         this->datasend[0] = 0x5A;
-        this->datasend[1] = 0x06;
+        this->datasend[1] = 0x46;
         this->datasend[2] = 0x00;
         this->datasend[3] = 0xEC;
         this->datasend[4] = 0x00;
@@ -325,7 +325,7 @@ void QtDhkjpump::Onoffenginmode(bool s)
     {
         this->datasend.resize(12);
         this->datasend[0] = 0x5A;
-        this->datasend[1] = 0x06;
+        this->datasend[1] = 0x46;
         this->datasend[2] = 0x00;
         this->datasend[3] = 0xCE;
         this->datasend[4] = 0x00;
@@ -350,7 +350,7 @@ void QtDhkjpump::Onofflaser(bool s)
     {
         this->datasend.resize(12);
         this->datasend[0] = 0x5A;
-        this->datasend[1] = 0x06;
+        this->datasend[1] = 0x46;
         this->datasend[2] = 0xAA;
         this->datasend[3] = 0x00;
         this->datasend[4] = 0x40;
@@ -367,7 +367,7 @@ void QtDhkjpump::Onofflaser(bool s)
     {
         this->datasend.resize(12);
         this->datasend[0] = 0x5A;
-        this->datasend[1] = 0x06;
+        this->datasend[1] = 0x46;
         this->datasend[2] = 0xAA;
         this->datasend[3] = 0x00;
         this->datasend[4] = 0x40;
@@ -413,11 +413,13 @@ void QtDhkjpump::SetLD1current(float value)
 {
     this->datasend.resize(12);
     this->datasend[0] = 0x5A;
-    this->datasend[1] = 0x06;
+    this->datasend[1] = 0x46;
     this->datasend[2] = 0xAA;
     this->datasend[3] = 0x11;
     this->datasend[4] = 0xF4;
     floatToIEEE754(value);
+    this->datasend[9] = 0x00;//校验和高位
+    this->datasend[10] = 0x00;//校验和低位
     this->datasend[11] = 0xA5;
 }
 /**
@@ -431,11 +433,13 @@ void QtDhkjpump::SetLD2current(float value)
 {
     this->datasend.resize(12);
     this->datasend[0] = 0x5A;
-    this->datasend[1] = 0x06;
+    this->datasend[1] = 0x46;
     this->datasend[2] = 0xAA;
     this->datasend[3] = 0x11;
     this->datasend[4] = 0xF5;
     floatToIEEE754(value);
+    this->datasend[9] = 0x00;//校验和高位
+    this->datasend[10] = 0x00;//校验和低位
     this->datasend[11] = 0xA5;
 }
 /**
@@ -452,11 +456,11 @@ void QtDhkjpump::ReInfoData(const QByteArray data)
     case 0x00:
         if ((unsigned char)data[3] == 0xEC)
         {
-            enginmodes = on;
+            this->enginmodes = on;
         }
         else if ((unsigned char)data[3] == 0xCE)
         {
-            enginmodes = off;
+            this->enginmodes = off;
         }
         else
             qDebug() << "Status Error ! Command: "<<data;
@@ -466,17 +470,33 @@ void QtDhkjpump::ReInfoData(const QByteArray data)
         {
             case 0x00:
                 if ((unsigned char)data[06] == 0x00)
-                    ampstatus = off;
+                    this->ampstatus = off;
                 else if ((unsigned char)data[06] == 0x01)
-                    ampstatus = on;
+                    this->ampstatus = on;
                 break;
             case 0x11://pump电流设置
+                if ((unsigned char)data[04] == 0xF4)
+                {
+                    myfloat.buf[0] = (unsigned char)data[8];
+                    myfloat.buf[1] = (unsigned char)data[7];
+                    myfloat.buf[2] = (unsigned char)data[6];
+                    myfloat.buf[3] = (unsigned char)data[5];
+                    this->resetpump1cur = myfloat.f;
+                }
+                else if ((unsigned char)data[04] == 0xF5)
+                {
+                    myfloat.buf[0] = (unsigned char)data[8];
+                    myfloat.buf[1] = (unsigned char)data[7];
+                    myfloat.buf[2] = (unsigned char)data[6];
+                    myfloat.buf[3] = (unsigned char)data[5];
+                    this->resetpump2cur = myfloat.f;
+                }
 
                 break;
         }
         break;
 
-    case 0xBB:
+    case 0xBB://BB表示读取
         switch ((unsigned char)data[3])
         {
             case 0x00:
@@ -486,10 +506,40 @@ void QtDhkjpump::ReInfoData(const QByteArray data)
                     this->ampstatus = off;
             break;
             case 0x10://实时电流
-
+                if ((unsigned char)data[04] == 0xF4)
+                {
+                    myfloat.buf[0] = (unsigned char)data[8];
+                    myfloat.buf[1] = (unsigned char)data[7];
+                    myfloat.buf[2] = (unsigned char)data[6];
+                    myfloat.buf[3] = (unsigned char)data[5];
+                    this->repump1cur = myfloat.f;
+                }
+                else if ((unsigned char)data[04] == 0xF5)
+                {
+                    myfloat.buf[0] = (unsigned char)data[8];
+                    myfloat.buf[1] = (unsigned char)data[7];
+                    myfloat.buf[2] = (unsigned char)data[6];
+                    myfloat.buf[3] = (unsigned char)data[5];
+                    this->repump2cur = myfloat.f;
+                }
              break;
             case 0x11://设置电流
-
+                if ((unsigned char)data[04] == 0xF4)
+                {
+                    myfloat.buf[0] = (unsigned char)data[8];
+                    myfloat.buf[1] = (unsigned char)data[7];
+                    myfloat.buf[2] = (unsigned char)data[6];
+                    myfloat.buf[3] = (unsigned char)data[5];
+                    this->resetpump1cur = myfloat.f;
+                }
+                else if ((unsigned char)data[04] == 0xF5)
+                {
+                    myfloat.buf[0] = (unsigned char)data[8];
+                    myfloat.buf[1] = (unsigned char)data[7];
+                    myfloat.buf[2] = (unsigned char)data[6];
+                    myfloat.buf[3] = (unsigned char)data[5];
+                    this->resetpump2cur = myfloat.f;
+                }
              break;
             case 0x14://最大设置电流
 
@@ -646,16 +696,18 @@ void QtDhkjpump::floatToIEEE754(float value)//顺序可能要改一下
     //std::bitset<sizeof(float) * 8> bits(intValue);
    
     myfloat.f = value;
-    this->datasend[5] = myfloat.buf[3];
-    this->datasend[6] = myfloat.buf[2];
-    this->datasend[7] = myfloat.buf[1];
-    this->datasend[8] = myfloat.buf[0];
+    this->datasend[5] = myfloat.buf[0];
+    this->datasend[6] = myfloat.buf[1];
+    this->datasend[7] = myfloat.buf[2];
+    this->datasend[8] = myfloat.buf[3];
 }
 
 void QtDhkjpump::SetStatus(QtDhkjpump* Amp)
 {
     this->repump1cur = Amp->repump1cur;
     this->repump2cur = Amp->repump2cur;
+    this->resetpump1cur = Amp->resetpump1cur;
+    this->resetpump2cur = Amp->resetpump2cur;
 
 }
 /**
@@ -691,7 +743,7 @@ void QtDhkjMMpump::Onofflaser(bool s)
         this->datasend[7] = 0x00;
         this->datasend[8] = 0x00;
         this->datasend[9] = 0x00;//校验和
-        this->datasend[10] = 0x77;//校验和
+        this->datasend[10] = 0x00;//校验和
         this->datasend[11] = 0xA5;
 
     }
@@ -702,13 +754,13 @@ void QtDhkjMMpump::Onofflaser(bool s)
         this->datasend[1] = 0x08;
         this->datasend[2] = 0x55;
         this->datasend[3] = 0x00;
-        this->datasend[4] = 0x40;
+        this->datasend[4] = 0x00;
         this->datasend[5] = 0x00;
         this->datasend[6] = 0x00;
         this->datasend[7] = 0x00;
         this->datasend[8] = 0x00;
         this->datasend[9] = 0x00;//校验和
-        this->datasend[10] = 0x55;//校验和
+        this->datasend[10] = 0x00;//校验和
         this->datasend[11] = 0xA5;
     }
 }
@@ -730,7 +782,7 @@ void QtDhkjMMpump::SetMMLDcurrent(float value)
     this->datasend[4] = 0xF5;
     floatToIEEE754(value);
     this->datasend[9] = 0x00;//校验和
-    this->datasend[10] = 0x55;//校验和
+    this->datasend[10] = 0x00;//校验和
     this->datasend[11] = 0xA5;
 }
 
@@ -751,7 +803,22 @@ void QtDhkjMMpump::ReInfoData(const QByteArray data)
             this->ampstatus = off;
         break;
     case 0xC8:
-
+        if ((unsigned char)data[3] == 0x10)
+        {
+            myfloat.buf[0] = (unsigned char)data[8];
+            myfloat.buf[1] = (unsigned char)data[7];
+            myfloat.buf[2] = (unsigned char)data[6];
+            myfloat.buf[3] = (unsigned char)data[5];
+            this->repumpcur = myfloat.f;
+        }
+        else if ((unsigned char)data[3] == 0x11)
+        {
+            myfloat.buf[0] = (unsigned char)data[8];
+            myfloat.buf[1] = (unsigned char)data[7];
+            myfloat.buf[2] = (unsigned char)data[6];
+            myfloat.buf[3] = (unsigned char)data[5];
+            this->resetpumpcur  = myfloat.f;
+        }
         break;
 
     default:
@@ -778,8 +845,8 @@ void QtDhkjMMpump::MMLDcurQuery()
     this->datasend[6] = 0x00;
     this->datasend[7] = 0x00;
     this->datasend[8] = 0x00;
-    this->datasend[9] = 0x01;//校验和
-    this->datasend[10] = 0xC0;//校验和
+    this->datasend[9] = 0x00;//校验和
+    this->datasend[10] = 0x00;//校验和
     this->datasend[11] = 0xA5;
 }
 
@@ -793,15 +860,17 @@ void QtDhkjMMpump::MMLDcurQuery()
 void QtDhkjMMpump::floatToIEEE754(float value)
 {
         myfloat.f = value;
-        this->datasend[5] = myfloat.buf[3];
-        this->datasend[6] = myfloat.buf[2];
-        this->datasend[7] = myfloat.buf[1];
-        this->datasend[8] = myfloat.buf[0];
+        this->datasend[5] = myfloat.buf[0];
+        this->datasend[6] = myfloat.buf[1];
+        this->datasend[7] = myfloat.buf[2];
+        this->datasend[8] = myfloat.buf[3];
 }
 
 void QtDhkjMMpump::SetStatus(QtDhkjMMpump* Amp)
 {
-    this->repumpcur = this->repumpcur;
+    this->repumpcur = Amp->repumpcur;
+    this->resetpumpcur = Amp->resetpumpcur;
+    
 
 }
 
